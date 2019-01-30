@@ -1,0 +1,12 @@
+.mat-tab-nav-bar {
+  border: none;
+}
+
+.mat-tab-link {
+  font-family: "Google Sans", Roboto, Arial, sans-serif;
+  font-size: 1.1rem;
+
+  &.active {
+    opacity: 1
+  }
+}

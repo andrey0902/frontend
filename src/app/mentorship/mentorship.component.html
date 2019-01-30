@@ -1,0 +1,74 @@
+<div class="mentorship-table">
+  <div class="mentorship-table__header">
+    <div class="mentorship-table__row">
+      <div class="mentorship-table__cell">
+        <h3 class="table-label">Менторы</h3>
+        <button type="button" class="add-mentor" (click)="addMentor()">добавить ментора</button>
+      </div>
+      <div class="mentorship-table__cell">
+        <h3 class="table-label">Протеже</h3>
+      </div>
+    </div>
+  </div>
+  <div class="mentorship-table__row" *ngFor="let mentorship of mentorshipList">
+    <div class="mentorship-table__cell activator-actions">
+      <div class="mentor">
+        <lt-user [user]="mentorship" class="vertical-center"></lt-user>
+        <div class="actions vertical-center ">
+          <button class="action-btn"
+            mat-mini-fab
+            color="primary"
+            matTooltip="Добавить протеже ментору"
+            [matTooltipPosition]="'below'"
+            [matTooltipShowDelay]="300"
+            [matTooltipClass]="'custom-font-size'">
+            <mat-icon>person_add</mat-icon>
+          </button>
+          <button class="action-btn"
+            mat-mini-fab
+            color="primary"
+            matTooltip="Убрать ментора"
+            [matTooltipPosition]="'below'"
+            [matTooltipShowDelay]="300"
+            [matTooltipClass]="'custom-font-size'">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="mentorship-table__cell">
+      <div class="protege activator-actions" *ngFor="let protege of mentorship.proteges">
+        <lt-user [user]="protege" class="vertical-center"></lt-user>
+        <div class="actions vertical-center ">
+          <button class="action-btn"
+                  mat-mini-fab
+                  color="primary"
+                  matTooltip="Сменить ментора"
+                  [matTooltipPosition]="'below'"
+                  [matTooltipShowDelay]="300"
+                  [matTooltipClass]="'custom-font-size'">
+            <mat-icon>transfer_within_a_station</mat-icon>
+          </button>
+          <button class="action-btn"
+                  mat-mini-fab
+                  color="primary"
+                  matTooltip="Убрать протеже"
+                  [matTooltipPosition]="'below'"
+                  [matTooltipShowDelay]="300"
+                  [matTooltipClass]="'custom-font-size'">
+            <mat-icon>delete</mat-icon>
+          </button>
+          <button class="action-btn"
+                  mat-mini-fab
+                  color="primary"
+                  matTooltip="Очистить статус протеже"
+                  [matTooltipPosition]="'below'"
+                  [matTooltipShowDelay]="300"
+                  [matTooltipClass]="'custom-font-size'">
+            <mat-icon>delete_forever</mat-icon>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
