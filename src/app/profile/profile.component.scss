@@ -1,0 +1,32 @@
+.profile-wrapper {
+  display: flex;
+}
+
+.user-info {
+  //border: 1px solid gray;
+  margin-right: 50px;
+}
+
+.user-photo {
+  width: 300px;
+  height: 300px;
+
+  img {
+    width: 100%;
+    height: auto;
+    border-radius: 50%;
+  }
+}
+
+.user-name {
+  font-family: "Google Sans", Roboto, Arial, sans-serif;
+  font-size: 1.4rem;
+  font-weight: 600;
+}
+
+.mentorship-info {
+  flex-grow: 1;
+  border: 1px solid gray;
+  min-height: 300px;
+  padding: 0 30px;
+}

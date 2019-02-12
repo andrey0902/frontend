@@ -1,0 +1,7 @@
+{
+  "id": 1,
+  "firstName": "John",
+  "lastName": "Doe",
+  "photo": "https://light-it-portal-gallery-dev.s3.amazonaws.com:443/users/77/fullsize/photo_20d592a0_alex_scream89.png",
+  "photoThumbnail": "https://light-it-portal-gallery-dev.s3.amazonaws.com:443/users/77/thumbnail/photo_9923c058_alex_scream89.png"
+}

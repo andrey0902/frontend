@@ -1,25 +1,20 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MentorshipComponent } from './mentorship.component';
 import {MentorshipRoutingModule} from './mentorship-routing.module';
 
-import {SharedModule} from '../shared/shared.module';
-import { AddMentorDialogComponent } from './add-mentor-dialog/add-mentor-dialog.component';
-import {ReactiveFormsModule} from '@angular/forms';
+import { MentorshipComponent } from './mentorship.component';
+import {MaterialModule} from '../material/material.module';
+import {CoreModule} from '../core/core.module';
 
 @NgModule({
   declarations: [
-    MentorshipComponent,
-    AddMentorDialogComponent
+    MentorshipComponent
   ],
   imports: [
     CommonModule,
     MentorshipRoutingModule,
-    ReactiveFormsModule,
-    SharedModule
-  ],
-  entryComponents: [
-    AddMentorDialogComponent
+    MaterialModule,
+    CoreModule
   ]
 })
 export class MentorshipModule { }

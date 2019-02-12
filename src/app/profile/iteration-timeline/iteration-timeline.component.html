@@ -1,0 +1,27 @@
+<div class="widget-timeline">
+  <div class="progress" [style.width]="progressPercentage"></div>
+  <div class="activity-wrapper start-iteration">
+    <div class="activity-point"
+         (mouseenter)="showPopup(startPopup)"
+         (mouseleave)="hidePopup(startPopup)">
+    </div>
+    <div class="activity-info" #startPopup>Start iteration</div>
+  </div>
+  <div class="activity-wrapper"
+       *ngFor="let activity of iteration.activities"
+       [style.left]="activityPosition(activity.date)">
+    <div class="activity-point"
+         [ngClass]="activity.type"
+         (mouseenter)="showPopup(popup)"
+         (mouseleave)="hidePopup(popup)">
+    </div>
+    <div class="activity-info" #popup>{{ activity.title }}</div>
+  </div>
+  <div class="activity-wrapper end-iteration">
+    <div class="activity-point"
+         (mouseenter)="showPopup(endPopup)"
+         (mouseleave)="hidePopup(endPopup)">
+    </div>
+    <div class="activity-info" #endPopup>End iteration</div>
+  </div>
+</div>

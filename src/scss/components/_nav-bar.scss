@@ -2,11 +2,11 @@
   border: none;
 }
 
-.mat-tab-link {
+.mat-tab-link, .mat-tab-label {
   font-family: "Google Sans", Roboto, Arial, sans-serif;
   font-size: 1.1rem;
 
-  &.active {
+  &.active, &.mat-tab-label-active {
     opacity: 1
   }
 }

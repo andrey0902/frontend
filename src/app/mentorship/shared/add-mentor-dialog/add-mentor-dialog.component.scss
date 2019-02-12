@@ -1,0 +1,16 @@
+@import '../../../../scss/variables';
+
+.mat-dialog-title {
+  font-size: 1.9rem;
+  text-align: center;
+  font-family: "Google Sans", Roboto, Arial, sans-serif;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.mat-raised-button.mat-primary {
+  //background-color: $primary-color;
+  text-transform: uppercase;
+}

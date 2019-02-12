@@ -1,0 +1,76 @@
+@import '../../../scss/variables';
+
+.mentorship-table {
+  margin-top: 10px;
+
+  &__header {
+    border-bottom: 1px solid #d0d0d0;
+  }
+
+  &__row {
+    display: flex;
+
+    &:nth-child(odd) {
+      background-color: #eee;
+    }
+
+    &:first-child {
+      background: none;
+    }
+  }
+
+  &__cell {
+    flex-grow: 1;
+    flex-basis: 50%;
+    padding: 15px;
+  }
+}
+
+.table-label {
+  margin: 0;
+  font-size: 1.2em;
+  font-weight: 600;
+}
+
+.add-mentor {
+  padding: 0;
+  margin-top: 5px;
+  background: none;
+  border: none;
+  font-size: 15px;
+  color: #224574;
+  cursor: pointer;
+  outline: none;
+}
+
+.mentor {
+  display: flex;
+}
+
+.protege {
+  display: flex;
+
+  &:not(:last-child) {
+    margin-bottom: 15px;
+  }
+}
+
+.activator-actions:hover .actions {
+  opacity: 1;
+}
+
+.actions {
+  margin-left: 15px;
+  opacity: 0;
+  transition: .3s opacity;
+}
+
+.action-btn {
+  margin: 0 5px;
+}
+
+.mat-primary {
+  background-color: $primary-color;
+}
+
+

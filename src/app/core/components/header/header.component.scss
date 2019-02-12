@@ -1,0 +1,19 @@
+@import '../../../../scss/variables';
+
+:host {
+  display: block;
+  position: fixed;
+  z-index: 999;
+  width: 100%;
+  height: $header-height;
+  background-color: $primary-color;
+  color: white;
+  box-shadow: 0 3px 3px -2px rgba(0,0,0,.2), 0 3px 4px 0 rgba(0,0,0,.14), 0 1px 8px 0 rgba(0,0,0,.12);
+}
+
+.app-logo {
+  width: 160px;
+  cursor: pointer;
+}
+
+

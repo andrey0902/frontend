@@ -4,8 +4,7 @@ import { Routes, RouterModule } from '@angular/router';
 const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: 'mentorship' },
   { path: 'mentorship',  loadChildren: './mentorship/mentorship.module#MentorshipModule' },
-  { path: 'need-a-mentor',  loadChildren: './need-a-mentor/need-a-mentor.module#NeedAMentorModule' },
-  { path: 'want-to-be-mentor',  loadChildren: './want-to-be-mentor/want-to-be-mentor.module#WantToBeMentorModule' },
+  { path: 'profile',  loadChildren: './profile/profile.module#ProfileModule' },
   { path: '**', redirectTo: 'mentorship' },
 ];
 
