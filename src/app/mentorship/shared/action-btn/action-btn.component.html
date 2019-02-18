@@ -1,0 +1,9 @@
+<button class="action-btn"
+        mat-mini-fab
+        color="primary"
+        [matTooltip]="tooltip"
+        [matTooltipPosition]="'below'"
+        [matTooltipShowDelay]="300"
+        [matTooltipClass]="'custom-font-size'" (click)="emitAction()">
+  <mat-icon>{{ icon }}</mat-icon>
+</button>

@@ -1,15 +1,5 @@
 <div class="container">
   <h2 class="text-center page-caption">Таблица ответственности менторов</h2>
-  <!--<nav mat-tab-nav-bar mat-align-tabs="center">-->
-      <!--<span mat-tab-link-->
-            <!--*ngFor="let link of navLinks"-->
-            <!--[routerLink]="link.path"-->
-            <!--routerLinkActive #rla="routerLinkActive"-->
-            <!--[active]="rla.isActive"-->
-            <!--[class.active]="rla.isActive">-->
-        <!--{{ link.label }}-->
-      <!--</span>-->
-  <!--</nav>-->
   <lt-nav-tabs [navLinks]="navLinks"> </lt-nav-tabs>
   <router-outlet></router-outlet>
 </div>

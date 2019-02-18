@@ -1,0 +1,15 @@
+<div class="user-item" *ngFor="let user of users">
+  <lt-user [user]="user" class="same-width" [routerLink]="['/profile', user.id]"></lt-user>
+  <div class="actions">
+    <lt-action-btn
+      [tooltip]="'Назначить ментора'"
+      [icon]="'person_add'"
+      (action)="onAction()">
+    </lt-action-btn>
+    <lt-action-btn
+      [tooltip]="'Очистить статус'"
+      [icon]="'delete_forever'"
+      (action)="onAction()">
+    </lt-action-btn>
+  </div>
+</div>

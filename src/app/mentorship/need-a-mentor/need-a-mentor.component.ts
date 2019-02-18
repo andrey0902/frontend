@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import {UserService} from '../../core/services/user.service';
+import {User} from '../../models/user.model';
 
 @Component({
   selector: 'lt-need-a-mentor',
@@ -7,9 +9,15 @@ import { Component, OnInit } from '@angular/core';
 })
 export class NeedAMentorComponent implements OnInit {
 
-  constructor() { }
+  constructor(private userService: UserService) { }
+
+  users: User[];
 
   ngOnInit() {
+    this.userService.getNeedMentorUsers().subscribe(users => {
+      this.users = users;
+      console.log(this.users);
+    });
   }
 
 }

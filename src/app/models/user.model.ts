@@ -4,4 +4,6 @@ export interface User {
   lastName: string;
   photo: string;
   photoThumbnail: string;
+  needMentor: boolean;
+  wantToBeMentor: boolean;
 }

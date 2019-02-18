@@ -3,18 +3,28 @@ import { CommonModule } from '@angular/common';
 import {AddMentorDialogComponent} from './add-mentor-dialog/add-mentor-dialog.component';
 import {ReactiveFormsModule} from '@angular/forms';
 import {MaterialModule} from '../../material/material.module';
+import { UserListComponent } from './user-list/user-list.component';
+import {CoreModule} from '../../core/core.module';
+import { ActionBtnComponent } from './action-btn/action-btn.component';
+import {RouterModule} from '@angular/router';
 
 @NgModule({
   declarations: [
-    AddMentorDialogComponent
+    AddMentorDialogComponent,
+    UserListComponent,
+    ActionBtnComponent
   ],
   imports: [
     CommonModule,
     ReactiveFormsModule,
-    MaterialModule
+    MaterialModule,
+    CoreModule,
+    RouterModule
   ],
   exports: [
     AddMentorDialogComponent,
+    UserListComponent,
+    ActionBtnComponent,
     MaterialModule
   ]
 })

@@ -60,6 +60,8 @@
 }
 
 .actions {
+  display: flex;
+  align-items: center;
   margin-left: 15px;
   opacity: 0;
   transition: .3s opacity;

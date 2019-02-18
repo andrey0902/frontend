@@ -13,8 +13,8 @@
   <div class="mentorship-table__row" *ngFor="let mentorship of mentorshipList">
     <div class="mentorship-table__cell activator-actions">
       <div class="mentor">
-        <lt-user [user]="mentorship" class="vertical-center"></lt-user>
-        <div class="actions vertical-center ">
+        <lt-user [user]="mentorship" [routerLink]="['/profile', mentorship.id]"></lt-user>
+        <div class="actions">
           <button class="action-btn"
             mat-mini-fab
             color="primary"
@@ -38,8 +38,8 @@
     </div>
     <div class="mentorship-table__cell">
       <div class="protege activator-actions" *ngFor="let protege of mentorship.proteges">
-        <lt-user [user]="protege" class="vertical-center"></lt-user>
-        <div class="actions vertical-center ">
+        <lt-user [user]="protege" [routerLink]="['/profile', protege.id]"></lt-user>
+        <div class="actions">
           <button class="action-btn"
                   mat-mini-fab
                   color="primary"

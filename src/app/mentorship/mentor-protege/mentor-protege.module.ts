@@ -6,6 +6,7 @@ import { MentorProtegeComponent } from './mentor-protege.component';
 import {SharedModule} from '../shared/shared.module';
 import {AddMentorDialogComponent} from '../shared/add-mentor-dialog/add-mentor-dialog.component';
 import {CoreModule} from '../../core/core.module';
+import {RouterModule} from '@angular/router';
 
 @NgModule({
   declarations: [
@@ -15,7 +16,8 @@ import {CoreModule} from '../../core/core.module';
     CommonModule,
     MentorProtegeRoutingModule,
     SharedModule,
-    CoreModule
+    CoreModule,
+    RouterModule
   ],
   entryComponents: [
     AddMentorDialogComponent
