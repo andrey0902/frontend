@@ -13,60 +13,46 @@
   <div class="mentorship-table__row" *ngFor="let mentorship of mentorshipList">
     <div class="mentorship-table__cell activator-actions">
       <div class="mentor">
-        <lt-user [user]="mentorship" [routerLink]="['/profile', mentorship.id]"></lt-user>
+        <lt-user
+          [user]="mentorship"
+          [routerLink]="['/profile', mentorship.id]">
+        </lt-user>
         <div class="actions">
-          <button class="action-btn"
-            mat-mini-fab
-            color="primary"
-            matTooltip="Добавить протеже ментору"
-            [matTooltipPosition]="'below'"
-            [matTooltipShowDelay]="300"
-            [matTooltipClass]="'custom-font-size'">
-            <mat-icon>person_add</mat-icon>
-          </button>
-          <button class="action-btn"
-            mat-mini-fab
-            color="primary"
-            matTooltip="Убрать ментора"
-            [matTooltipPosition]="'below'"
-            [matTooltipShowDelay]="300"
-            [matTooltipClass]="'custom-font-size'">
-            <mat-icon>delete</mat-icon>
-          </button>
+          <lt-action-btn
+            [tooltip]="'Добавить протеже ментору'"
+            [icon]="'person_add'"
+            (action)="addProtege()">
+          </lt-action-btn>
+          <lt-action-btn
+            [tooltip]="'Убрать ментора'"
+            [icon]="'delete'"
+            (action)="deleteMentor(mentorship)">
+          </lt-action-btn>
         </div>
       </div>
     </div>
     <div class="mentorship-table__cell">
       <div class="protege activator-actions" *ngFor="let protege of mentorship.proteges">
-        <lt-user [user]="protege" [routerLink]="['/profile', protege.id]"></lt-user>
+        <lt-user
+          [user]="protege"
+          [routerLink]="['/profile', protege.id]">
+        </lt-user>
         <div class="actions">
-          <button class="action-btn"
-                  mat-mini-fab
-                  color="primary"
-                  matTooltip="Сменить ментора"
-                  [matTooltipPosition]="'below'"
-                  [matTooltipShowDelay]="300"
-                  [matTooltipClass]="'custom-font-size'">
-            <mat-icon>transfer_within_a_station</mat-icon>
-          </button>
-          <button class="action-btn"
-                  mat-mini-fab
-                  color="primary"
-                  matTooltip="Убрать протеже"
-                  [matTooltipPosition]="'below'"
-                  [matTooltipShowDelay]="300"
-                  [matTooltipClass]="'custom-font-size'">
-            <mat-icon>delete</mat-icon>
-          </button>
-          <button class="action-btn"
-                  mat-mini-fab
-                  color="primary"
-                  matTooltip="Очистить статус протеже"
-                  [matTooltipPosition]="'below'"
-                  [matTooltipShowDelay]="300"
-                  [matTooltipClass]="'custom-font-size'">
-            <mat-icon>delete_forever</mat-icon>
-          </button>
+          <lt-action-btn
+            [tooltip]="'Сменить ментора'"
+            [icon]="'transfer_within_a_station'"
+            (action)="changeMentor()">
+          </lt-action-btn>
+          <lt-action-btn
+            [tooltip]="'Убрать протеже'"
+            [icon]="'delete'"
+            (action)="deleteProtege(mentorship, protege)">
+          </lt-action-btn>
+          <lt-action-btn
+            [tooltip]="'Очистить статус протеже'"
+            [icon]="'delete_forever'"
+            (action)="clearProtegeStatus(protege)">
+          </lt-action-btn>
         </div>
       </div>
     </div>

@@ -7,6 +7,7 @@ import {SharedModule} from '../shared/shared.module';
 import {AddMentorDialogComponent} from '../shared/add-mentor-dialog/add-mentor-dialog.component';
 import {CoreModule} from '../../core/core.module';
 import {RouterModule} from '@angular/router';
+import {ConfirmDialogComponent} from '../shared/confirm-dialog/confirm-dialog.component';
 
 @NgModule({
   declarations: [
@@ -20,7 +21,8 @@ import {RouterModule} from '@angular/router';
     RouterModule
   ],
   entryComponents: [
-    AddMentorDialogComponent
+    AddMentorDialogComponent,
+    ConfirmDialogComponent
   ]
 })
 export class MentorProtegeModule { }

@@ -1,0 +1,14 @@
+<div mat-dialog-content class="modal-content text-center">
+  <div [innerHTML]="data.htmlContent | ltSafeHtml"></div>
+</div>
+<div mat-dialog-actions align="end">
+  <button
+    mat-raised-button
+    color="warn"
+    [mat-dialog-close]="true"
+    class="google-font-bold">Да</button>
+  <button
+    mat-button
+    [mat-dialog-close]="false"
+    class="google-font-bold">Нет</button>
+</div>

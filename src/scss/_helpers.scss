@@ -38,3 +38,12 @@
 .text-center {
   text-align: center;
 }
+
+.google-font {
+  font-family: "Google Sans", Roboto, Arial, sans-serif;
+}
+
+.google-font-bold {
+  @extend .google-font;
+  font-weight: 600;
+}

@@ -5,6 +5,7 @@ import {MentorshipRoutingModule} from './mentorship-routing.module';
 import { MentorshipComponent } from './mentorship.component';
 import {MaterialModule} from '../material/material.module';
 import {CoreModule} from '../core/core.module';
+import {SharedModule} from './shared/shared.module';
 
 @NgModule({
   declarations: [
@@ -14,7 +15,8 @@ import {CoreModule} from '../core/core.module';
     CommonModule,
     MentorshipRoutingModule,
     MaterialModule,
-    CoreModule
+    CoreModule,
+    SharedModule.forRoot()
   ]
 })
 export class MentorshipModule { }

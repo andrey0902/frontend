@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {MatDialog} from '@angular/material';
 import {AddMentorDialogComponent} from '../shared/add-mentor-dialog/add-mentor-dialog.component';
+import {DialogService} from '../shared/services/dialog.service';
 
 @Component({
   selector: 'lt-mentor-protege',
@@ -9,7 +10,10 @@ import {AddMentorDialogComponent} from '../shared/add-mentor-dialog/add-mentor-d
 })
 export class MentorProtegeComponent implements OnInit {
 
-  constructor(public dialog: MatDialog) { }
+  constructor(
+    private dialog: MatDialog,
+    private dialogService: DialogService
+  ) { }
 
   mentorshipList = [
     {
@@ -72,8 +76,7 @@ export class MentorProtegeComponent implements OnInit {
     }
   ];
 
-  ngOnInit() {
-  }
+  ngOnInit() {}
 
   addMentor() {
     const dialogRef = this.dialog.open(AddMentorDialogComponent, {
@@ -84,6 +87,30 @@ export class MentorProtegeComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       console.log('The dialog was closed:', result);
+    });
+  }
+
+  deleteMentor(mentor) {
+    const htmlContent = `<p>Вы уверены, что <b>${mentor.firstName} ${mentor.lastName}</b> больше не ментор ?</p>`;
+
+    this.dialogService.openConfirmDialog(htmlContent, (result) => {
+      console.log('Delete mentor:', result);
+    });
+  }
+
+  deleteProtege(mentor, protege) {
+    const htmlContent = `<p>Вы уверены, что <b>${protege.firstName} ${protege.lastName}</b> больше не протеже для <b>${mentor.firstName} ${mentor.lastName}</b> ?</p>`;
+
+    this.dialogService.openConfirmDialog(htmlContent, (result) => {
+      console.log('Delete protege:', result);
+    });
+  }
+
+  clearProtegeStatus(protege) {
+    const htmlContent = `<p>Вы уверены, что хотите очистить статус протеже для <b>${protege.firstName} ${protege.lastName}</b> ?</p>`;
+
+    this.dialogService.openConfirmDialog(htmlContent, (result) => {
+      console.log('Clear protege status:', result);
     });
   }
 

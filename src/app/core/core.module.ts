@@ -24,7 +24,8 @@ import { NavTabsComponent } from './components/nav-tabs/nav-tabs.component';
   exports: [
     HeaderComponent,
     UserComponent,
-    NavTabsComponent
+    NavTabsComponent,
+    SafeHtmlPipe
   ]
 })
 export class CoreModule { }
