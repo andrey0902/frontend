@@ -2,12 +2,13 @@
   <div class="app-logo">
     <lt-svg-icon [name]="'logo'"></lt-svg-icon>
   </div>
-  <div class="user-block" *ngIf="currentUser">
+  <div class="user-block">
     <img class="avatar"
-         [src]="currentUser.photoThumbnail"
+         *ngIf="currentUser"
+         [src]="currentUser?.attributes.photo_thumbnail"
          [matMenuTriggerFor]="menu">
     <mat-menu #menu="matMenu" overlapTrigger="false">
-      <button mat-menu-item [routerLink]="['/profile', currentUser.id]">Профиль</button>
+      <button mat-menu-item [routerLink]="['/profile', currentUser?.id]">Профиль</button>
       <button mat-menu-item routerLink="mentorship">Таблица ответствености</button>
     </mat-menu>
   </div>

@@ -14,7 +14,7 @@
     <div class="mentorship-table__cell activator-actions">
       <div class="mentor">
         <lt-user
-          [user]="mentorship"
+          [user]="mentorship.attributes"
           [routerLink]="['/profile', mentorship.id]">
         </lt-user>
         <div class="actions">
@@ -32,9 +32,9 @@
       </div>
     </div>
     <div class="mentorship-table__cell">
-      <div class="protege activator-actions" *ngFor="let protege of mentorship.proteges">
+      <div class="protege activator-actions" *ngFor="let protege of mentorship.attributes.proteges">
         <lt-user
-          [user]="protege"
+          [user]="protege.attributes"
           [routerLink]="['/profile', protege.id]">
         </lt-user>
         <div class="actions">

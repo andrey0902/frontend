@@ -1,7 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import {MatDialog} from '@angular/material';
-import {AddMentorDialogComponent} from '../shared/add-mentor-dialog/add-mentor-dialog.component';
+import {MentorshipManagementDialogComponent} from '../shared/mentorship-management-dialog/mentorship-management-dialog.component';
 import {DialogService} from '../shared/services/dialog.service';
+import {UserService} from '../../core/services/user.service';
+import {Store} from '@ngrx/store';
+import {LoadMentors} from '../../root-store/mentors/mentors.actions';
+import {selectMentors} from '../../root-store/mentors/mentors.selectors';
+import {User} from '../../models/user.model';
 
 @Component({
   selector: 'lt-mentor-protege',
@@ -12,89 +17,43 @@ export class MentorProtegeComponent implements OnInit {
 
   constructor(
     private dialog: MatDialog,
-    private dialogService: DialogService
+    private dialogService: DialogService,
+    private userService: UserService,
+    private store: Store<any>
   ) { }
 
-  mentorshipList = [
-    {
-      id: 1,
-      firstName: 'Алексей',
-      is_approved: true,
-      is_dismissed: false,
-      lastName: 'Дирацуян',
-      photo: 'https://light-it-portal-gallery-dev.s3.amazonaws.com:443/users/77/fullsize/photo_20d592a0_alex_scream89.png',
-      photoThumbnail: 'https://light-it-portal-gallery-dev.s3.amazonaws.com:443/users/77/thumbnail/photo_9923c058_alex_scream89.png',
-      proteges: [
-        {
-          firstName: 'Анастасия',
-          id: 9,
-          is_approved: true,
-          is_dismissed: false,
-          lastName: 'Игнашова',
-          photo: 'https://light-it-portal-gallery-dev.s3.amazonaws.com:443/users/9/fullsize/photo_d72f2605_20170508_101647.jpg',
-          photoThumbnail: 'https://light-it-portal-gallery-dev.s3.amazonaws.com:443/users/9/thumbnail/photo_d72f2605_20170508_101647.jpg'
-        },
-        {
-          firstName: 'Анастасия',
-          id: 5,
-          is_approved: true,
-          is_dismissed: false,
-          lastName: 'Игнашова',
-          photo: 'https://light-it-portal-gallery-dev.s3.amazonaws.com:443/users/9/fullsize/photo_d72f2605_20170508_101647.jpg',
-          photoThumbnail: 'https://light-it-portal-gallery-dev.s3.amazonaws.com:443/users/9/thumbnail/photo_d72f2605_20170508_101647.jpg'
-        }
-      ]
-    },
-    {
-      id: 2,
-      firstName: 'Алексей',
-      is_approved: true,
-      is_dismissed: false,
-      lastName: 'Дирацуян',
-      photo: 'https://light-it-portal-gallery-dev.s3.amazonaws.com:443/users/77/fullsize/photo_20d592a0_alex_scream89.png',
-      photoThumbnail: 'https://light-it-portal-gallery-dev.s3.amazonaws.com:443/users/77/thumbnail/photo_9923c058_alex_scream89.png',
-      proteges: [
-        {
-          firstName: 'Анастасия',
-          id: 10,
-          is_approved: true,
-          is_dismissed: false,
-          lastName: 'Игнашова',
-          photo: 'https://light-it-portal-gallery-dev.s3.amazonaws.com:443/users/9/fullsize/photo_d72f2605_20170508_101647.jpg',
-          photoThumbnail: 'https://light-it-portal-gallery-dev.s3.amazonaws.com:443/users/9/thumbnail/photo_d72f2605_20170508_101647.jpg'
-        },
-        {
-          firstName: 'Анастасия',
-          id: 6,
-          is_approved: true,
-          is_dismissed: false,
-          lastName: 'Игнашова',
-          photo: 'https://light-it-portal-gallery-dev.s3.amazonaws.com:443/users/9/fullsize/photo_d72f2605_20170508_101647.jpg',
-          photoThumbnail: 'https://light-it-portal-gallery-dev.s3.amazonaws.com:443/users/9/thumbnail/photo_d72f2605_20170508_101647.jpg'
-        }
-      ]
-    }
-  ];
+  mentorshipList: User[];
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.userService.getMentors({include: 'proteges'}).subscribe((res: User[]) => {
+      console.log(res);
+      this.mentorshipList = res;
+    });
+    // this.store.select(selectMentors).subscribe(val => {console.log(val); });
+    // this.store.dispatch(new LoadMentors());
+  }
 
   addMentor() {
-    const dialogRef = this.dialog.open(AddMentorDialogComponent, {
-      width: '500px',
-      data: {mentor: 'Hello, mentor'},
-      autoFocus: false
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed:', result);
+    this.dialogService.openMentorshipManagementDialog('addMentor', (mentor) => {
+      if (mentor) {
+        this.userService.addMentor(mentor.id).subscribe((res: User) => {
+          this.mentorshipList.unshift(res);
+        });
+      }
     });
   }
 
   deleteMentor(mentor) {
-    const htmlContent = `<p>Вы уверены, что <b>${mentor.firstName} ${mentor.lastName}</b> больше не ментор ?</p>`;
+    const htmlContent = `<p>Вы уверены, что <b>${mentor.attributes.first_name} ${mentor.attributes.last_name}</b> больше не ментор ?</p>`;
 
-    this.dialogService.openConfirmDialog(htmlContent, (result) => {
-      console.log('Delete mentor:', result);
+    this.dialogService.openConfirmDialog(htmlContent, (confirm) => {
+      console.log('Delete mentor:', confirm);
+      if (confirm) {
+        this.userService.deleteMentor(mentor.id).subscribe(() => {
+          const userIndex = this.mentorshipList.findIndex(mentorship => mentorship.id === mentor.id);
+          this.mentorshipList = [...this.mentorshipList.slice(0, userIndex), ...this.mentorshipList.slice(userIndex + 1)];
+        });
+      }
     });
   }
 
