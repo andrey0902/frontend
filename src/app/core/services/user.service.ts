@@ -1,9 +1,19 @@
 import { Injectable } from '@angular/core';
-import {HttpClient} from '@angular/common/http';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {User} from '../../models/user.model';
 import {map} from 'rxjs/operators';
+import {ApiConfig} from '../../helpers/apiConfig';
 
+const httpOptions = {
+  headers: new HttpHeaders({
+    'Access-Control-Allow-Origin': '*'
+  })
+};
 
+export interface UserResponse {
+  data: User[];
+  included: any[];
+}
 
 @Injectable({
   providedIn: 'root'
@@ -12,14 +22,27 @@ export class UserService {
 
   constructor(private http: HttpClient) {}
 
-  getCurrentUser() {
-    return this.http.get<User>('assets/mockDB/currentUser.json');
+  getUsers(params = {}) {
+    return this.http.get(`${ApiConfig.users}`, { ...httpOptions,  params });
+  }
+
+  getMentors(params = {}) {
+    return this.http.get(`${ApiConfig.mentors}`, { ...httpOptions,  params });
+  }
+
+  addMentor(mentor_id) {
+    const params = { include: 'proteges' };
+    return this.http.post(`${ApiConfig.mentors}/${mentor_id}`, {}, { ...httpOptions,  params });
+  }
+
+  deleteMentor(mentor_id) {
+    return this.http.delete(`${ApiConfig.mentors}/${mentor_id}`, { ...httpOptions });
   }
 
   getNeedMentorUsers() {
     return this.http.get('assets/mockDB/users.json').pipe(
       map((users: User[]) => {
-        return users.filter(user => !!user.needMentor);
+        return users.filter(user => !user.attributes.is_mentor);
       })
     );
   }
@@ -27,7 +50,7 @@ export class UserService {
   getBecomeMentorUsers() {
     return this.http.get('assets/mockDB/users.json').pipe(
       map((users: User[]) => {
-        return users.filter(user => !!user.wantToBeMentor);
+        return users.filter(user => !!user.attributes.is_mentor);
       })
     );
   }

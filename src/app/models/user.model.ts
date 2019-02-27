@@ -1,9 +1,20 @@
 export interface User {
-  id: number;
-  firstName: string;
-  lastName: string;
-  photo: string;
-  photoThumbnail: string;
-  needMentor: boolean;
-  wantToBeMentor: boolean;
+  type: string;
+  id: string;
+  attributes: {
+    first_name: string;
+    last_name: string;
+    photo: string;
+    photo_thumbnail: string;
+    is_mentor: boolean;
+    portal_id: number;
+    slack: string;
+    specialization_id: number;
+    proteges: any[]
+    // need_mentor?: boolean;
+    // want_be_mentor?: boolean;
+    links: {
+      self: string;
+    }
+  };
 }

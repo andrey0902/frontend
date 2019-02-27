@@ -1,0 +1,38 @@
+<h3 mat-dialog-title>Добавить ментора</h3>
+<div mat-dialog-content>
+  <!--{{data | json}}-->
+  <mat-form-field
+    class="full-width"
+    appearance="standard">
+    <input
+      matInput
+      placeholder="Ментор"
+      [formControl]="userInput"
+      [matAutocomplete]="auto">
+    <mat-autocomplete
+      #auto="matAutocomplete"
+      (optionSelected)="selectUser($event)"
+      [displayWith]="displayFn">
+      <mat-option
+        *ngFor="let option of filteredOptions$ | async"
+        [value]="option">
+        <div class="user-wrapper">
+          <lt-user [user]="option.attributes"></lt-user>
+        </div>
+      </mat-option>
+      <!--<mat-option *ngIf="!(filteredOptions$ | async)?.length"-->
+        <!--[value]="null"-->
+        <!--[disabled]="true">-->
+        <!--<span>Нет совпадений</span>-->
+      <!--</mat-option>-->
+    </mat-autocomplete>
+  </mat-form-field>
+</div>
+<div mat-dialog-actions align="end">
+  <button
+    mat-raised-button
+    color="accent"
+    [mat-dialog-close]="selectedUser"
+    [disabled]="userInput.invalid"
+    class="google-font-bold">Выбрать</button>
+</div>

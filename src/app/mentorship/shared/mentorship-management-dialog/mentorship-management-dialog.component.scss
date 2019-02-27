@@ -1,0 +1,31 @@
+@import '../../../../scss/variables';
+
+:host {
+  display: block;
+  padding: 20px;
+}
+
+
+
+.mat-dialog-title {
+  font-size: 1.9rem;
+  text-align: center;
+  font-family: "Google Sans", Roboto, Arial, sans-serif;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.mat-raised-button.mat-accent {
+  background-color: $accent-color;
+
+  &[disabled] {
+  background-color: rgba(0,0,0,.12)
+  }
+}
+
+.mat-option {
+  height: 60px;
+  line-height: 20px;
+}
