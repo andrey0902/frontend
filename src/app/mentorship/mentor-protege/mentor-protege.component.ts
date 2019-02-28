@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import {MatDialog} from '@angular/material';
-import {MentorshipManagementDialogComponent} from '../shared/mentorship-management-dialog/mentorship-management-dialog.component';
 import {DialogService} from '../shared/services/dialog.service';
 import {UserService} from '../../core/services/user.service';
 import {Store} from '@ngrx/store';
@@ -34,7 +33,7 @@ export class MentorProtegeComponent implements OnInit {
   }
 
   addMentor() {
-    this.dialogService.openMentorshipManagementDialog('addMentor', (mentor) => {
+    this.dialogService.openMentorshipManagementDialog({ mode: 'addMentor' }, (mentor) => {
       if (mentor) {
         this.userService.addMentor(mentor.id).subscribe((res: User) => {
           this.mentorshipList.unshift(res);
@@ -44,10 +43,11 @@ export class MentorProtegeComponent implements OnInit {
   }
 
   deleteMentor(mentor) {
-    const htmlContent = `<p>Вы уверены, что <b>${mentor.attributes.first_name} ${mentor.attributes.last_name}</b> больше не ментор ?</p>`;
+    const htmlContent = `<p>Вы уверены, что <b>
+      ${mentor.attributes.first_name} ${mentor.attributes.last_name}</b>
+      больше не ментор ?</p>`;
 
     this.dialogService.openConfirmDialog(htmlContent, (confirm) => {
-      console.log('Delete mentor:', confirm);
       if (confirm) {
         this.userService.deleteMentor(mentor.id).subscribe(() => {
           const userIndex = this.mentorshipList.findIndex(mentorship => mentorship.id === mentor.id);
@@ -57,11 +57,48 @@ export class MentorProtegeComponent implements OnInit {
     });
   }
 
+  changeMentor(mentorship, protege) {
+    this.dialogService.openMentorshipManagementDialog({
+      mode: 'changeMentor',
+      mentor: mentorship.attributes,
+      protege: protege.attributes
+    }, (mentor) => {
+      if (mentor) {
+        this.userService.bindProtegeToMentor(protege.id, mentor.id).subscribe((user: User) => {
+          this.destroyExistingRelations(user);
+          const currentMentorship = this.mentorshipList.find(item => item.id === mentor.id);
+          currentMentorship.attributes.proteges.push(user);
+        });
+      }
+    });
+  }
+
+  addProtege(mentorship) {
+    this.dialogService.openMentorshipManagementDialog({
+      mode: 'addProtege',
+      mentor: mentorship.attributes
+    }, (protege) => {
+      if (protege) {
+        this.userService.bindProtegeToMentor(protege.id, mentorship.id).subscribe((user: User) => {
+          this.destroyExistingRelations(user);
+          mentorship.attributes.proteges.push(user);
+        });
+      }
+    });
+  }
+
   deleteProtege(mentor, protege) {
-    const htmlContent = `<p>Вы уверены, что <b>${protege.firstName} ${protege.lastName}</b> больше не протеже для <b>${mentor.firstName} ${mentor.lastName}</b> ?</p>`;
+    const htmlContent = `<p>Вы уверены, что <b>
+      ${protege.attributes.first_name} ${protege.attributes.last_name}</b>
+      больше не протеже для <b>${mentor.attributes.first_name}
+      ${mentor.attributes.last_name}</b> ?</p>`;
 
     this.dialogService.openConfirmDialog(htmlContent, (result) => {
-      console.log('Delete protege:', result);
+      if (result) {
+        this.userService.bindProtegeToMentor(protege.id, '').subscribe((user: User) => {
+          this.destroyExistingRelations(user);
+        });
+      }
     });
   }
 
@@ -70,6 +107,17 @@ export class MentorProtegeComponent implements OnInit {
 
     this.dialogService.openConfirmDialog(htmlContent, (result) => {
       console.log('Clear protege status:', result);
+    });
+  }
+
+  destroyExistingRelations(user) {
+    this.mentorshipList.forEach(mentorship => {
+      const index = mentorship.attributes.proteges.findIndex(protege => {
+        return protege.id === user.id;
+      });
+      if (index !== -1) {
+        mentorship.attributes.proteges.splice(index, 1);
+      }
     });
   }
 

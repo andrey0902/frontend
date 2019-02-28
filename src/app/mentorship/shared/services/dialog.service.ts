@@ -21,12 +21,10 @@ export class DialogService {
     });
   }
 
-  openMentorshipManagementDialog(mode, callback) {
+  openMentorshipManagementDialog(data, callback) {
     const dialogRef = this.dialog.open(MentorshipManagementDialogComponent, {
       width: '500px',
-      data: {
-        mode
-      }
+      data
     });
 
     dialogRef.afterClosed().subscribe(result => {

@@ -21,7 +21,7 @@
           <lt-action-btn
             [tooltip]="'Добавить протеже ментору'"
             [icon]="'person_add'"
-            (action)="addProtege()">
+            (action)="addProtege(mentorship)">
           </lt-action-btn>
           <lt-action-btn
             [tooltip]="'Убрать ментора'"
@@ -41,7 +41,7 @@
           <lt-action-btn
             [tooltip]="'Сменить ментора'"
             [icon]="'transfer_within_a_station'"
-            (action)="changeMentor()">
+            (action)="changeMentor(mentorship, protege)">
           </lt-action-btn>
           <lt-action-btn
             [tooltip]="'Убрать протеже'"

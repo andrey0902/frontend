@@ -39,6 +39,11 @@ export class UserService {
     return this.http.delete(`${ApiConfig.mentors}/${mentor_id}`, { ...httpOptions });
   }
 
+  bindProtegeToMentor(protege_id, mentor_id) {
+    const params = { mentor: mentor_id };
+    return this.http.patch(`${ApiConfig.protege}/${protege_id}`, {}, { ...httpOptions, params });
+  }
+
   getNeedMentorUsers() {
     return this.http.get('assets/mockDB/users.json').pipe(
       map((users: User[]) => {

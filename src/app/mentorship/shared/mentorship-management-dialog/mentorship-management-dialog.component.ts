@@ -7,8 +7,16 @@ import {UserService, UserResponse} from '../../../core/services/user.service';
 import {User} from '../../../models/user.model';
 
 export interface DialogData {
-  mentor: string;
+  mode: string;
+  protege?: any;
+  mentor?: any;
 }
+
+const modeMap = {
+  addMentor: { is_mentor: false },
+  addProtege: { is_protege: true },
+  changeMentor: { is_mentor: true }
+};
 
 @Component({
   selector: 'lt-add-mentor-dialog',
@@ -34,7 +42,10 @@ export class MentorshipManagementDialogComponent implements OnInit {
           if (value.length === 0) {
             return of([]);
           }
-          return this.userService.getUsers({ name: value })
+          return this.userService.getUsers({
+            name: value,
+            ...modeMap[this.data.mode]
+          })
             .pipe(
               map((res: UserResponse) => this.tempFilter(res))
             );
@@ -59,7 +70,7 @@ export class MentorshipManagementDialogComponent implements OnInit {
   }
 
   private tempFilter(users) {
-    return users.filter(user => !user.attributes.is_mentor);
+    return users.filter(user => this.data.mode === 'changeMentor' ? !!user.attributes.is_mentor : !user.attributes.is_mentor);
   }
 
 }

@@ -8,9 +8,18 @@
 
 
 .mat-dialog-title {
-  font-size: 1.9rem;
-  text-align: center;
-  font-family: "Google Sans", Roboto, Arial, sans-serif;
+
+  h3 {
+    margin: 0;
+    font-size: 1.9rem;
+    text-align: center;
+  }
+
+  p {
+    text-align: center;
+    font-size: .9em;
+    margin: 5px 0 0;
+  }
 }
 
 .full-width {
