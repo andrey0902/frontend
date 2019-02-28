@@ -5,6 +5,7 @@ import {Observable, of} from 'rxjs';
 import {Action} from '@ngrx/store';
 import {UsersActionTypes, LoadUsersSuccess, LoadUsersFail} from './users.actions';
 import {catchError, map, switchMap} from 'rxjs/operators';
+import {User} from '../../models/user.model';
 
 @Injectable()
 export class UsersEffectService {
@@ -18,7 +19,9 @@ export class UsersEffectService {
     ofType(UsersActionTypes.LOAD_USERS),
     switchMap(() => {
       return this.userService.getUsers().pipe(
-        map((res: any) => new LoadUsersSuccess(res.data)),
+        map((users: User[]) => {
+          return new LoadUsersSuccess(users);
+        }),
         catchError(err => of(new LoadUsersFail(err)))
       );
     })
