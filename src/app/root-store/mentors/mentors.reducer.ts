@@ -1,15 +1,15 @@
-import {User} from '../../models/user.model';
+import {UsersMap} from '../../models/user.model';
 import {MentorsActionTypes, MentorsActionUnion} from './mentors.actions';
 import {MentorHelper} from './mentor.helper';
 
 export interface MentorsState {
-  mentors: User[];
+  mentors: UsersMap ;
   loading: boolean;
   error: any;
 }
 
 const initialState: MentorsState = {
-  mentors: null,
+  mentors: {},
   loading: false,
   error: null
 };
@@ -33,50 +33,50 @@ export function mentorsReducer(state = initialState, action: MentorsActionUnion)
       };
     }
 
-    case MentorsActionTypes.LOAD_MENTORS_FAIL: {
-      return {
-        ...state,
-        error: action.payload,
-        loading: false,
-      };
-    }
-
     case MentorsActionTypes.ADD_MENTOR_SUCCESS: {
       return {
         ...state,
         error: null,
-        mentors: [
-          action.payload,
+        mentors: {
+          ...action.payload,
           ...state.mentors,
-        ]
-      };
-    }
-
-    case MentorsActionTypes.ADD_MENTOR_FAIL: {
-      return {
-        ...state,
-        error: action.payload,
-        loading: false,
+        }
       };
     }
 
     case MentorsActionTypes.DELETE_MENTOR_SUCCESS: {
       return {
         ...state,
-        mentors: MentorHelper.deleteMentor(state.mentors, action.payload),
+        mentors: {...MentorHelper.deleteMentor(state.mentors, action.payload)},
         error: null,
       };
     }
 
-    case MentorsActionTypes.DELETE_MENTOR_FAIL: {
+    case MentorsActionTypes.ADD_PROTEGE_SUCCESS: {
       return {
         ...state,
-        error: action.payload,
-        loading: false,
+        mentors: {...MentorHelper.addProtege(state.mentors, action.payload.protege, action.payload.mentorId)},
+        error: null,
       };
     }
 
-    case MentorsActionTypes.UPDATE_RELATIONS_FAIL: {
+    case MentorsActionTypes.CHANGE_MENTOR_SUCCESS: {
+      return {
+        ...state,
+        mentors: {...MentorHelper.changeMentor(state.mentors, action.payload.protege, action.payload.newMentorId, action.payload.currentMentorId)},
+        error: null,
+      };
+    }
+
+    case MentorsActionTypes.DELETE_PROTEGE_SUCCESS: {
+      return {
+        ...state,
+        mentors: {...MentorHelper.deleteProtege(state.mentors, action.payload.protegeId, action.payload.currentMentorId)},
+        error: null,
+      };
+    }
+
+    case MentorsActionTypes.DISPATCH_MENTORS_FAIL: {
       return {
         ...state,
         error: action.payload,

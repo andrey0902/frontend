@@ -5,15 +5,14 @@ import {Observable, of} from 'rxjs';
 import {Action} from '@ngrx/store';
 import {
   AddMentor,
-  AddMentorFail,
-  AddMentorSuccess,
-  DeleteMentor, DeleteMentorFail, DeleteMentorSuccess, LoadMentors,
-  LoadMentorsFail,
+  AddMentorSuccess, AddProtege, AddProtegeSuccess, ChangeMentor, ChangeMentorSuccess,
+  DeleteMentor, DeleteMentorSuccess, DeleteProtege, DeleteProtegeSuccess, DispatchMentorsFail,
   LoadMentorsSuccess,
-  MentorsActionTypes, UpdateRelations, UpdateRelationsFail
+  MentorsActionTypes
 } from './mentors.actions';
 import {catchError, map, switchMap} from 'rxjs/operators';
-import {User} from '../../models/user.model';
+import {User, UsersMap} from '../../models/user.model';
+import {MentorHelper} from './mentor.helper';
 
 @Injectable() export class MentorsEffectService {
 
@@ -25,13 +24,12 @@ import {User} from '../../models/user.model';
   @Effect() getMentors: Observable<Action> = this.actions$.pipe(
     ofType(MentorsActionTypes.LOAD_MENTORS),
     switchMap(() => {
-      return this.userService.getMentors({include: 'proteges'}).pipe(
-        map((mentors: any[]) => {
-          const mentorList: User[] = mentors.map(mentor => new User(mentor));
-          console.log(mentorList);
-          return new LoadMentorsSuccess(mentorList);
-        }),
-        catchError(err => of(new LoadMentorsFail(err.error.errors)))
+        return this.userService.getMentors({include: 'proteges'}).pipe(
+          map((mentors: any[]) => {
+            const mentorList = MentorHelper.createUsersMap(mentors);
+            return new LoadMentorsSuccess(mentorList);
+          }),
+          catchError(err => of(new DispatchMentorsFail(err.error.errors)))
       );
     })
   );
@@ -41,10 +39,10 @@ import {User} from '../../models/user.model';
     switchMap((action: AddMentor) => {
       return this.userService.addMentor(action.payload).pipe(
         map((res: any) => {
-          const mentor: User = new User(res);
+          const mentor: UsersMap = { [res.id]: new User(res)};
           return new AddMentorSuccess(mentor);
         }),
-        catchError(err => of(new AddMentorFail(err.error.errors)))
+        catchError(err => of(new DispatchMentorsFail(err.error.errors)))
       );
     })
   );
@@ -54,20 +52,55 @@ import {User} from '../../models/user.model';
     switchMap((action: DeleteMentor) => {
       return this.userService.deleteMentor(action.payload).pipe(
         map((res: any) => {
-          const user: User = new User(res);
-          return new DeleteMentorSuccess(user.id);
+          return new DeleteMentorSuccess(res.id);
         }),
-        catchError(err => of(new DeleteMentorFail(err.error.errors)))
+        catchError(err => of(new DispatchMentorsFail(err.error.errors)))
       );
     })
   );
 
-  @Effect() updateRelations: Observable<Action> = this.actions$.pipe(
-    ofType(MentorsActionTypes.UPDATE_RELATIONS),
-    switchMap((action: UpdateRelations) => {
+  @Effect() addProtege: Observable<Action> = this.actions$.pipe(
+    ofType(MentorsActionTypes.ADD_PROTEGE),
+    switchMap((action: AddProtege) => {
       return this.userService.bindProtegeToMentor(action.payload).pipe(
-        map(() => new LoadMentors()),
-        catchError(err => of(new UpdateRelationsFail(err.error.errors)))
+        map((res: any) => {
+          return new AddProtegeSuccess({
+            protege: new User(res),
+            mentorId: action.payload.mentorId
+          });
+        }),
+        catchError(err => of(new DispatchMentorsFail(err.error.errors)))
+      );
+    })
+  );
+
+  @Effect() changeMentor: Observable<Action> = this.actions$.pipe(
+    ofType(MentorsActionTypes.CHANGE_MENTOR),
+    switchMap((action: ChangeMentor) => {
+      return this.userService.bindProtegeToMentor(action.payload).pipe(
+        map((res: any) => {
+          return new ChangeMentorSuccess({
+            protege: new User(res),
+            newMentorId: action.payload.mentorId,
+            currentMentorId: action.payload.currentMentorId
+          });
+        }),
+        catchError(err => of(new DispatchMentorsFail(err.error.errors)))
+      );
+    })
+  );
+
+  @Effect() deleteProtege: Observable<Action> = this.actions$.pipe(
+    ofType(MentorsActionTypes.DELETE_PROTEGE),
+    switchMap((action: DeleteProtege) => {
+      return this.userService.bindProtegeToMentor(action.payload).pipe(
+        map((res: any) => {
+          return new DeleteProtegeSuccess({
+            protegeId: res.id,
+            currentMentorId: action.payload.currentMentorId
+          });
+        }),
+        catchError(err => of(new DispatchMentorsFail(err.error.errors)))
       );
     })
   );
