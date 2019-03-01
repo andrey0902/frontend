@@ -1,5 +1,6 @@
 import {User} from '../../models/user.model';
 import {MentorsActionTypes, MentorsActionUnion} from './mentors.actions';
+import {MentorHelper} from './mentor.helper';
 
 export interface MentorsState {
   mentors: User[];
@@ -33,6 +34,49 @@ export function mentorsReducer(state = initialState, action: MentorsActionUnion)
     }
 
     case MentorsActionTypes.LOAD_MENTORS_FAIL: {
+      return {
+        ...state,
+        error: action.payload,
+        loading: false,
+      };
+    }
+
+    case MentorsActionTypes.ADD_MENTOR_SUCCESS: {
+      return {
+        ...state,
+        error: null,
+        mentors: [
+          action.payload,
+          ...state.mentors,
+        ]
+      };
+    }
+
+    case MentorsActionTypes.ADD_MENTOR_FAIL: {
+      return {
+        ...state,
+        error: action.payload,
+        loading: false,
+      };
+    }
+
+    case MentorsActionTypes.DELETE_MENTOR_SUCCESS: {
+      return {
+        ...state,
+        mentors: MentorHelper.deleteMentor(state.mentors, action.payload),
+        error: null,
+      };
+    }
+
+    case MentorsActionTypes.DELETE_MENTOR_FAIL: {
+      return {
+        ...state,
+        error: action.payload,
+        loading: false,
+      };
+    }
+
+    case MentorsActionTypes.UPDATE_RELATIONS_FAIL: {
       return {
         ...state,
         error: action.payload,
