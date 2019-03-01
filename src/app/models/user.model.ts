@@ -1,20 +1,43 @@
-export interface User {
+export class User {
   type: string;
-  id: string;
-  attributes: {
-    first_name: string;
-    last_name: string;
-    photo: string;
-    photo_thumbnail: string;
-    is_mentor: boolean;
-    portal_id: number;
-    slack: string;
-    specialization_id: number;
-    proteges: any[]
-    // need_mentor?: boolean;
-    // want_be_mentor?: boolean;
-    links: {
-      self: string;
-    }
-  };
+  id: string | number;
+  attributes: Attributes;
+  constructor(data) {
+    this.type = data.type;
+    this.id = data.id;
+    this.attributes = new Attributes(data.attributes);
+  }
+}
+
+export class Attributes {
+  firstName: string;
+  lastName: string;
+  photo: string;
+  photoThumbnail: string;
+  isMentor: boolean;
+  portalId: number;
+  slack: string;
+  specializationId: number;
+  proteges: any[];
+  // need_mentor?: boolean;
+  // want_be_mentor?: boolean;
+  constructor(data) {
+    this.firstName = data.first_name;
+    this.lastName = data.last_name;
+    this.photo = data.photo;
+    this.photoThumbnail = data.photo_thumbnail;
+    this.isMentor = data.is_mentor;
+    this.portalId = data.portal_id;
+    this.slack = data.slack;
+    this.specializationId = data.specializtion_id;
+    this.proteges = data.proteges ? this.prepareProtege(data.proteges) : null;
+  }
+
+  prepareProtege(data: any[]) {
+    return data.map(protege => new User(protege));
+  }
+
+  get fullName() {
+    return `${this.firstName} ${this.lastName}`;
+  }
 }

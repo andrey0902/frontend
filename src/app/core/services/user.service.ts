@@ -10,10 +10,10 @@ const httpOptions = {
   })
 };
 
-export interface UserResponse {
-  data: User[];
-  included: any[];
-}
+// export interface UserResponse {
+//   data: User[];
+//   included: any[];
+// }
 
 @Injectable({
   providedIn: 'root'
@@ -39,24 +39,24 @@ export class UserService {
     return this.http.delete(`${ApiConfig.mentors}/${mentor_id}`, { ...httpOptions });
   }
 
-  bindProtegeToMentor(protege_id, mentor_id) {
-    const params = { mentor: mentor_id };
-    return this.http.patch(`${ApiConfig.protege}/${protege_id}`, {}, { ...httpOptions, params });
+  bindProtegeToMentor({ protegeId, mentorId }) {
+    const params = { mentor: mentorId };
+    return this.http.patch(`${ApiConfig.protege}/${protegeId}`, {}, { ...httpOptions, params });
   }
 
-  getNeedMentorUsers() {
-    return this.http.get('assets/mockDB/users.json').pipe(
-      map((users: User[]) => {
-        return users.filter(user => !user.attributes.is_mentor);
-      })
-    );
-  }
-
-  getBecomeMentorUsers() {
-    return this.http.get('assets/mockDB/users.json').pipe(
-      map((users: User[]) => {
-        return users.filter(user => !!user.attributes.is_mentor);
-      })
-    );
-  }
+  // getNeedMentorUsers() {
+  //   return this.http.get('assets/mockDB/users.json').pipe(
+  //     map((users: User[]) => {
+  //       return users.filter(user => !user.attributes.is_mentor);
+  //     })
+  //   );
+  // }
+  //
+  // getBecomeMentorUsers() {
+  //   return this.http.get('assets/mockDB/users.json').pipe(
+  //     map((users: User[]) => {
+  //       return users.filter(user => !!user.attributes.is_mentor);
+  //     })
+  //   );
+  // }
 }

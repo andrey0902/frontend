@@ -3,7 +3,7 @@ import {MAT_DIALOG_DATA} from '@angular/material';
 import {FormControl, ValidationErrors} from '@angular/forms';
 import {Observable, of} from 'rxjs';
 import {debounceTime, distinctUntilChanged, map, switchMap} from 'rxjs/operators';
-import {UserService, UserResponse} from '../../../core/services/user.service';
+import {UserService} from '../../../core/services/user.service';
 import {User} from '../../../models/user.model';
 
 export interface DialogData {
@@ -47,14 +47,15 @@ export class MentorshipManagementDialogComponent implements OnInit {
             ...modeMap[this.data.mode]
           })
             .pipe(
-              map((res: UserResponse) => this.tempFilter(res))
+              map((res: any[]) => res.map(user => new User(user))),
+              map((res: any[]) => this.tempFilter(res))
             );
         })
       );
   }
 
-  displayFn(value) {
-    return value ? `${value.attributes.first_name} ${value.attributes.last_name}` : '';
+  displayFn(user) {
+    return user ? user.attributes.fullName : '';
   }
 
   selectUser(event) {
@@ -70,7 +71,7 @@ export class MentorshipManagementDialogComponent implements OnInit {
   }
 
   private tempFilter(users) {
-    return users.filter(user => this.data.mode === 'changeMentor' ? !!user.attributes.is_mentor : !user.attributes.is_mentor);
+    return users.filter(user => this.data.mode === 'changeMentor' ? !!user.attributes.isMentor : !user.attributes.isMentor);
   }
 
 }

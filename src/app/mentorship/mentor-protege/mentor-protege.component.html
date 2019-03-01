@@ -10,7 +10,7 @@
       </div>
     </div>
   </div>
-  <div class="mentorship-table__row" *ngFor="let mentorship of mentorshipList">
+  <div class="mentorship-table__row" *ngFor="let mentorship of mentorshipList$ | async">
     <div class="mentorship-table__cell activator-actions">
       <div class="mentor">
         <lt-user
