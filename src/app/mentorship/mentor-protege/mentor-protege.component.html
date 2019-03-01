@@ -10,7 +10,7 @@
       </div>
     </div>
   </div>
-  <div class="mentorship-table__row" *ngFor="let mentorship of mentorshipList$ | async">
+  <div class="mentorship-table__row" *ngFor="let mentorship of objectValues(mentorshipList$ | async)">
     <div class="mentorship-table__cell activator-actions">
       <div class="mentor">
         <lt-user
@@ -32,7 +32,7 @@
       </div>
     </div>
     <div class="mentorship-table__cell">
-      <div class="protege activator-actions" *ngFor="let protege of mentorship.attributes.proteges">
+      <div class="protege activator-actions" *ngFor="let protege of objectValues(mentorship.attributes.proteges)">
         <lt-user
           [user]="protege.attributes"
           [routerLink]="['/profile', protege.id]">

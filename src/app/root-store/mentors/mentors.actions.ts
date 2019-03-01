@@ -1,18 +1,20 @@
 import {Action} from '@ngrx/store';
-import {User} from '../../models/user.model';
+import {User, UsersMap} from '../../models/user.model';
 
 export enum MentorsActionTypes {
   LOAD_MENTORS = '[Mentors] Load Mentors',
   LOAD_MENTORS_SUCCESS = '[Mentors] Load Mentors Success',
-  LOAD_MENTORS_FAIL = '[Mentors] Load Mentors Fail',
   ADD_MENTOR = '[Mentors] Add Mentor',
   ADD_MENTOR_SUCCESS = '[Mentors] Add Mentor Success',
-  ADD_MENTOR_FAIL = '[Mentors] Add Mentor Fail',
   DELETE_MENTOR = '[Mentors] Delete Mentor',
   DELETE_MENTOR_SUCCESS = '[Mentors] Delete Mentor Success',
-  DELETE_MENTOR_FAIL = '[Mentors] Delete Mentor Fail',
-  UPDATE_RELATIONS = '[Mentors] Update Relations',
-  UPDATE_RELATIONS_FAIL = '[Mentors] Update Relations Fail'
+  ADD_PROTEGE = '[Mentors] Add Protege',
+  ADD_PROTEGE_SUCCESS = '[Mentors] Add Protege Success',
+  CHANGE_MENTOR = '[Mentors] Change Mentor',
+  CHANGE_MENTOR_SUCCESS = '[Mentors] Change Mentor Success',
+  DELETE_PROTEGE = '[Mentors] Delete Protege',
+  DELETE_PROTEGE_SUCCESS = '[Mentors] Delete Protege Success',
+  DISPATCH_MENTORS_FAIL = '[Mentors] Dispatch Mentors Fail'
 }
 
 export class LoadMentors implements Action {
@@ -22,14 +24,7 @@ export class LoadMentors implements Action {
 export class LoadMentorsSuccess implements Action {
   readonly type = MentorsActionTypes.LOAD_MENTORS_SUCCESS;
 
-  constructor(public payload: User[]) {
-  }
-}
-
-export class LoadMentorsFail implements Action {
-  readonly type = MentorsActionTypes.LOAD_MENTORS_FAIL;
-
-  constructor(public payload: any) {
+  constructor(public payload: UsersMap) {
   }
 }
 
@@ -43,14 +38,21 @@ export class AddMentor implements Action {
 export class AddMentorSuccess implements Action {
   readonly type = MentorsActionTypes.ADD_MENTOR_SUCCESS;
 
-  constructor(public payload: User) {
+  constructor(public payload: UsersMap) {
   }
 }
 
-export class AddMentorFail implements Action {
-  readonly type = MentorsActionTypes.ADD_MENTOR_FAIL;
+export class AddProtege implements Action {
+  readonly type = MentorsActionTypes.ADD_PROTEGE;
 
-  constructor(public payload: any) {
+  constructor(public payload: { protegeId: string, mentorId: string }) {
+  }
+}
+
+export class AddProtegeSuccess implements Action {
+  readonly type = MentorsActionTypes.ADD_PROTEGE_SUCCESS;
+
+  constructor(public payload: { protege: User, mentorId: string }) {
   }
 }
 
@@ -68,22 +70,36 @@ export class DeleteMentorSuccess implements Action {
   }
 }
 
-export class DeleteMentorFail implements Action {
-  readonly type = MentorsActionTypes.DELETE_MENTOR_FAIL;
+export class ChangeMentor implements Action {
+  readonly type = MentorsActionTypes.CHANGE_MENTOR;
 
-  constructor(public payload: any) {
+  constructor(public payload: { protegeId: string, mentorId: string , currentMentorId: string }) {
   }
 }
 
-export class UpdateRelations implements Action {
-  readonly type = MentorsActionTypes.UPDATE_RELATIONS;
+export class ChangeMentorSuccess implements Action {
+  readonly type = MentorsActionTypes.CHANGE_MENTOR_SUCCESS;
 
-  constructor(public payload: { protegeId: string | number, mentorId: string | number }) {
+  constructor(public payload: { protege: User, newMentorId: string , currentMentorId: string}) {
   }
 }
 
-export class UpdateRelationsFail implements Action {
-  readonly type = MentorsActionTypes.UPDATE_RELATIONS_FAIL;
+export class DeleteProtege implements Action {
+  readonly type = MentorsActionTypes.DELETE_PROTEGE;
+
+  constructor(public payload: { protegeId: string, mentorId: string , currentMentorId: string }) {
+  }
+}
+
+export class DeleteProtegeSuccess implements Action {
+  readonly type = MentorsActionTypes.DELETE_PROTEGE_SUCCESS;
+
+  constructor(public payload: { protegeId: string, currentMentorId: string }) {
+  }
+}
+
+export class DispatchMentorsFail implements Action {
+  readonly type = MentorsActionTypes.DISPATCH_MENTORS_FAIL;
 
   constructor(public payload: any) {
   }
@@ -92,12 +108,14 @@ export class UpdateRelationsFail implements Action {
 export type MentorsActionUnion =
   | LoadMentors
   | LoadMentorsSuccess
-  | LoadMentorsFail
   | AddMentor
   | AddMentorSuccess
-  | AddMentorFail
   | DeleteMentor
   | DeleteMentorSuccess
-  | DeleteMentorFail
-  | UpdateRelations
-  | UpdateRelationsFail;
+  | AddProtege
+  | AddProtegeSuccess
+  | ChangeMentor
+  | ChangeMentorSuccess
+  | DeleteProtege
+  | DeleteProtegeSuccess
+  | DispatchMentorsFail;

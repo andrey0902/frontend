@@ -1,7 +1,5 @@
 import { Injectable } from '@angular/core';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
-import {User} from '../../models/user.model';
-import {map} from 'rxjs/operators';
 import {ApiConfig} from '../../helpers/apiConfig';
 
 const httpOptions = {
@@ -9,11 +7,6 @@ const httpOptions = {
     'Access-Control-Allow-Origin': '*'
   })
 };
-
-// export interface UserResponse {
-//   data: User[];
-//   included: any[];
-// }
 
 @Injectable({
   providedIn: 'root'

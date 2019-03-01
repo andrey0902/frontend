@@ -2,9 +2,16 @@ import { Component, OnInit } from '@angular/core';
 import {DialogService} from '../shared/services/dialog.service';
 import {UserService} from '../../core/services/user.service';
 import {Store} from '@ngrx/store';
-import {AddMentor, UpdateRelations, DeleteMentor, LoadMentors} from '../../root-store/mentors/mentors.actions';
+import {
+  AddMentor,
+  DeleteMentor,
+  LoadMentors,
+  AddProtege,
+  ChangeMentor,
+  DeleteProtege
+} from '../../root-store/mentors/mentors.actions';
 import {selectMentors} from '../../root-store/mentors/mentors.selectors';
-import {User} from '../../models/user.model';
+import {UsersMap} from '../../models/user.model';
 import {Observable} from 'rxjs';
 
 @Component({
@@ -20,7 +27,8 @@ export class MentorProtegeComponent implements OnInit {
     private store: Store<any>
   ) { }
 
-  mentorshipList$: Observable<User[]>;
+  mentorshipList$: Observable<UsersMap>;
+  objectValues = Object.values;
 
   ngOnInit() {
     this.mentorshipList$ = this.store.select(selectMentors);
@@ -47,7 +55,7 @@ export class MentorProtegeComponent implements OnInit {
       mentor: mentorship.attributes,
       protege: protege.attributes
     }, (mentor) => {
-      if (mentor) { this.store.dispatch(new UpdateRelations({protegeId: protege.id, mentorId: mentor.id})); }
+      if (mentor) { this.store.dispatch(new ChangeMentor({protegeId: protege.id, mentorId: mentor.id, currentMentorId: mentorship.id})); }
     });
   }
 
@@ -56,7 +64,7 @@ export class MentorProtegeComponent implements OnInit {
       mode: 'addProtege',
       mentor: mentorship.attributes
     }, (protege) => {
-      if (protege) { this.store.dispatch(new UpdateRelations({protegeId: protege.id, mentorId: mentorship.id})); }
+      if (protege) { this.store.dispatch(new AddProtege({protegeId: protege.id, mentorId: mentorship.id})); }
     });
   }
 
@@ -65,7 +73,7 @@ export class MentorProtegeComponent implements OnInit {
       больше не протеже для <b>${mentor.attributes.fullName}</b> ?</p>`;
 
     this.dialogService.openConfirmDialog(htmlContent, (result) => {
-      if (result) { this.store.dispatch(new UpdateRelations({protegeId: protege.id, mentorId: ''})); }
+      if (result) { this.store.dispatch(new DeleteProtege({protegeId: protege.id, mentorId: '', currentMentorId: mentor.id})); }
     });
   }
 
