@@ -10,6 +10,7 @@
     <mat-menu #menu="matMenu" overlapTrigger="false">
       <button mat-menu-item [routerLink]="['/profile', currentUser?.id]">Профиль</button>
       <button mat-menu-item routerLink="mentorship">Таблица ответствености</button>
+      <button mat-menu-item [routerLink]="['/plan/own', currentUser.id]">Мой ИПР</button>
     </mat-menu>
   </div>
 </div>
