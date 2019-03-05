@@ -10,18 +10,18 @@
       </div>
     </div>
   </div>
-  <div class="mentorship-table__row" *ngFor="let mentorship of mentorshipList">
+  <div class="mentorship-table__row" *ngFor="let mentorship of objectValues(mentorshipList$ | async)">
     <div class="mentorship-table__cell activator-actions">
       <div class="mentor">
         <lt-user
-          [user]="mentorship"
+          [user]="mentorship.attributes"
           [routerLink]="['/profile', mentorship.id]">
         </lt-user>
         <div class="actions">
           <lt-action-btn
             [tooltip]="'Добавить протеже ментору'"
             [icon]="'person_add'"
-            (action)="addProtege()">
+            (action)="addProtege(mentorship)">
           </lt-action-btn>
           <lt-action-btn
             [tooltip]="'Убрать ментора'"
@@ -32,16 +32,16 @@
       </div>
     </div>
     <div class="mentorship-table__cell">
-      <div class="protege activator-actions" *ngFor="let protege of mentorship.proteges">
+      <div class="protege activator-actions" *ngFor="let protege of objectValues(mentorship.attributes.proteges)">
         <lt-user
-          [user]="protege"
+          [user]="protege.attributes"
           [routerLink]="['/profile', protege.id]">
         </lt-user>
         <div class="actions">
           <lt-action-btn
             [tooltip]="'Сменить ментора'"
             [icon]="'transfer_within_a_station'"
-            (action)="changeMentor()">
+            (action)="changeMentor(mentorship, protege)">
           </lt-action-btn>
           <lt-action-btn
             [tooltip]="'Убрать протеже'"

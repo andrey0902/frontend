@@ -4,13 +4,10 @@ import { NgModule } from '@angular/core';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import {StoreModule} from '@ngrx/store';
-import { StoreDevtoolsModule } from '@ngrx/store-devtools';
-import { environment } from '../environments/environment';
 import {CoreModule} from './core/core.module';
 import {HttpClientModule} from '@angular/common/http';
 import { SharedModule } from './shared/shared.module';
-
+import {RootStoreModule} from './root-store/root-store.module';
 
 @NgModule({
   declarations: [
@@ -20,8 +17,7 @@ import { SharedModule } from './shared/shared.module';
     BrowserModule,
     BrowserAnimationsModule,
     HttpClientModule,
-    StoreModule.forRoot({}),
-    !environment.production ? StoreDevtoolsModule.instrument() : [],
+    RootStoreModule,
     AppRoutingModule,
     CoreModule,
     SharedModule

@@ -18,10 +18,10 @@ export class NeedAMentorComponent implements OnInit {
   users: User[];
 
   ngOnInit() {
-    this.userService.getNeedMentorUsers().subscribe(users => {
-      this.users = users;
-      console.log(this.users);
-    });
+    // this.userService.getNeedMentorUsers().subscribe(users => {
+    //   this.users = users;
+    //   console.log(this.users);
+    // });
   }
 
   clearStatus(user) {

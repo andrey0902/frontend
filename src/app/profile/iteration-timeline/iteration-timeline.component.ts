@@ -38,7 +38,6 @@ export class IterationTimelineComponent implements OnInit {
   }
 
   ngOnInit() {
-    console.log(this.iteration, moment(this.iteration.startDate, this.iteration.format));
     const range = moment().range(moment(this.startDate, this.iteration.format), moment(this.endDate, this.iteration.format));
     for (const month of range.by('months')) {
       const addMonth = {
@@ -52,7 +51,6 @@ export class IterationTimelineComponent implements OnInit {
       }
       this.months.push(addMonth);
     }
-    console.log(this.months);
     this.progress_percent = this.getPosition(moment().format(this.iteration.format));
   }
 

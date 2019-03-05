@@ -1,6 +1,6 @@
 import {ModuleWithProviders, NgModule} from '@angular/core';
 import { CommonModule } from '@angular/common';
-import {AddMentorDialogComponent} from './add-mentor-dialog/add-mentor-dialog.component';
+import {MentorshipManagementDialogComponent} from './mentorship-management-dialog/mentorship-management-dialog.component';
 import {ReactiveFormsModule} from '@angular/forms';
 import {MaterialModule} from '../../material/material.module';
 import {CoreModule} from '../../core/core.module';
@@ -11,7 +11,7 @@ import {DialogService} from './services/dialog.service';
 
 @NgModule({
   declarations: [
-    AddMentorDialogComponent,
+    MentorshipManagementDialogComponent,
     ActionBtnComponent,
     ConfirmDialogComponent
   ],
@@ -23,13 +23,13 @@ import {DialogService} from './services/dialog.service';
     RouterModule
   ],
   exports: [
-    AddMentorDialogComponent,
+    MentorshipManagementDialogComponent,
     ConfirmDialogComponent,
     ActionBtnComponent,
     MaterialModule
   ],
   entryComponents: [
-    AddMentorDialogComponent,
+    MentorshipManagementDialogComponent,
     ConfirmDialogComponent
   ]
 })
