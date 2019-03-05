@@ -1,0 +1,25 @@
+.simple-input {
+  position: relative;
+}
+.action {
+
+  &-wrapper {
+    width: 60px;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    position: absolute;
+    right: 2px;
+    top: 12%;
+  }
+
+  &-save, &-delete {
+    border: none;
+    background: transparent;
+    padding: 0;
+
+  }
+}
+.full-width {
+  display: block;
+}

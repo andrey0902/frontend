@@ -9,6 +9,7 @@ import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { environment } from '../environments/environment';
 import {CoreModule} from './core/core.module';
 import {HttpClientModule} from '@angular/common/http';
+import { SharedModule } from './shared/shared.module';
 
 
 @NgModule({
@@ -22,7 +23,8 @@ import {HttpClientModule} from '@angular/common/http';
     StoreModule.forRoot({}),
     !environment.production ? StoreDevtoolsModule.instrument() : [],
     AppRoutingModule,
-    CoreModule
+    CoreModule,
+    SharedModule
   ],
   providers: [],
   bootstrap: [AppComponent]
