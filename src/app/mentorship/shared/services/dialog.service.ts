@@ -8,12 +8,10 @@ export class DialogService {
 
   constructor(private dialog: MatDialog) { }
 
-  openConfirmDialog(htmlContent, callback) {
+  openConfirmDialog(data, callback) {
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
       width: '960px',
-      data: {
-        htmlContent
-      }
+      data
     });
 
     dialogRef.afterClosed().subscribe(result => {

@@ -1,8 +1,8 @@
 import {User, UsersMap} from '../../models/user.model';
 
-export class MentorHelper {
+export class MentorsHelper {
 
-  public  static createUsersMap(users) {
+  public static createUsersMap(users) {
     const userList = {};
     users.forEach(user => {
       userList[user.id] = new User(user);
@@ -17,7 +17,7 @@ export class MentorHelper {
   }
 
   public static addProtege(mentorList: UsersMap, protege: User, mentorId: string) {
-    const updatedList = MentorHelper.removeRelations(mentorList, protege.id);
+    const updatedList = MentorsHelper.removeRelations(mentorList, protege.id);
     updatedList[mentorId].attributes.proteges = {
       ...updatedList[mentorId].attributes.proteges,
       [protege.id]: protege

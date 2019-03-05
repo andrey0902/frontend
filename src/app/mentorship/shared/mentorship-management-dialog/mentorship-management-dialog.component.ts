@@ -10,12 +10,14 @@ export interface DialogData {
   mode: string;
   protege?: any;
   mentor?: any;
+  placeholder?: string;
 }
 
 const modeMap = {
   addMentor: { is_mentor: false },
   addProtege: { is_protege: true },
-  changeMentor: { is_mentor: true }
+  changeMentor: { is_mentor: true },
+  assignMentor: { is_mentor: true }
 };
 
 @Component({
@@ -70,8 +72,9 @@ export class MentorshipManagementDialogComponent implements OnInit {
     return null;
   }
 
+  // Temporary solution
   private tempFilter(users) {
-    return users.filter(user => this.data.mode === 'changeMentor' ? !!user.attributes.isMentor : !user.attributes.isMentor);
+    return users.filter(user => this.data.mode === 'changeMentor' || this.data.mode === 'assignMentor' ? !!user.attributes.isMentor : !user.attributes.isMentor);
   }
 
 }

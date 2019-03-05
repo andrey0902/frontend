@@ -44,7 +44,7 @@ export class MentorProtegeComponent implements OnInit {
   deleteMentor(mentor) {
     const htmlContent = `<p>Вы уверены, что <b>${mentor.attributes.fullName}</b> больше не ментор ?</p>`;
 
-    this.dialogService.openConfirmDialog(htmlContent, (confirm) => {
+    this.dialogService.openConfirmDialog({ htmlContent }, (confirm) => {
       if (confirm) { this.store.dispatch(new DeleteMentor(mentor.id)); }
     });
   }
@@ -53,7 +53,8 @@ export class MentorProtegeComponent implements OnInit {
     this.dialogService.openMentorshipManagementDialog({
       mode: 'changeMentor',
       mentor: mentorship.attributes,
-      protege: protege.attributes
+      protege: protege.attributes,
+      placeholder: 'Новый ментор'
     }, (mentor) => {
       if (mentor) { this.store.dispatch(new ChangeMentor({protegeId: protege.id, mentorId: mentor.id, currentMentorId: mentorship.id})); }
     });
@@ -62,7 +63,8 @@ export class MentorProtegeComponent implements OnInit {
   addProtege(mentorship) {
     this.dialogService.openMentorshipManagementDialog({
       mode: 'addProtege',
-      mentor: mentorship.attributes
+      mentor: mentorship.attributes,
+      placeholder: 'Протеже'
     }, (protege) => {
       if (protege) { this.store.dispatch(new AddProtege({protegeId: protege.id, mentorId: mentorship.id})); }
     });
@@ -72,7 +74,7 @@ export class MentorProtegeComponent implements OnInit {
     const htmlContent = `<p>Вы уверены, что <b>${protege.attributes.fullName}</b>
       больше не протеже для <b>${mentor.attributes.fullName}</b> ?</p>`;
 
-    this.dialogService.openConfirmDialog(htmlContent, (result) => {
+    this.dialogService.openConfirmDialog({ htmlContent }, (result) => {
       if (result) { this.store.dispatch(new DeleteProtege({protegeId: protege.id, mentorId: '', currentMentorId: mentor.id})); }
     });
   }
@@ -80,7 +82,7 @@ export class MentorProtegeComponent implements OnInit {
   clearProtegeStatus(protege) {
     const htmlContent = `<p>Вы уверены, что хотите очистить статус протеже для <b>${protege.attributes.fullName}</b> ?</p>`;
 
-    this.dialogService.openConfirmDialog(htmlContent, (result) => {
+    this.dialogService.openConfirmDialog({ htmlContent }, (result) => {
       console.log('Clear protege status:', result);
     });
   }

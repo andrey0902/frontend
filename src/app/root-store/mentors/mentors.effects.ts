@@ -12,7 +12,7 @@ import {
 } from './mentors.actions';
 import {catchError, map, switchMap} from 'rxjs/operators';
 import {User, UsersMap} from '../../models/user.model';
-import {MentorHelper} from './mentor.helper';
+import {MentorsHelper} from './mentors.helper';
 
 @Injectable() export class MentorsEffectService {
 
@@ -26,7 +26,7 @@ import {MentorHelper} from './mentor.helper';
     switchMap(() => {
         return this.userService.getMentors({include: 'proteges'}).pipe(
           map((mentors: any[]) => {
-            const mentorList = MentorHelper.createUsersMap(mentors);
+            const mentorList = MentorsHelper.createUsersMap(mentors);
             return new LoadMentorsSuccess(mentorList);
           }),
           catchError(err => of(new DispatchMentorsFail(err.error.errors)))
@@ -37,7 +37,7 @@ import {MentorHelper} from './mentor.helper';
   @Effect() addMentor: Observable<Action> = this.actions$.pipe(
     ofType(MentorsActionTypes.ADD_MENTOR),
     switchMap((action: AddMentor) => {
-      return this.userService.addMentor(action.payload).pipe(
+      return this.userService.addMentor(action.payload, { include: 'proteges' }).pipe(
         map((res: any) => {
           const mentor: UsersMap = { [res.id]: new User(res)};
           return new AddMentorSuccess(mentor);

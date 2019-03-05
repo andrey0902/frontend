@@ -11,6 +11,10 @@
     <p>Протеже: {{ data.protege.fullName }}</p>
     <p>Ментор: {{ data.mentor.fullName }}</p>
   </ng-container>
+  <ng-container *ngIf="data.mode === 'assignMentor'">
+    <h3>Назначить ментора</h3>
+    <p>для {{ data.protege.fullName }}</p>
+  </ng-container>
 </div>
 <div mat-dialog-content>
   <mat-form-field
@@ -18,7 +22,7 @@
     appearance="standard">
     <input
       matInput
-      placeholder="Ментор"
+      [placeholder]="data.placeholder ? data.placeholder : 'Ментор'"
       [formControl]="userInput"
       [matAutocomplete]="auto">
     <mat-autocomplete
