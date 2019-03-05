@@ -5,12 +5,14 @@ import {environment} from '../../environments/environment';
 import {StoreDevtoolsModule} from '@ngrx/store-devtools';
 import {UsersStoreModule} from './users/users-store.module';
 import {MentorsStoreModule} from './mentors/mentors-store.module';
-import {ProtegesStoreModule} from './proteges/proteges-store.module';
+import {MentorRequestsStoreModule} from './mentor-requests/mentor-requests-store.module';
+import {ProtegeRequestsStoreModule} from './protege-requests/protege-requests-store.module';
 
 const STORES = [
   UsersStoreModule,
   MentorsStoreModule,
-  ProtegesStoreModule
+  MentorRequestsStoreModule,
+  ProtegeRequestsStoreModule
 ];
 
 @NgModule({

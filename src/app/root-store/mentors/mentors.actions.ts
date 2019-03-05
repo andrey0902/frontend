@@ -80,7 +80,7 @@ export class ChangeMentor implements Action {
 export class ChangeMentorSuccess implements Action {
   readonly type = MentorsActionTypes.CHANGE_MENTOR_SUCCESS;
 
-  constructor(public payload: { protege: User, newMentorId: string , currentMentorId: string}) {
+  constructor(public payload: { protege: User, newMentorId: string , currentMentorId: string }) {
   }
 }
 

@@ -1,19 +1,28 @@
-<div class="user-item" *ngFor="let user of users">
+<div class="user-item" *ngFor="let request of objectValues(requests$ | async)">
   <lt-user
     class="same-width"
-    [user]="user"
-    [routerLink]="['/profile', user.id]">
+    [user]="request.attributes.user.attributes"
+    [routerLink]="['/profile', request.attributes.user.id]">
   </lt-user>
+  <div class="request-note" *ngIf="request.attributes.text; else emptyText">
+    <p>Примечание:</p>
+    <p>{{request.attributes.text}}</p>
+  </div>
+  <ng-template #emptyText>
+    <div class="empty-text">
+      <p>( примечание отсутствует )</p>
+    </div>
+  </ng-template>
   <div class="actions">
     <lt-action-btn
       [tooltip]="'Назначить ментором'"
       [icon]="'person_add'"
-      (action)="onAction()">
+      (action)="makeMentor(request)">
     </lt-action-btn>
     <lt-action-btn
       [tooltip]="'Очистить статус'"
       [icon]="'delete_forever'"
-      (action)="clearStatus(user)">
+      (action)="clearStatus(request)">
     </lt-action-btn>
   </div>
 </div>

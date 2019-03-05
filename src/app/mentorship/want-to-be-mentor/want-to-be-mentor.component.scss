@@ -1,3 +1,5 @@
+@import "../../../scss/helpers";
+
 :host {
   display: block;
   padding-top: 10px;
@@ -19,6 +21,32 @@
 
 .same-width {
   min-width: 300px;
+}
+
+.request-note {
+  flex-grow: 1;
+  @extend .flex-container;
+  flex-direction: column;
+
+  p {
+    margin: 5px 0;
+    font-size: .9em;
+
+    &:first-child {
+      font-weight: 600;
+      font-family: "Google Sans", Roboto, Arial, sans-serif;
+    }
+  }
+}
+
+.empty-text {
+  @extend .vertical-center;
+  flex-grow: 1;
+
+  p {
+    margin: 5px 0;
+    font-size: .9em;
+  }
 }
 
 .actions {

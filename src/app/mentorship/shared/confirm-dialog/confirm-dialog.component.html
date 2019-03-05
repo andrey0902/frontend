@@ -5,6 +5,7 @@
   <button
     mat-raised-button
     color="warn"
+    [ngClass]="{'confirm-assign': data.isAssign }"
     [mat-dialog-close]="true"
     class="google-font-bold">Да</button>
   <button

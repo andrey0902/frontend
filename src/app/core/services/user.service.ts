@@ -23,8 +23,7 @@ export class UserService {
     return this.http.get(`${ApiConfig.mentors}`, { ...httpOptions,  params });
   }
 
-  addMentor(mentor_id) {
-    const params = { include: 'proteges' };
+  addMentor(mentor_id, params = {}) {
     return this.http.post(`${ApiConfig.mentors}/${mentor_id}`, {}, { ...httpOptions,  params });
   }
 
@@ -37,19 +36,21 @@ export class UserService {
     return this.http.patch(`${ApiConfig.protege}/${protegeId}`, {}, { ...httpOptions, params });
   }
 
-  // getNeedMentorUsers() {
-  //   return this.http.get('assets/mockDB/users.json').pipe(
-  //     map((users: User[]) => {
-  //       return users.filter(user => !user.attributes.is_mentor);
-  //     })
-  //   );
-  // }
-  //
-  // getBecomeMentorUsers() {
-  //   return this.http.get('assets/mockDB/users.json').pipe(
-  //     map((users: User[]) => {
-  //       return users.filter(user => !!user.attributes.is_mentor);
-  //     })
-  //   );
-  // }
+  getNeedMentorRequests() {
+    const params = { include: 'user'};
+    return this.http.get(`${ApiConfig.protege}/requests`, { ...httpOptions, params });
+  }
+
+  deleteProtegeRequest(requestId) {
+    return this.http.delete(`${ApiConfig.protege}/requests/${requestId}`, { ...httpOptions });
+  }
+
+  getBecomeMentorUsers() {
+    const params = { include: 'user'};
+    return this.http.get(`${ApiConfig.mentors}/requests`, { ...httpOptions, params });
+  }
+
+  deleteMentorRequest(requestId) {
+    return this.http.delete(`${ApiConfig.mentors}/requests/${requestId}`, { ...httpOptions });
+  }
 }

@@ -1,6 +1,6 @@
 import {UsersMap} from '../../models/user.model';
 import {MentorsActionTypes, MentorsActionUnion} from './mentors.actions';
-import {MentorHelper} from './mentor.helper';
+import {MentorsHelper} from './mentors.helper';
 
 export interface MentorsState {
   mentors: UsersMap ;
@@ -47,7 +47,7 @@ export function mentorsReducer(state = initialState, action: MentorsActionUnion)
     case MentorsActionTypes.DELETE_MENTOR_SUCCESS: {
       return {
         ...state,
-        mentors: {...MentorHelper.deleteMentor(state.mentors, action.payload)},
+        mentors: { ...MentorsHelper.deleteMentor(state.mentors, action.payload) },
         error: null,
       };
     }
@@ -55,7 +55,7 @@ export function mentorsReducer(state = initialState, action: MentorsActionUnion)
     case MentorsActionTypes.ADD_PROTEGE_SUCCESS: {
       return {
         ...state,
-        mentors: {...MentorHelper.addProtege(state.mentors, action.payload.protege, action.payload.mentorId)},
+        mentors: { ...MentorsHelper.addProtege(state.mentors, action.payload.protege, action.payload.mentorId) },
         error: null,
       };
     }
@@ -63,7 +63,7 @@ export function mentorsReducer(state = initialState, action: MentorsActionUnion)
     case MentorsActionTypes.CHANGE_MENTOR_SUCCESS: {
       return {
         ...state,
-        mentors: {...MentorHelper.changeMentor(state.mentors, action.payload.protege, action.payload.newMentorId, action.payload.currentMentorId)},
+        mentors: { ...MentorsHelper.changeMentor(state.mentors, action.payload.protege, action.payload.newMentorId, action.payload.currentMentorId) },
         error: null,
       };
     }
@@ -71,7 +71,7 @@ export function mentorsReducer(state = initialState, action: MentorsActionUnion)
     case MentorsActionTypes.DELETE_PROTEGE_SUCCESS: {
       return {
         ...state,
-        mentors: {...MentorHelper.deleteProtege(state.mentors, action.payload.protegeId, action.payload.currentMentorId)},
+        mentors: { ...MentorsHelper.deleteProtege(state.mentors, action.payload.protegeId, action.payload.currentMentorId) },
         error: null,
       };
     }

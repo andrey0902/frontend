@@ -1,9 +1,10 @@
-import {MentorHelper} from '../root-store/mentors/mentor.helper';
+import {MentorsHelper} from '../root-store/mentors/mentors.helper';
 
 export class User {
   type: string;
   id: string;
   attributes: Attributes;
+
   constructor(data) {
     this.type = data.type;
     this.id = data.id;
@@ -21,8 +22,7 @@ export class Attributes {
   slack: string;
   specializationId: number;
   proteges: UsersMap;
-  // need_mentor?: boolean;
-  // want_be_mentor?: boolean;
+
   constructor(data) {
     this.firstName = data.first_name;
     this.lastName = data.last_name;
@@ -32,11 +32,7 @@ export class Attributes {
     this.portalId = data.portal_id;
     this.slack = data.slack;
     this.specializationId = data.specializtion_id;
-    this.proteges = data.proteges ? MentorHelper.createUsersMap(data.proteges) : {};
-  }
-
-  prepareProtege(data: any[]) {
-    return data.map(protege => new User(protege));
+    this.proteges = data.proteges ? MentorsHelper.createUsersMap(data.proteges) : {};
   }
 
   get fullName() {
