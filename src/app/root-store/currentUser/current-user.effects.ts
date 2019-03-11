@@ -3,12 +3,12 @@ import {Actions, Effect, ofType} from '@ngrx/effects';
 import {UserService} from '../../core/services/user.service';
 import {Observable, of} from 'rxjs';
 import {Action} from '@ngrx/store';
-import {UsersActionTypes, LoadUsersSuccess, LoadUsersFail} from './users.actions';
+import {CurrentUserActionTypes, LoadUser, LoadUserFail, LoadUserSuccess} from './current-user.actions';
 import {catchError, map, switchMap} from 'rxjs/operators';
 import {User} from '../../models/user.model';
 
 @Injectable()
-export class UsersEffectService {
+export class CurrentUserEffectService {
 
   constructor(
     private actions$: Actions,
@@ -16,13 +16,14 @@ export class UsersEffectService {
   ) {}
 
   @Effect() getUsers: Observable<Action> = this.actions$.pipe(
-    ofType(UsersActionTypes.LOAD_USERS),
-    switchMap(() => {
-      return this.userService.getUsers().pipe(
-        map((users: User[]) => {
-          return new LoadUsersSuccess(users);
+    ofType(CurrentUserActionTypes.LOAD_USER),
+    switchMap((action: LoadUser) => {
+      return this.userService.getUser(action.payload).pipe(
+        map((res: any) => {
+          const user = new User(res);
+          return new LoadUserSuccess(user);
         }),
-        catchError(err => of(new LoadUsersFail(err)))
+        catchError(err => of(new LoadUserFail(err.error.errors)))
       );
     })
   );

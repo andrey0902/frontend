@@ -19,6 +19,10 @@ export class UserService {
     return this.http.get(`${ApiConfig.users}`, { ...httpOptions,  params });
   }
 
+  getUser(userId, params = {}) {
+    return this.http.get(`${ApiConfig.users}/${userId}`, { ...httpOptions, params });
+  }
+
   getMentors(params = {}) {
     return this.http.get(`${ApiConfig.mentors}`, { ...httpOptions,  params });
   }

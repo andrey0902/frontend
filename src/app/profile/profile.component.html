@@ -1,16 +1,52 @@
 <div class="container">
   <h2 class="text-center page-caption">Профиль</h2>
-  <div class="profile-wrapper">
+  <div class="profile-wrapper" *ngIf="user$ | async as user">
     <div class="user-info">
       <div class="user-photo">
-        <img *ngIf="user" [src]="user.photo">
+        <img [src]="user.attributes.photo">
       </div>
-      <h3 class="user-name text-center" *ngIf="user">{{ user.firstName}} {{ user.lastName}}</h3>
+      <h3 class="user-name text-center">{{ user.attributes.fullName }}</h3>
+      <p class="user-specialization text-center">{{ user.attributes.specialization.attributes.title }}</p>
+      <div class="request-buttons" *ngIf="showRequestButtons">
+        <button
+          mat-raised-button
+          color="accent"
+          class="google-font-bold"
+          [disabled]="user.attributes.isMentor || user.attributes.wantBeMentor">Хочу стать ментором</button>
+        <button
+          mat-raised-button
+          color="accent"
+          class="google-font-bold"
+          [disabled]="user.attributes.needMentor">Нужен ментор</button>
+      </div>
+      <div class="relations-block" *ngIf="user.attributes.mentor">
+        <span class="relation-title">Ментор:</span>
+        <div class="user-container">
+          <lt-user
+            [user]="user.attributes.mentor.attributes"
+            [routerLink]="['/profile', user.attributes.mentor.id]">
+          </lt-user>
+        </div>
+      </div>
+      <div class="relations-block" *ngIf="objectValues(user.attributes.proteges).length">
+        <div class="relation-title">Протеже:</div>
+        <div class="user-container">
+          <lt-user
+            *ngFor="let protege of objectValues(user.attributes.proteges)"
+            [user]="protege.attributes"
+            [routerLink]="['/profile', protege.id]">
+          </lt-user>
+        </div>
+      </div>
+      <div class="horizontal-center" *ngIf="showIterationBtn && iterationExists">
+        <button mat-raised-button color="accent" class="google-font-bold">Создать итерацию</button>
+      </div>
     </div>
+
     <div class="mentorship-info">
       <mat-tab-group>
         <mat-tab label="Обзор">
-          <lt-profile-overview></lt-profile-overview>
+          <lt-profile-overview [iteration]="currentIteration$ | async"></lt-profile-overview>
         </mat-tab>
         <mat-tab label="Итерации"> Content 2 </mat-tab>
         <mat-tab label="Активность"> Content 3 </mat-tab>

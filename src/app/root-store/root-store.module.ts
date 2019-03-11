@@ -3,13 +3,13 @@ import {StoreModule} from '@ngrx/store';
 import {EffectsModule} from '@ngrx/effects';
 import {environment} from '../../environments/environment';
 import {StoreDevtoolsModule} from '@ngrx/store-devtools';
-import {UsersStoreModule} from './users/users-store.module';
+import {CurrentUserStoreModule} from './currentUser/current-user-store.module';
 import {MentorsStoreModule} from './mentors/mentors-store.module';
 import {MentorRequestsStoreModule} from './mentor-requests/mentor-requests-store.module';
 import {ProtegeRequestsStoreModule} from './protege-requests/protege-requests-store.module';
 
 const STORES = [
-  UsersStoreModule,
+  CurrentUserStoreModule,
   MentorsStoreModule,
   MentorRequestsStoreModule,
   ProtegeRequestsStoreModule

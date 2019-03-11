@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import { Iteration } from '../../models/iteration.model';
 
 @Component({
@@ -7,6 +7,7 @@ import { Iteration } from '../../models/iteration.model';
   styleUrls: [ './profile-overview.component.scss' ]
 })
 export class ProfileOverviewComponent implements OnInit {
+  @Input() iteration: any;
 
   constructor() {
   }
@@ -16,7 +17,7 @@ export class ProfileOverviewComponent implements OnInit {
     goal: 'Получить 5 уровень',
     format: 'YYYY-MM-DD',
     startDate: new Date('2019-01-07 11:33:05'),
-    endDate: new Date('2019-02-21 11:33:05'),
+    endDate: new Date('2019-06-21 11:33:05'),
     activities: [
       {type: 'meeting', title: 'Test title', date: new Date('2019-01-13 11:33:05')},
       {type: 'deploy', title: 'Test deploy', date: new Date('2019-01-19 11:33:05')}
