@@ -1,34 +1,29 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {UserService} from '../../services/user.service';
 import {User} from '../../../models/user.model';
 import {Store} from '@ngrx/store';
-import {selectUser} from '../../../root-store/users/users.selectors';
-import {LoadUsers} from '../../../root-store/users/users.actions';
-import {Subscription} from 'rxjs';
+import {selectCurrentUser} from '../../../root-store/currentUser/current-user.selectors';
+import {LoadUser} from '../../../root-store/currentUser/current-user.actions';
+import {Observable} from 'rxjs';
+import {tap} from 'rxjs/operators';
 
 @Component({
   selector: 'lt-header',
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss']
 })
-export class HeaderComponent implements OnInit, OnDestroy {
+export class HeaderComponent implements OnInit {
 
-  constructor(private userService: UserService, private store: Store<any>) { }
+  constructor(
+    private userService: UserService,
+    private store: Store<any>
+  ) { }
 
-  currentUser: User;
-  userSubscription: Subscription;
+  currentUser$: Observable<User>;
 
   ngOnInit(): void {
-    this.userSubscription = this.store.select(selectUser, { id: '1' }).subscribe(val => {
-      // console.log(val);
-      this.currentUser = val;
-    });
-
-    this.store.dispatch(new LoadUsers());
-  }
-
-  ngOnDestroy(): void {
-    this.userSubscription.unsubscribe();
+    this.currentUser$ = this.store.select(selectCurrentUser);
+    this.store.dispatch(new LoadUser(2));
   }
 
 }

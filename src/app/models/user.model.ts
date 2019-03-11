@@ -1,4 +1,5 @@
 import {MentorsHelper} from '../root-store/mentors/mentors.helper';
+import {Specialization} from './specialization.model';
 
 export class User {
   type: string;
@@ -20,8 +21,11 @@ export class Attributes {
   isMentor: boolean;
   portalId: number;
   slack: string;
-  specializationId: number;
+  specialization: Specialization;
+  mentor: User;
   proteges: UsersMap;
+  needMentor: boolean;
+  wantBeMentor: boolean;
 
   constructor(data) {
     this.firstName = data.first_name;
@@ -31,8 +35,11 @@ export class Attributes {
     this.isMentor = data.is_mentor;
     this.portalId = data.portal_id;
     this.slack = data.slack;
-    this.specializationId = data.specializtion_id;
+    this.specialization = new Specialization(data.specialization);
+    this.mentor = data.mentor ? new User(data.mentor) : null;
     this.proteges = data.proteges ? MentorsHelper.createUsersMap(data.proteges) : {};
+    this.needMentor = data.need_mentor;
+    this.wantBeMentor = data.want_be_mentor;
   }
 
   get fullName() {
