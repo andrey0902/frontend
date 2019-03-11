@@ -1,13 +1,14 @@
 <div class="simple-input">
   <mat-form-field class="full-width">
     <mat-label *ngIf="label">{{label}}</mat-label>
-    <input type="text" matInput [formControl]="control"  [placeholder]="placeholder">
+    <input type="text" matInput [formControl]="control" [placeholder]="placeholder" [value]="value ? value : ''">
   </mat-form-field>
   <div class="action-wrapper">
-    <button mat-icon-button class="action-save"
-            (click)="saveTask()"
-            [disabled]="isDisabled">
+    <button mat-icon-button class="action-save" (click)="saveTask()" [disabled]="isDisabled">
       <mat-icon class="material-icons" aria-hidden="true">done</mat-icon>
+    </button>
+    <button mat-icon-button class="action-save" (click)="deleteTask()" *ngIf="!main">
+      <mat-icon class="material-icons" aria-hidden="true">close</mat-icon>
     </button>
   </div>
 </div>

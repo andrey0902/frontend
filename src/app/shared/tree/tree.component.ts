@@ -1,18 +1,19 @@
-import { Component, ElementRef, EventEmitter, Input, OnChanges, Output, SimpleChanges, ViewChild } from '@angular/core';
-import { FlatTreeControl } from '@angular/cdk/tree';
-import { MatTreeFlatDataSource, MatTreeFlattener } from '@angular/material';
-import { SelectionModel } from '@angular/cdk/collections';
-import { InsertionType, TreeDatabaseService } from './providers/tree-database.service';
-import { ItemFlatNode, ItemNode } from './models/item-node.model';
-import { Observable, of } from 'rxjs';
+import {Component, ElementRef, EventEmitter, Input, OnChanges, Output, SimpleChanges, ViewChild} from '@angular/core';
+import {FlatTreeControl} from '@angular/cdk/tree';
+import {MatTreeFlatDataSource, MatTreeFlattener} from '@angular/material';
+import {SelectionModel} from '@angular/cdk/collections';
+import {InsertionType, TreeDatabaseService} from './providers/tree-database.service';
+import {ItemFlatNode, ItemNode} from './models/item-node.model';
+import {Observable, of} from 'rxjs';
 
 
 @Component({
   selector: 'lt-tree',
   templateUrl: './tree.component.html',
-  styleUrls: [ './tree.component.scss' ],
-  providers: [ TreeDatabaseService ]
+  styleUrls: ['./tree.component.scss'],
+  providers: [TreeDatabaseService]
 })
+
 export class TreeComponent implements OnChanges {
 
 
@@ -47,6 +48,8 @@ export class TreeComponent implements OnChanges {
   dragNodeExpandOverArea: string;
   @ViewChild('emptyItem') emptyItem: ElementRef;
 
+  saveIsDisabled = true;
+
   constructor(private database: TreeDatabaseService) {
     this.treeFlattener = new MatTreeFlattener(this.transformer, this.getLevel, this.isExpandable, this.getChildren);
     this.treeControl = new FlatTreeControl<ItemFlatNode>(this.getLevel, this.isExpandable);
@@ -57,6 +60,8 @@ export class TreeComponent implements OnChanges {
     database.dataChange.subscribe(data => {
       this.dataSource.data = [];
       this.dataSource.data = data;
+      console.log(data);
+      console.log(this.dataSource);
     });
   }
 
@@ -66,13 +71,13 @@ export class TreeComponent implements OnChanges {
 
   getChildren = (node: ItemNode): Observable<ItemNode[]> => {
     return of(node.children);
-  }
+  };
 
   hasChild = (_: number, _nodeData: ItemFlatNode) => _nodeData.expandable;
 
-  hasNoContent = (_: number, _nodeData: ItemFlatNode) => {
-    return !_nodeData.text;
-  }
+  showAsInput = (_: number, _nodeData: ItemFlatNode) => {
+    return _nodeData.showAsInput;
+  };
 
   /**
    * Transformer to convert nested node to flat node. Record the nodes in maps for later use.
@@ -83,6 +88,7 @@ export class TreeComponent implements OnChanges {
       ? existingNode
       : new ItemFlatNode();
     flatNode.text = node.text;
+    flatNode.showAsInput = node.showAsInput;
     flatNode.level = level;
     flatNode.expandable = (node.children && node.children.length > 0);
     if (node.is_completed) {
@@ -91,7 +97,7 @@ export class TreeComponent implements OnChanges {
     this.flatNodeMap.set(flatNode, node);
     this.nestedNodeMap.set(node, flatNode);
     return flatNode;
-  }
+  };
 
   /** Whether all the descendants of the node are selected */
   descendantsAllSelected(node: ItemFlatNode): boolean {
@@ -111,36 +117,56 @@ export class TreeComponent implements OnChanges {
     this.checklistSelection.toggle(flatNode);
     const node = this.flatNodeMap.get(flatNode);
     node.is_completed = !node.is_completed;
+
     this.updateItem.emit(this.getChangedCheckedItems(node));
   }
 
-  addItemToRoot(data: ItemNode) {
-    data.parentId = null;
+
+  /** add item(add value-item)**/
+  addItemToRoot(nodeText: string) {
+    const data = new this.type();
+    data.text = nodeText;
     this.database.insertItem(null, data, true);
     this.createItem.emit(data);
   }
 
-  /** Select the category so we can insert the new item. */
+  /** add item(add input-item) **/
   addNewItem(node: ItemFlatNode) {
     const parentNode = this.flatNodeMap.get(node);
-    const isParentHasChildren = !!parentNode.children;
+    const data = new this.type();
+    data.showAsInput = true;
 
-    this.database.insertItem(parentNode, new this.type(), true);
-    if (isParentHasChildren) {
+    this.database.insertItem(parentNode, data, true);
+    if (!!parentNode.children) {
       this.treeControl.expand(node);
     }
-
   }
 
-  /** Save the node to database */
-  saveNode(node: ItemFlatNode, itemValue: string) {
-    const nestedNode = this.flatNodeMap.get(node);
-    this.database.updateItem(nestedNode, itemValue);
-    nestedNode.isNew = false;
-    this.createItem.emit(nestedNode);
+  /** add item(replace input with value)**/
+  addItem(nodeText: string, node: ItemFlatNode) {
+    const data = this.flatNodeMap.get(node);
+    data.isNew = false;
+    data.showAsInput = false;
+    this.database.updateItem(data, nodeText);
+    this.createItem.emit(data);
   }
 
-  handleDragStart(event, node) {
+  /** edit item(replace value with input)**/
+  editItem(node: ItemFlatNode) {
+    const data = this.flatNodeMap.get(node);
+    data.showAsInput = true;
+    this.database.updateItem(data, data.text);
+  }
+
+  /** remove item **/
+  removeItem(node: ItemFlatNode) {
+    const data = this.flatNodeMap.get(node);
+    this.database.deleteItem(data);
+    this.deleteItem.emit(data);
+  }
+
+
+  handleDragStart(event, node: ItemFlatNode) {
     // Required by Firefox (https://stackoverflow.com/questions/19055264/why-doesnt-html5-drag-and-drop-work-in-firefox)
     event.dataTransfer.setData('foo', 'bar');
     event.dataTransfer.setDragImage(this.emptyItem.nativeElement, 0, 0);
@@ -186,8 +212,9 @@ export class TreeComponent implements OnChanges {
       } else {
         newItem = this.database.copyPasteItem(this.flatNodeMap.get(this.dragNode), this.flatNodeMap.get(node));
       }
+
       if (oldOrder !== newItem.order && oldParentId !== newItem.parentId) {
-        this.updateItem.emit([ newItem ]);
+        this.updateItem.emit([newItem]);
         this.treeControl.expandDescendants(this.nestedNodeMap.get(newItem));
       }
     }
@@ -195,7 +222,6 @@ export class TreeComponent implements OnChanges {
     this.dragNodeExpandOverNode = null;
     this.dragNodeExpandOverTime = 0;
   }
-
 
   handleDragEnd(event) {
     this.dragNode = null;

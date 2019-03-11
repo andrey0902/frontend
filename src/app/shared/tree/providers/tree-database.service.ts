@@ -77,15 +77,16 @@ export class TreeDatabaseService {
 
     item.order = 0;
     item.isNew = isNew;
+
     if (!isNew) {
       const oldParent = this.getParentFromNodes(item);
       const oldArr = oldParent ? oldParent.children : this.data;
       const oldIndex = oldArr.indexOf(item);
-      this.deleteNode(oldArr, item);
+      this.deleteNode(item);
       this.recalculateOrdering(oldArr, oldIndex, item.order);
     }
-    arr.unshift(item);
 
+    arr.unshift(item);
     this.recalculateOrdering(arr, 1, 1);
     this.dataChange.next(this.data);
     if (raiseEvent) {
@@ -101,7 +102,7 @@ export class TreeDatabaseService {
     const oldArr = oldParentNode != null ? oldParentNode.children : this.data;
     const oldIndex = oldArr.indexOf(insertNode);
 
-    this.deleteNode(oldArr, insertNode);
+    this.deleteNode(insertNode);
     this.recalculateOrdering(oldArr, oldIndex, insertNode.order);
 
     let newOrder: number = nodeAnchor.order;
@@ -158,7 +159,7 @@ export class TreeDatabaseService {
   }
 
   deleteItem(node: ItemNode, raiseEvent = false) {
-    this.deleteNode(this.data, node);
+    this.deleteNode(node);
     this.dataChange.next(this.data);
     if (raiseEvent) {
       this.deleteEventEmitter.emit(node);
@@ -169,11 +170,10 @@ export class TreeDatabaseService {
     return this.insertItem(to, from);
   }
 
-  deleteNode(nodes: ItemNode[], nodeToDelete: ItemNode) {
-    const index = nodes.indexOf(nodeToDelete, 0);
-    if (index > -1) {
-      nodes.splice(index, 1);
-    }
+  deleteNode(nodeToDelete: ItemNode) {
+    const parent = this.getParentFromNodes(nodeToDelete);
+    const index = parent.children.indexOf(nodeToDelete, 0);
+    parent.children.splice(index, 1);
   }
 
   private recalculateOrdering(arr: ItemNode[], beginIndex: number, startOrder = 0, endIndex?: number): ItemNode[] {

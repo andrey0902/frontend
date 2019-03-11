@@ -1,7 +1,6 @@
-<lt-create-tree-item *ngIf="canEdit" label="Добавить задачу" (createItem)="addItemToRoot($event)" [type]="type"></lt-create-tree-item>
+<lt-create-tree-item *ngIf="canEdit" label="Добавить задачу" (createItem)="addItemToRoot($event)" class="create-tree-item" [main] = 'true'></lt-create-tree-item>
 <mat-tree [dataSource]="dataSource" [treeControl]="treeControl">
-  <mat-tree-node *matTreeNodeDef="let node"
-                 matTreeNodePadding>
+  <mat-tree-node *matTreeNodeDef="let node" matTreeNodePadding>
     <button mat-icon-button disabled></button>
     <mat-checkbox class="checklist-leaf-node"
                   [ngClass]="{'drop-above': dragNodeExpandOverArea === 'above' && dragNodeExpandOverNode === node,
@@ -14,15 +13,16 @@
                   (dragover)="handleDragOver($event, node);"
                   (drop)="handleDrop($event, node);"
                   (dragend)="handleDragEnd($event);">{{node.text}}</mat-checkbox>
-    <button mat-icon-button (click)="addNewItem(node)"><mat-icon>add</mat-icon></button>
+    <ng-container *ngTemplateOutlet="nodeMenu; context: {node: node}"></ng-container>
+
   </mat-tree-node>
 
-  <mat-tree-node *matTreeNodeDef="let node; when: hasNoContent" matTreeNodePadding>
-    <button mat-icon-button disabled></button>
-    <mat-form-field>
-      <input matInput #itemValue placeholder="New item...">
-    </mat-form-field>
-    <button mat-button (click)="saveNode(node, itemValue.value)">Save</button>
+  <mat-tree-node *matTreeNodeDef="let node; when: showAsInput" matTreeNodePadding>
+    <lt-create-tree-item *ngIf="canEdit"
+                         [value] = "node.text"
+                         (createItem)="addItem($event, node)"
+                         (removeItem)="removeItem(node)"
+                         class="create-tree-item"></lt-create-tree-item>
   </mat-tree-node>
 
   <mat-tree-node *matTreeNodeDef="let node; when: hasChild"
@@ -44,8 +44,21 @@
                   [checked]="checklistSelection.isSelected(node)"
                   [indeterminate]="descendantsPartiallySelected(node)"
                   (change)="todoItemSelectionToggle(node)">{{node.text}}</mat-checkbox>
-    <button mat-icon-button (click)="addNewItem(node)"><mat-icon>add</mat-icon></button>
+    <ng-container *ngTemplateOutlet="nodeMenu; context: {node: node}"></ng-container>
   </mat-tree-node>
 </mat-tree>
 
-<span #emptyItem></span>
+<ng-template #nodeMenu let-node = "node">
+  <button mat-icon-button (click)="addNewItem(node)"><mat-icon>add</mat-icon></button>
+  <button mat-icon-button [matMenuTriggerFor]="menu"><mat-icon>more_vert</mat-icon></button>
+  <mat-menu #menu="matMenu">
+    <button mat-menu-item (click)="editItem(node)">
+      <mat-icon>edit</mat-icon>
+      <span>Edit</span>
+    </button>
+    <button mat-menu-item (click)="removeItem(node)">
+      <mat-icon>close</mat-icon>
+      <span>Delete</span>
+    </button>
+  </mat-menu>
+</ng-template>
