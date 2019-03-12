@@ -14,7 +14,6 @@
                   (drop)="handleDrop($event, node);"
                   (dragend)="handleDragEnd($event);">{{node.text}}</mat-checkbox>
     <ng-container *ngTemplateOutlet="nodeMenu; context: {node: node}"></ng-container>
-
   </mat-tree-node>
 
   <mat-tree-node *matTreeNodeDef="let node; when: showAsInput" matTreeNodePadding>
@@ -25,8 +24,7 @@
                          class="create-tree-item"></lt-create-tree-item>
   </mat-tree-node>
 
-  <mat-tree-node *matTreeNodeDef="let node; when: hasChild"
-                 matTreeNodePadding>
+  <mat-tree-node *matTreeNodeDef="let node; when: hasChild" matTreeNodePadding>
     <button mat-icon-button matTreeNodeToggle
             [attr.aria-label]="'toggle ' + node.text">
       <mat-icon class="mat-icon-rtl-mirror">
@@ -47,6 +45,9 @@
     <ng-container *ngTemplateOutlet="nodeMenu; context: {node: node}"></ng-container>
   </mat-tree-node>
 </mat-tree>
+
+
+<span #emptyItem></span>
 
 <ng-template #nodeMenu let-node = "node">
   <button mat-icon-button (click)="addNewItem(node)"><mat-icon>add</mat-icon></button>

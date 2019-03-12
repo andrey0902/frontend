@@ -15,8 +15,6 @@ import {Observable, of} from 'rxjs';
 })
 
 export class TreeComponent implements OnChanges {
-
-
   @Input() private data: ItemNode[];
   @Input() public canEdit = true;
   @Input() public type: new (...arg: any[]) => ItemNode;
@@ -60,8 +58,6 @@ export class TreeComponent implements OnChanges {
     database.dataChange.subscribe(data => {
       this.dataSource.data = [];
       this.dataSource.data = data;
-      console.log(data);
-      console.log(this.dataSource);
     });
   }
 
@@ -140,6 +136,8 @@ export class TreeComponent implements OnChanges {
     if (!!parentNode.children) {
       this.treeControl.expand(node);
     }
+
+    this.updateItem.emit(this.getChangedCheckedItems(data));
   }
 
   /** add item(replace input with value)**/
@@ -161,10 +159,15 @@ export class TreeComponent implements OnChanges {
   /** remove item **/
   removeItem(node: ItemFlatNode) {
     const data = this.flatNodeMap.get(node);
+    const parent = this.database.getParentFromNodes(data);
     this.database.deleteItem(data);
     this.deleteItem.emit(data);
-  }
 
+    if (parent.children && parent.children.length > 0) {
+      this.updateItem.emit(this.getChangedCheckedItems(parent.children[0]));
+    }
+
+  }
 
   handleDragStart(event, node: ItemFlatNode) {
     // Required by Firefox (https://stackoverflow.com/questions/19055264/why-doesnt-html5-drag-and-drop-work-in-firefox)
@@ -203,20 +206,25 @@ export class TreeComponent implements OnChanges {
   handleDrop(event, node: ItemFlatNode) {
     event.preventDefault();
     if (node !== this.dragNode) {
-      const {order: oldOrder, parentId: oldParentId} = this.flatNodeMap.get(this.dragNode);
+      const dragNode = this.flatNodeMap.get(this.dragNode);
+      const dragNodeParent = this.database.getParentFromNodes(dragNode);
+      const {order: oldOrder, parentId: oldParentId} = dragNode;
       let newItem: ItemNode;
+
       if (this.dragNodeExpandOverArea === 'above') {
-        newItem = this.database.insertItemNear(this.flatNodeMap.get(node), this.flatNodeMap.get(this.dragNode), InsertionType.ABOVE);
+        newItem = this.database.insertItemNear(this.flatNodeMap.get(node), dragNode, InsertionType.ABOVE);
       } else if (this.dragNodeExpandOverArea === 'below') {
-        newItem = this.database.insertItemNear(this.flatNodeMap.get(node), this.flatNodeMap.get(this.dragNode), InsertionType.BELOW);
+        newItem = this.database.insertItemNear(this.flatNodeMap.get(node), dragNode, InsertionType.BELOW);
       } else {
-        newItem = this.database.copyPasteItem(this.flatNodeMap.get(this.dragNode), this.flatNodeMap.get(node));
+        newItem = this.database.copyPasteItem(dragNode, this.flatNodeMap.get(node));
       }
 
       if (oldOrder !== newItem.order && oldParentId !== newItem.parentId) {
         this.updateItem.emit([newItem]);
         this.treeControl.expandDescendants(this.nestedNodeMap.get(newItem));
       }
+
+      this.updateItem.emit(this.getChangedCheckedItems(dragNodeParent.children[0]));
     }
     this.dragNode = null;
     this.dragNodeExpandOverNode = null;
@@ -239,46 +247,41 @@ export class TreeComponent implements OnChanges {
     }
   }
 
-  changeCheckedParentItems(parent: ItemNode): ItemNode[] {
-    const arr: ItemNode[] = [];
-    const parentFlatNode = this.nestedNodeMap.get(parent);
-    const allChildrenChecked = this.descendantsAllSelected(parentFlatNode);
-    if (allChildrenChecked !== parent.is_completed) {
-      parent.is_completed = allChildrenChecked;
-      allChildrenChecked ? this.checklistSelection.select(parentFlatNode) : this.checklistSelection.deselect(parentFlatNode);
-      arr.push(parent);
-      if (!!parent.parentId) {
-        const parentNode = this.database.getParentFromNodes(parent);
-        arr.push(...this.changeCheckedParentItems(parentNode));
-      }
-    }
-    return arr;
-  }
+  getChangedCheckedItems(startNode: ItemNode, checkChildren: boolean = true): ItemNode[] {
+    const changedItems: ItemNode[] = [];
+    const nodeIsCompleted: boolean = startNode.is_completed;
+    const startFlatNode: ItemFlatNode = this.nestedNodeMap.get(startNode);
+    const flatDescendants: ItemFlatNode[] = this.treeControl.getDescendants(startFlatNode);
+    const descendants: ItemNode[] = flatDescendants.map((descendant: ItemFlatNode) => this.flatNodeMap.get(descendant));
 
-  getChangedCheckedItems(startNode: ItemNode): ItemNode[] {
-    const arr: ItemNode[] = [];
-    const state = startNode.is_completed;
-    const startFlatNode = this.nestedNodeMap.get(startNode);
-    // check all children
-    const descendants = this.treeControl.getDescendants(startFlatNode);
-    if (descendants.length > 0) {
-      descendants.forEach((item) => {
-        const itemNode = this.flatNodeMap.get(item);
-        if (itemNode.is_completed !== state) {
-          itemNode.is_completed = state;
-          arr.push(itemNode);
+    // check all children and save changes
+    if (descendants.length > 0 && checkChildren) {
+      descendants.forEach((descendant: ItemNode) => {
+        if (descendant.is_completed !== nodeIsCompleted) {
+          descendant.is_completed = nodeIsCompleted;
+          changedItems.push(descendant);
         }
       });
-      state ? this.checklistSelection.select(...descendants) : this.checklistSelection.deselect(...descendants);
+      nodeIsCompleted ? this.checklistSelection.select(...flatDescendants) : this.checklistSelection.deselect(...flatDescendants);
     }
 
-    // check all parent
+    // check current node and save changes
+    if (descendants.length > 0) {
+      const allChildrenChecked = this.descendantsAllSelected(startFlatNode);
+      if (allChildrenChecked !== startNode.is_completed) {
+        startNode.is_completed = allChildrenChecked;
+        allChildrenChecked ? this.checklistSelection.select(startFlatNode) : this.checklistSelection.deselect(startFlatNode);
+      }
+    }
+
+    // check parent
     const parentNode = this.database.getParentFromNodes(startNode);
     if (parentNode) {
-      arr.push(...this.changeCheckedParentItems(parentNode));
+      changedItems.push(...this.getChangedCheckedItems(parentNode, false));
     }
-    arr.push(startNode);
 
-    return arr;
+    changedItems.push(startNode);
+
+    return changedItems;
   }
 }
