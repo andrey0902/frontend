@@ -17,7 +17,7 @@ export class ProfileOverviewComponent implements OnInit {
     goal: 'Получить 5 уровень',
     format: 'YYYY-MM-DD',
     startDate: new Date('2019-01-07 11:33:05'),
-    endDate: new Date('2019-06-21 11:33:05'),
+    endDate: new Date('2019-04-21 11:33:05'),
     activities: [
       {type: 'meeting', title: 'Test title', date: new Date('2019-01-13 11:33:05')},
       {type: 'deploy', title: 'Test deploy', date: new Date('2019-01-19 11:33:05')}

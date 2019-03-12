@@ -8,6 +8,8 @@ import {CoreModule} from './core/core.module';
 import {HttpClientModule} from '@angular/common/http';
 import { SharedModule } from './shared/shared.module';
 import {RootStoreModule} from './root-store/root-store.module';
+import {MatMomentDateModule} from '@angular/material-moment-adapter';
+import {MAT_DATE_LOCALE} from '@angular/material';
 
 @NgModule({
   declarations: [
@@ -20,9 +22,12 @@ import {RootStoreModule} from './root-store/root-store.module';
     RootStoreModule,
     AppRoutingModule,
     CoreModule,
-    SharedModule
+    SharedModule,
+    MatMomentDateModule
   ],
-  providers: [],
+  providers: [
+    {provide: MAT_DATE_LOCALE, useValue: 'ru'}
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

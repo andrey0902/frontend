@@ -1,0 +1,37 @@
+@import "../../../scss/helpers";
+@import "../../../scss/variables";
+
+.form-control {
+  @extend .horizontal-center;
+
+  .control-title {
+    @extend .vertical-center;
+    width: 160px;
+    font-family: "Google Sans", Roboto, Arial, sans-serif;
+    font-weight: 600;
+  }
+
+  .required-asterisk {
+    color: $warn-color;
+    margin-left: 5px;
+  }
+
+  .control-input {
+    width: 300px;
+
+    mat-form-field {
+      width: 100%;
+    }
+  }
+}
+
+.mat-raised-button.mat-accent {
+  margin: 15px 0;
+  background-color: $accent-color;
+
+  &[disabled] {
+    background-color: rgba(0,0,0,.12)
+  }
+}
+
+
