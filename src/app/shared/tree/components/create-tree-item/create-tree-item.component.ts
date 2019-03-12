@@ -1,20 +1,22 @@
-import { Component, EventEmitter, Input, OnChanges, Output } from '@angular/core';
-import { FormControl, Validators } from '@angular/forms';
-import { ItemNode } from '../../models/item-node.model';
-import { LtValidators } from '../../../helpers/validator-methods.static';
+import {Component, EventEmitter, Input, OnChanges, OnInit, Output} from '@angular/core';
+import {FormControl, Validators} from '@angular/forms';
+import {ItemNode} from '../../models/item-node.model';
+import {LtValidators} from '../../../helpers/validator-methods.static';
 
 @Component({
   selector: 'lt-create-tree-item',
   templateUrl: './create-tree-item.component.html',
-  styleUrls: [ './create-tree-item.component.scss' ]
+  styleUrls: ['./create-tree-item.component.scss']
 })
-export class CreateTreeItemComponent implements OnChanges {
+export class CreateTreeItemComponent implements OnInit {
   @Input() label: string;
   @Input() placeholder: string;
   @Input() validators: any;
-  @Input() type: new(...args: any[]) => ItemNode = ItemNode;
+  @Input() main = false;
+  @Input() value: string;
 
-  @Output() createItem = new EventEmitter<ItemNode>();
+  @Output() createItem = new EventEmitter<string>();
+  @Output() removeItem = new EventEmitter<string>();
 
   public isDisabled = true;
   public control: FormControl;
@@ -30,7 +32,7 @@ export class CreateTreeItemComponent implements OnChanges {
     this.setValue();
   }
 
-  ngOnChanges() {
+  ngOnInit() {
     this.createControl();
     this.checkValidators();
   }
@@ -58,7 +60,6 @@ export class CreateTreeItemComponent implements OnChanges {
   private listenChanges(): void {
 
     this.control.valueChanges.subscribe((value) => {
-
       if ((this.control.valid && this.control.value !== null) && value.length) {
         this.isDisabled = false;
       } else {
@@ -77,11 +78,14 @@ export class CreateTreeItemComponent implements OnChanges {
     if (!this.control.value || this.control.invalid) {
       return;
     }
-    const data = new this.type();
-    data.isNew = true;
-    data.parentId = null;
-    data.text = this.control.value;
-    this.createItem.emit(data);
+    this.createItem.emit(this.control.value);
+    this.control.markAsUntouched({onlySelf: true});
+    this.control.reset();
+    this.isDisabled = true;
+  }
+
+  public deleteTask() {
+    this.removeItem.emit();
     this.control.markAsUntouched({onlySelf: true});
     this.control.reset();
     this.isDisabled = true;
@@ -98,10 +102,10 @@ export class CreateTreeItemComponent implements OnChanges {
             tempValidators.push(Validators.required);
             break;
           default:
-            if (typeof Validators[ validator ] === 'function') {
-              tempValidators.push(Validators[ validator ](validators[ validator ]));
-            } else if (typeof LtValidators[ validator ] === 'function') {
-              tempValidators.push(LtValidators[ validator ]);
+            if (typeof Validators[validator] === 'function') {
+              tempValidators.push(Validators[validator](validators[validator]));
+            } else if (typeof LtValidators[validator] === 'function') {
+              tempValidators.push(LtValidators[validator]);
             }
             break;
         }

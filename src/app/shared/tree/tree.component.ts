@@ -1,21 +1,20 @@
-import { Component, ElementRef, EventEmitter, Input, OnChanges, Output, SimpleChanges, ViewChild } from '@angular/core';
-import { FlatTreeControl } from '@angular/cdk/tree';
-import { MatTreeFlatDataSource, MatTreeFlattener } from '@angular/material';
-import { SelectionModel } from '@angular/cdk/collections';
-import { InsertionType, TreeDatabaseService } from './providers/tree-database.service';
-import { ItemFlatNode, ItemNode } from './models/item-node.model';
-import { Observable, of } from 'rxjs';
+import {Component, ElementRef, EventEmitter, Input, OnChanges, Output, SimpleChanges, ViewChild} from '@angular/core';
+import {FlatTreeControl} from '@angular/cdk/tree';
+import {MatTreeFlatDataSource, MatTreeFlattener} from '@angular/material';
+import {SelectionModel} from '@angular/cdk/collections';
+import {InsertionType, TreeDatabaseService} from './providers/tree-database.service';
+import {ItemFlatNode, ItemNode} from './models/item-node.model';
+import {Observable, of} from 'rxjs';
 
 
 @Component({
   selector: 'lt-tree',
   templateUrl: './tree.component.html',
-  styleUrls: [ './tree.component.scss' ],
-  providers: [ TreeDatabaseService ]
+  styleUrls: ['./tree.component.scss'],
+  providers: [TreeDatabaseService]
 })
+
 export class TreeComponent implements OnChanges {
-
-
   @Input() private data: ItemNode[];
   @Input() public canEdit = true;
   @Input() public type: new (...arg: any[]) => ItemNode;
@@ -47,6 +46,8 @@ export class TreeComponent implements OnChanges {
   dragNodeExpandOverArea: string;
   @ViewChild('emptyItem') emptyItem: ElementRef;
 
+  saveIsDisabled = true;
+
   constructor(private database: TreeDatabaseService) {
     this.treeFlattener = new MatTreeFlattener(this.transformer, this.getLevel, this.isExpandable, this.getChildren);
     this.treeControl = new FlatTreeControl<ItemFlatNode>(this.getLevel, this.isExpandable);
@@ -66,13 +67,13 @@ export class TreeComponent implements OnChanges {
 
   getChildren = (node: ItemNode): Observable<ItemNode[]> => {
     return of(node.children);
-  }
+  };
 
   hasChild = (_: number, _nodeData: ItemFlatNode) => _nodeData.expandable;
 
-  hasNoContent = (_: number, _nodeData: ItemFlatNode) => {
-    return !_nodeData.text;
-  }
+  showAsInput = (_: number, _nodeData: ItemFlatNode) => {
+    return _nodeData.showAsInput;
+  };
 
   /**
    * Transformer to convert nested node to flat node. Record the nodes in maps for later use.
@@ -83,6 +84,7 @@ export class TreeComponent implements OnChanges {
       ? existingNode
       : new ItemFlatNode();
     flatNode.text = node.text;
+    flatNode.showAsInput = node.showAsInput;
     flatNode.level = level;
     flatNode.expandable = (node.children && node.children.length > 0);
     if (node.is_completed) {
@@ -91,7 +93,7 @@ export class TreeComponent implements OnChanges {
     this.flatNodeMap.set(flatNode, node);
     this.nestedNodeMap.set(node, flatNode);
     return flatNode;
-  }
+  };
 
   /** Whether all the descendants of the node are selected */
   descendantsAllSelected(node: ItemFlatNode): boolean {
@@ -111,36 +113,63 @@ export class TreeComponent implements OnChanges {
     this.checklistSelection.toggle(flatNode);
     const node = this.flatNodeMap.get(flatNode);
     node.is_completed = !node.is_completed;
+
     this.updateItem.emit(this.getChangedCheckedItems(node));
   }
 
-  addItemToRoot(data: ItemNode) {
-    data.parentId = null;
+
+  /** add item(add value-item)**/
+  addItemToRoot(nodeText: string) {
+    const data = new this.type();
+    data.text = nodeText;
     this.database.insertItem(null, data, true);
     this.createItem.emit(data);
   }
 
-  /** Select the category so we can insert the new item. */
+  /** add item(add input-item) **/
   addNewItem(node: ItemFlatNode) {
     const parentNode = this.flatNodeMap.get(node);
-    const isParentHasChildren = !!parentNode.children;
+    const data = new this.type();
+    data.showAsInput = true;
 
-    this.database.insertItem(parentNode, new this.type(), true);
-    if (isParentHasChildren) {
+    this.database.insertItem(parentNode, data, true);
+    if (!!parentNode.children) {
       this.treeControl.expand(node);
+    }
+
+    this.updateItem.emit(this.getChangedCheckedItems(data));
+  }
+
+  /** add item(replace input with value)**/
+  addItem(nodeText: string, node: ItemFlatNode) {
+    const data = this.flatNodeMap.get(node);
+    data.isNew = false;
+    data.showAsInput = false;
+    this.database.updateItem(data, nodeText);
+    this.createItem.emit(data);
+  }
+
+  /** edit item(replace value with input)**/
+  editItem(node: ItemFlatNode) {
+    const data = this.flatNodeMap.get(node);
+    data.showAsInput = true;
+    this.database.updateItem(data, data.text);
+  }
+
+  /** remove item **/
+  removeItem(node: ItemFlatNode) {
+    const data = this.flatNodeMap.get(node);
+    const parent = this.database.getParentFromNodes(data);
+    this.database.deleteItem(data);
+    this.deleteItem.emit(data);
+
+    if (parent.children && parent.children.length > 0) {
+      this.updateItem.emit(this.getChangedCheckedItems(parent.children[0]));
     }
 
   }
 
-  /** Save the node to database */
-  saveNode(node: ItemFlatNode, itemValue: string) {
-    const nestedNode = this.flatNodeMap.get(node);
-    this.database.updateItem(nestedNode, itemValue);
-    nestedNode.isNew = false;
-    this.createItem.emit(nestedNode);
-  }
-
-  handleDragStart(event, node) {
+  handleDragStart(event, node: ItemFlatNode) {
     // Required by Firefox (https://stackoverflow.com/questions/19055264/why-doesnt-html5-drag-and-drop-work-in-firefox)
     event.dataTransfer.setData('foo', 'bar');
     event.dataTransfer.setDragImage(this.emptyItem.nativeElement, 0, 0);
@@ -177,25 +206,30 @@ export class TreeComponent implements OnChanges {
   handleDrop(event, node: ItemFlatNode) {
     event.preventDefault();
     if (node !== this.dragNode) {
-      const {order: oldOrder, parentId: oldParentId} = this.flatNodeMap.get(this.dragNode);
+      const dragNode = this.flatNodeMap.get(this.dragNode);
+      const dragNodeParent = this.database.getParentFromNodes(dragNode);
+      const {order: oldOrder, parentId: oldParentId} = dragNode;
       let newItem: ItemNode;
+
       if (this.dragNodeExpandOverArea === 'above') {
-        newItem = this.database.insertItemNear(this.flatNodeMap.get(node), this.flatNodeMap.get(this.dragNode), InsertionType.ABOVE);
+        newItem = this.database.insertItemNear(this.flatNodeMap.get(node), dragNode, InsertionType.ABOVE);
       } else if (this.dragNodeExpandOverArea === 'below') {
-        newItem = this.database.insertItemNear(this.flatNodeMap.get(node), this.flatNodeMap.get(this.dragNode), InsertionType.BELOW);
+        newItem = this.database.insertItemNear(this.flatNodeMap.get(node), dragNode, InsertionType.BELOW);
       } else {
-        newItem = this.database.copyPasteItem(this.flatNodeMap.get(this.dragNode), this.flatNodeMap.get(node));
+        newItem = this.database.copyPasteItem(dragNode, this.flatNodeMap.get(node));
       }
+
       if (oldOrder !== newItem.order && oldParentId !== newItem.parentId) {
-        this.updateItem.emit([ newItem ]);
+        this.updateItem.emit([newItem]);
         this.treeControl.expandDescendants(this.nestedNodeMap.get(newItem));
       }
+
+      this.updateItem.emit(this.getChangedCheckedItems(dragNodeParent.children[0]));
     }
     this.dragNode = null;
     this.dragNodeExpandOverNode = null;
     this.dragNodeExpandOverTime = 0;
   }
-
 
   handleDragEnd(event) {
     this.dragNode = null;
@@ -213,46 +247,41 @@ export class TreeComponent implements OnChanges {
     }
   }
 
-  changeCheckedParentItems(parent: ItemNode): ItemNode[] {
-    const arr: ItemNode[] = [];
-    const parentFlatNode = this.nestedNodeMap.get(parent);
-    const allChildrenChecked = this.descendantsAllSelected(parentFlatNode);
-    if (allChildrenChecked !== parent.is_completed) {
-      parent.is_completed = allChildrenChecked;
-      allChildrenChecked ? this.checklistSelection.select(parentFlatNode) : this.checklistSelection.deselect(parentFlatNode);
-      arr.push(parent);
-      if (!!parent.parentId) {
-        const parentNode = this.database.getParentFromNodes(parent);
-        arr.push(...this.changeCheckedParentItems(parentNode));
-      }
-    }
-    return arr;
-  }
+  getChangedCheckedItems(startNode: ItemNode, checkChildren: boolean = true): ItemNode[] {
+    const changedItems: ItemNode[] = [];
+    const nodeIsCompleted: boolean = startNode.is_completed;
+    const startFlatNode: ItemFlatNode = this.nestedNodeMap.get(startNode);
+    const flatDescendants: ItemFlatNode[] = this.treeControl.getDescendants(startFlatNode);
+    const descendants: ItemNode[] = flatDescendants.map((descendant: ItemFlatNode) => this.flatNodeMap.get(descendant));
 
-  getChangedCheckedItems(startNode: ItemNode): ItemNode[] {
-    const arr: ItemNode[] = [];
-    const state = startNode.is_completed;
-    const startFlatNode = this.nestedNodeMap.get(startNode);
-    // check all children
-    const descendants = this.treeControl.getDescendants(startFlatNode);
-    if (descendants.length > 0) {
-      descendants.forEach((item) => {
-        const itemNode = this.flatNodeMap.get(item);
-        if (itemNode.is_completed !== state) {
-          itemNode.is_completed = state;
-          arr.push(itemNode);
+    // check all children and save changes
+    if (descendants.length > 0 && checkChildren) {
+      descendants.forEach((descendant: ItemNode) => {
+        if (descendant.is_completed !== nodeIsCompleted) {
+          descendant.is_completed = nodeIsCompleted;
+          changedItems.push(descendant);
         }
       });
-      state ? this.checklistSelection.select(...descendants) : this.checklistSelection.deselect(...descendants);
+      nodeIsCompleted ? this.checklistSelection.select(...flatDescendants) : this.checklistSelection.deselect(...flatDescendants);
     }
 
-    // check all parent
+    // check current node and save changes
+    if (descendants.length > 0) {
+      const allChildrenChecked = this.descendantsAllSelected(startFlatNode);
+      if (allChildrenChecked !== startNode.is_completed) {
+        startNode.is_completed = allChildrenChecked;
+        allChildrenChecked ? this.checklistSelection.select(startFlatNode) : this.checklistSelection.deselect(startFlatNode);
+      }
+    }
+
+    // check parent
     const parentNode = this.database.getParentFromNodes(startNode);
     if (parentNode) {
-      arr.push(...this.changeCheckedParentItems(parentNode));
+      changedItems.push(...this.getChangedCheckedItems(parentNode, false));
     }
-    arr.push(startNode);
 
-    return arr;
+    changedItems.push(startNode);
+
+    return changedItems;
   }
 }

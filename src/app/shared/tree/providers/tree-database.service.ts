@@ -3,9 +3,9 @@
  * Each node in Json object represents a to-do item or a category.
  * If a node is a category, it has children items and new items can be added under the category.
  */
-import { EventEmitter, Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
-import { ItemNode } from '../models/item-node.model';
+import {EventEmitter, Injectable} from '@angular/core';
+import {BehaviorSubject} from 'rxjs';
+import {ItemNode} from '../models/item-node.model';
 
 export enum InsertionType {
   ABOVE = 'above',
@@ -51,7 +51,7 @@ export class TreeDatabaseService {
   buildFileTree(data: ItemNode[], parentId = 0): ItemNode[] {
     const completeArr: ItemNode[] = [];
     for (let i = 0; i < data.length; i++) {
-      const item = data[ i ];
+      const item = data[i];
       if (item.parentId === parentId) {
         item.children.push(...this.buildFileTree(data, item.id));
         completeArr.push(item);
@@ -77,15 +77,16 @@ export class TreeDatabaseService {
 
     item.order = 0;
     item.isNew = isNew;
+
     if (!isNew) {
       const oldParent = this.getParentFromNodes(item);
       const oldArr = oldParent ? oldParent.children : this.data;
       const oldIndex = oldArr.indexOf(item);
-      this.deleteNode(oldArr, item);
+      this.deleteNode(item, oldArr);
       this.recalculateOrdering(oldArr, oldIndex, item.order);
     }
-    arr.unshift(item);
 
+    arr.unshift(item);
     this.recalculateOrdering(arr, 1, 1);
     this.dataChange.next(this.data);
     if (raiseEvent) {
@@ -101,7 +102,7 @@ export class TreeDatabaseService {
     const oldArr = oldParentNode != null ? oldParentNode.children : this.data;
     const oldIndex = oldArr.indexOf(insertNode);
 
-    this.deleteNode(oldArr, insertNode);
+    this.deleteNode(insertNode, oldArr);
     this.recalculateOrdering(oldArr, oldIndex, insertNode.order);
 
     let newOrder: number = nodeAnchor.order;
@@ -122,7 +123,7 @@ export class TreeDatabaseService {
 
   getParentFromNodes(node: ItemNode): ItemNode {
     for (let i = 0; i < this.data.length; ++i) {
-      const currentRoot = this.data[ i ];
+      const currentRoot = this.data[i];
       const parent = this.getParent(currentRoot, node);
       if (parent != null) {
         return parent;
@@ -134,7 +135,7 @@ export class TreeDatabaseService {
   getParent(currentRoot: ItemNode, node: ItemNode): ItemNode {
     if (currentRoot.children && currentRoot.children.length > 0) {
       for (let i = 0; i < currentRoot.children.length; ++i) {
-        const child = currentRoot.children[ i ];
+        const child = currentRoot.children[i];
         if (child === node) {
           return currentRoot;
         } else if (child.children && child.children.length > 0) {
@@ -158,7 +159,7 @@ export class TreeDatabaseService {
   }
 
   deleteItem(node: ItemNode, raiseEvent = false) {
-    this.deleteNode(this.data, node);
+    this.deleteNode(node);
     this.dataChange.next(this.data);
     if (raiseEvent) {
       this.deleteEventEmitter.emit(node);
@@ -169,10 +170,12 @@ export class TreeDatabaseService {
     return this.insertItem(to, from);
   }
 
-  deleteNode(nodes: ItemNode[], nodeToDelete: ItemNode) {
-    const index = nodes.indexOf(nodeToDelete, 0);
+  deleteNode(nodeToDelete: ItemNode, nodes: ItemNode[] = null) {
+    const children = this.getParentFromNodes(nodeToDelete) && this.getParentFromNodes(nodeToDelete).children;
+    const deleteFrom = nodes || children || this.data;
+    const index = deleteFrom.indexOf(nodeToDelete, 0);
     if (index > -1) {
-      nodes.splice(index, 1);
+      deleteFrom.splice(index, 1);
     }
   }
 
@@ -180,7 +183,7 @@ export class TreeDatabaseService {
     let order = startOrder;
     const lastIndex = endIndex || arr.length - 1;
     for (let i = beginIndex; i <= lastIndex; i++) {
-      const item = arr[ i ];
+      const item = arr[i];
       item.order = order;
       order++;
     }
