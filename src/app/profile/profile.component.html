@@ -39,7 +39,10 @@
         </div>
       </div>
       <div class="horizontal-center" *ngIf="showIterationBtn && !iterationExists">
-        <button mat-raised-button color="accent" class="google-font-bold">Создать итерацию</button>
+        <button
+          mat-raised-button
+          color="accent"
+          class="google-font-bold" [routerLink]="['create-iteration']">Создать итерацию</button>
       </div>
     </div>
 

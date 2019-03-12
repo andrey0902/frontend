@@ -7,18 +7,22 @@ import {MaterialModule} from '../material/material.module';
 import {CoreModule} from '../core/core.module';
 import { ProfileOverviewComponent } from './profile-overview/profile-overview.component';
 import { IterationTimelineComponent } from './iteration-timeline/iteration-timeline.component';
+import { CreateIterationComponent } from './create-iteration/create-iteration.component';
+import {ReactiveFormsModule} from '@angular/forms';
 
 @NgModule({
   declarations: [
     ProfileComponent,
     ProfileOverviewComponent,
-    IterationTimelineComponent
+    IterationTimelineComponent,
+    CreateIterationComponent
   ],
   imports: [
     CommonModule,
     ProfileRoutingModule,
     MaterialModule,
-    CoreModule
+    CoreModule,
+    ReactiveFormsModule
   ]
 })
 export class ProfileModule { }
