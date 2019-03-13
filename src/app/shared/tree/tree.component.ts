@@ -22,6 +22,7 @@ export class TreeComponent implements OnChanges {
   @Output() public updateItem = new EventEmitter<ItemNode[]>();
   @Output() public deleteItem = new EventEmitter<ItemNode>();
   @Output() public createItem = new EventEmitter<ItemNode>();
+  @Output() public editItem = new EventEmitter<ItemNode>();
 
   /** Map from flat node to nested node. This helps us finding the nested node to be modified */
   flatNodeMap = new Map<ItemFlatNode, ItemNode>();
@@ -114,30 +115,40 @@ export class TreeComponent implements OnChanges {
     const node = this.flatNodeMap.get(flatNode);
     node.is_completed = !node.is_completed;
 
-    this.updateItem.emit(this.getChangedCheckedItems(node));
+    this.updateItem.emit([...this.getChangedCheckedItems(node), node]);
   }
-
 
   /** add item(add value-item)**/
   addItemToRoot(nodeText: string) {
-    const data = new this.type();
-    data.text = nodeText;
-    this.database.insertItem(null, data, true);
-    this.createItem.emit(data);
+    if (this.dataSource.data.length < 100) {
+      const data = new this.type();
+      data.is_completed = false;
+      data.text = nodeText;
+      this.database.insertItem(null, data, true);
+      this.createItem.emit(data);
+    }
   }
 
   /** add item(add input-item) **/
   addNewItem(node: ItemFlatNode) {
     const parentNode = this.flatNodeMap.get(node);
-    const data = new this.type();
-    data.showAsInput = true;
+    const nestingLevel = this.database.getParentsFromNodes(parentNode).length + 2;
+    if (parentNode.children.length < 100 && nestingLevel < 5) {
+      const data = new this.type();
+      data.showAsInput = true;
+      data.is_completed = false;
 
-    this.database.insertItem(parentNode, data, true);
-    if (!!parentNode.children) {
-      this.treeControl.expand(node);
+      this.database.insertItem(parentNode, data, true);
+      if (!!parentNode.children) {
+        this.treeControl.expand(node);
+      }
+
+      this.createItem.emit(data);
+      const changesCheckedItems = this.getChangedCheckedItems(data);
+      if (changesCheckedItems.length > 0) {
+        this.updateItem.emit(changesCheckedItems);
+      }
     }
-
-    this.updateItem.emit(this.getChangedCheckedItems(data));
   }
 
   /** add item(replace input with value)**/
@@ -146,11 +157,11 @@ export class TreeComponent implements OnChanges {
     data.isNew = false;
     data.showAsInput = false;
     this.database.updateItem(data, nodeText);
-    this.createItem.emit(data);
+    this.editItem.emit(data);
   }
 
   /** edit item(replace value with input)**/
-  editItem(node: ItemFlatNode) {
+  redactItem(node: ItemFlatNode) {
     const data = this.flatNodeMap.get(node);
     data.showAsInput = true;
     this.database.updateItem(data, data.text);
@@ -164,7 +175,10 @@ export class TreeComponent implements OnChanges {
     this.deleteItem.emit(data);
 
     if (parent.children && parent.children.length > 0) {
-      this.updateItem.emit(this.getChangedCheckedItems(parent.children[0]));
+      const changesCheckedItems = this.getChangedCheckedItems(parent.children[0]);
+      if (changesCheckedItems.length > 0) {
+        this.updateItem.emit(changesCheckedItems);
+      }
     }
 
   }
@@ -219,12 +233,15 @@ export class TreeComponent implements OnChanges {
         newItem = this.database.copyPasteItem(dragNode, this.flatNodeMap.get(node));
       }
 
-      if (oldOrder !== newItem.order && oldParentId !== newItem.parentId) {
-        this.updateItem.emit([newItem]);
+      if (oldOrder !== newItem.order || oldParentId !== newItem.parentId) {
+        this.editItem.emit(newItem);
         this.treeControl.expandDescendants(this.nestedNodeMap.get(newItem));
       }
 
-      this.updateItem.emit(this.getChangedCheckedItems(dragNodeParent.children[0]));
+      const changesCheckedItems = this.getChangedCheckedItems(dragNodeParent.children[0]);
+      if (changesCheckedItems.length > 0) {
+        this.updateItem.emit(changesCheckedItems);
+      }
     }
     this.dragNode = null;
     this.dragNodeExpandOverNode = null;
@@ -270,6 +287,7 @@ export class TreeComponent implements OnChanges {
       const allChildrenChecked = this.descendantsAllSelected(startFlatNode);
       if (allChildrenChecked !== startNode.is_completed) {
         startNode.is_completed = allChildrenChecked;
+        changedItems.push(startNode);
         allChildrenChecked ? this.checklistSelection.select(startFlatNode) : this.checklistSelection.deselect(startFlatNode);
       }
     }
@@ -279,8 +297,6 @@ export class TreeComponent implements OnChanges {
     if (parentNode) {
       changedItems.push(...this.getChangedCheckedItems(parentNode, false));
     }
-
-    changedItems.push(startNode);
 
     return changedItems;
   }

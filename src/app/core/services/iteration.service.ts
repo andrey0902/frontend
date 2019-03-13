@@ -1,6 +1,10 @@
 import { Injectable } from '@angular/core';
-import {HttpClient, HttpHeaders} from '@angular/common/http';
+import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
 import {ApiConfig} from '../../helpers/apiConfig';
+import {Observable} from 'rxjs';
+import {Iteration} from '../../models/iteration.model';
+import {tap} from 'rxjs/internal/operators/tap';
+import {map} from 'rxjs/operators';
 
 const httpOptions = {
   headers: new HttpHeaders({
@@ -15,8 +19,12 @@ export class IterationService {
 
   constructor(private http: HttpClient) { }
 
-  getCurrentIteration(protegeId) {
-    return this.http.get(`${ApiConfig.protege}/${protegeId}/iterations/current`, { ...httpOptions });
+  getCurrentIteration(protegeId): Observable<Iteration> {
+    httpOptions['params'] = new HttpParams().set('include', 'meets,plans');
+    return this.http.get(`${ApiConfig.protege}/${protegeId}/iterations/current`, { ...httpOptions })
+      .pipe(
+        map((config) => new Iteration(config))
+      );
   }
 
   createIteration(protegeId, payload) {

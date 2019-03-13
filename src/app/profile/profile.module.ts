@@ -9,6 +9,7 @@ import { ProfileOverviewComponent } from './profile-overview/profile-overview.co
 import { IterationTimelineComponent } from './iteration-timeline/iteration-timeline.component';
 import { CreateIterationComponent } from './create-iteration/create-iteration.component';
 import {ReactiveFormsModule} from '@angular/forms';
+import {SharedModule} from '../shared/shared.module';
 
 @NgModule({
   declarations: [
@@ -22,7 +23,8 @@ import {ReactiveFormsModule} from '@angular/forms';
     ProfileRoutingModule,
     MaterialModule,
     CoreModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    SharedModule
   ]
 })
 export class ProfileModule { }

@@ -132,6 +132,16 @@ export class TreeDatabaseService {
     return null;
   }
 
+  getParentsFromNodes(node: ItemNode): ItemNode[] {
+    const parents: ItemNode[] = [];
+    if (node.parentId) {
+      const parent: ItemNode = this.getParentFromNodes(node);
+      parents.push(parent);
+      parents.push(...this.getParentsFromNodes(parent));
+    }
+    return parents;
+  }
+
   getParent(currentRoot: ItemNode, node: ItemNode): ItemNode {
     if (currentRoot.children && currentRoot.children.length > 0) {
       for (let i = 0; i < currentRoot.children.length; ++i) {

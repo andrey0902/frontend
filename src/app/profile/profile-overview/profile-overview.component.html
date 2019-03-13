@@ -3,6 +3,10 @@
   <h2 class="iteration-name">{{ currentIteration.goal }}</h2>
 </div>
 <lt-iteration-timeline [iteration]="currentIteration"></lt-iteration-timeline>
+<div class="tree">
+  <lt-tree [data]="tasks" [type]="itemConstructor" (deleteItem)="deleteTreeItem($event)" (createItem)="createTreeItem($event)" (editItem)="editTreeItem($event)"  (updateItem)="updateTreeItems($event)">
+  </lt-tree>
+</div>
 
 
 
