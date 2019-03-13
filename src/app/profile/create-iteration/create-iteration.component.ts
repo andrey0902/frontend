@@ -49,11 +49,10 @@ export class CreateIterationComponent implements OnInit {
   onSubmit() {
     const protegeId = this.route.snapshot.paramMap.get('id');
     const iteration = this.iterationForm.value;
-    this.iterationService.createIteration(protegeId, iteration)
-      .subscribe(res => {
-        console.log(res);
-        this.router.navigate(['/profile', protegeId]);
-      });
+
+    this.iterationService.createIteration(protegeId, iteration).subscribe(() => {
+      this.router.navigate(['/profile', protegeId]);
+    });
   }
 
 }

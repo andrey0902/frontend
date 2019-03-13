@@ -6,7 +6,7 @@ import {
   MatDialogModule,
   MatFormFieldModule,
   MatIconModule, MatInputModule,
-  MatMenuModule, MatSelectModule,
+  MatMenuModule, MatSelectModule, MatStepperModule,
   MatTabsModule,
   MatTooltipModule
 } from '@angular/material';
@@ -25,7 +25,8 @@ import {
     MatInputModule,
     MatAutocompleteModule,
     MatDatepickerModule,
-    MatSelectModule
+    MatSelectModule,
+    MatStepperModule
   ],
   exports: [
     MatMenuModule,
@@ -38,7 +39,8 @@ import {
     MatInputModule,
     MatAutocompleteModule,
     MatDatepickerModule,
-    MatSelectModule
+    MatSelectModule,
+    MatStepperModule
   ]
 })
 export class MaterialModule { }
