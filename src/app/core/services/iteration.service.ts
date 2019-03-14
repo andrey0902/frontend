@@ -1,12 +1,6 @@
 import { Injectable } from '@angular/core';
-import {HttpClient, HttpHeaders} from '@angular/common/http';
+import {HttpClient} from '@angular/common/http';
 import {ApiConfig} from '../../helpers/apiConfig';
-
-const httpOptions = {
-  headers: new HttpHeaders({
-    'Access-Control-Allow-Origin': '*'
-  })
-};
 
 @Injectable({
   providedIn: 'root'
@@ -16,7 +10,7 @@ export class IterationService {
   constructor(private http: HttpClient) { }
 
   getCurrentIteration(protegeId) {
-    return this.http.get(`${ApiConfig.protege}/${protegeId}/iterations/current`, { ...httpOptions });
+    return this.http.get(`${ApiConfig.protege}/${protegeId}/iterations/current`);
   }
 
   createIteration(protegeId, payload) {
@@ -29,14 +23,10 @@ export class IterationService {
       test_project: payload.projectLink
     };
 
-    return this.http.post(
-      `${ApiConfig.protege}/${protegeId}/iterations`,
-      iteration,
-      { ...httpOptions }
-    );
+    return this.http.post(`${ApiConfig.protege}/${protegeId}/iterations`, iteration);
   }
 
   getMeetTypes() {
-    return this.http.get(`${ApiConfig.base}/data/iterations/meet_types`, { ...httpOptions });
+    return this.http.get(`${ApiConfig.base}/data/iterations/meet_types`);
   }
 }
