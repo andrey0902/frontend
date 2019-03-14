@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {ApiConfig} from '../../helpers/apiConfig';
+import * as moment from 'moment';
 
 @Injectable({
   providedIn: 'root'
@@ -15,8 +16,8 @@ export class IterationService {
 
   createIteration(protegeId, payload) {
     const iteration = {
-      start_date: payload.startDate,
-      end_date: payload.endDate,
+      start_date: moment(payload.startDate).format(),
+      end_date: moment(payload.endDate).format(),
       goal: payload.goal,
       meet_type_id: payload.meetType,
       week_day: payload.weekDay,

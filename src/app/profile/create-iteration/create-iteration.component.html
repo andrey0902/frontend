@@ -1,99 +1,28 @@
 <div class="container">
   <h2 class="text-center page-caption">Создать итерацию</h2>
-  <form class="iteration-form" [formGroup]="iterationForm" (ngSubmit)="onSubmit()">
-    <div class="form-control">
-      <label class="control-title">
-        Дата начала:
-        <span class="required-asterisk">*</span>
-      </label>
-      <div class="control-input">
-        <mat-form-field hintLabel="d.m.yyyy">
-          <input
-            matInput
-            [matDatepicker]="startDatePicker"
-            formControlName="startDate">
-          <mat-error *ngIf="startDate.hasError('required')">Это поле обязательно для заполнения</mat-error>
-          <mat-datepicker-toggle matSuffix [for]="startDatePicker"></mat-datepicker-toggle>
-          <mat-datepicker #startDatePicker></mat-datepicker>
-        </mat-form-field>
-      </div>
-    </div>
-    <div class="form-control">
-      <label class="control-title">
-        Дата окончания:
-        <span class="required-asterisk">*</span>
-      </label>
-      <div class="control-input">
-        <mat-form-field hintLabel="d.m.yyyy">
-          <input
-            matInput
-            [matDatepicker]="endDatePicker"
-            formControlName="endDate"
-            [min]="startDate.value">
-          <mat-error *ngIf="endDate.hasError('required')">Это поле обязательно для заполнения</mat-error>
-          <mat-datepicker-toggle matSuffix [for]="endDatePicker"></mat-datepicker-toggle>
-          <mat-datepicker #endDatePicker></mat-datepicker>
-        </mat-form-field>
-      </div>
-    </div>
-    <div class="form-control">
-      <label class="control-title">
-        Цель:
-        <span class="required-asterisk">*</span>
-      </label>
-      <div class="control-input">
-        <mat-form-field>
-          <input matInput formControlName="goal">
-          <mat-error *ngIf="goal.hasError('required')">Это поле обязательно для заполнения</mat-error>
-        </mat-form-field>
-      </div>
-    </div>
-    <div class="form-control">
-      <label class="control-title">Ссылка на проект:</label>
-      <div class="control-input">
-        <mat-form-field>
-          <input matInput formControlName="projectLink">
-        </mat-form-field>
-      </div>
-    </div>
-    <div class="form-control">
-      <label class="control-title">
-        Тип встреч:
-        <span class="required-asterisk">*</span>
-      </label>
-      <div class="control-input">
-        <mat-form-field>
-          <mat-select formControlName="meetType">
-            <mat-option *ngFor="let type of meetTypes$ | async" [value]="type.id">
-              {{type.attributes.title}}
-            </mat-option>
-          </mat-select>
-          <mat-error *ngIf="meetType.hasError('required')">Это поле обязательно для заполнения</mat-error>
-        </mat-form-field>
-      </div>
-    </div>
-    <div class="form-control">
-      <label class="control-title">
-        День недели:
-        <span class="required-asterisk">*</span>
-      </label>
-      <div class="control-input">
-        <mat-form-field>
-          <mat-select formControlName="weekDay">
-            <mat-option *ngFor="let day of weekDays" [value]="day.id">
-              {{day.title}}
-            </mat-option>
-          </mat-select>
-          <mat-error *ngIf="weekDay.hasError('required')">Это поле обязательно для заполнения</mat-error>
-        </mat-form-field>
-      </div>
-    </div>
-    <div class="form-control">
-      <button
-        mat-raised-button
-        color="accent"
-        [disabled]="iterationForm.invalid"
-        class="google-font-bold">Создать</button>
-    </div>
-  </form>
+
+  <mat-vertical-stepper linear>
+    <mat-step
+      label="Создание итерации"
+      editable="false"
+      state="create-iteration"
+      [stepControl]="iterationForm">
+      <lt-create-iteration-form
+        [iterationForm]="iterationForm"
+        (submitForm)="createIteration()">
+      </lt-create-iteration-form>
+    </mat-step>
+    <mat-step label="Создание ИПР" editable="false" state="create-plan">
+      Content 2
+    </mat-step>
+    <ng-template matStepperIcon="create-iteration">
+      <mat-icon>today</mat-icon>
+    </ng-template>
+    <ng-template matStepperIcon="create-plan">
+      <mat-icon>edit</mat-icon>
+    </ng-template>
+  </mat-vertical-stepper>
+
+
+
 </div>

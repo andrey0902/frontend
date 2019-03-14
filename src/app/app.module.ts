@@ -12,6 +12,7 @@ import {MatMomentDateModule} from '@angular/material-moment-adapter';
 import {MAT_DATE_LOCALE} from '@angular/material';
 import {CookieService} from 'ngx-cookie-service';
 import {AuthInterceptor} from './core/services/auth.iterceptor';
+import {STEPPER_GLOBAL_OPTIONS} from '@angular/cdk/stepper';
 
 @NgModule({
   declarations: [
@@ -30,7 +31,9 @@ import {AuthInterceptor} from './core/services/auth.iterceptor';
   providers: [
     CookieService,
     { provide: MAT_DATE_LOCALE, useValue: 'ru' },
-    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }
+    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
+    { provide: STEPPER_GLOBAL_OPTIONS, useValue: { displayDefaultIndicatorType: false }
+    }
   ],
   bootstrap: [AppComponent]
 })
