@@ -5,7 +5,6 @@ import {Store} from '@ngrx/store';
 import {selectCurrentUser} from '../../../root-store/currentUser/current-user.selectors';
 import {LoadUser} from '../../../root-store/currentUser/current-user.actions';
 import {Observable} from 'rxjs';
-import {tap} from 'rxjs/operators';
 
 @Component({
   selector: 'lt-header',
@@ -23,7 +22,7 @@ export class HeaderComponent implements OnInit {
 
   ngOnInit(): void {
     this.currentUser$ = this.store.select(selectCurrentUser);
-    this.store.dispatch(new LoadUser(2));
+    this.store.dispatch(new LoadUser(7));
   }
 
 }
