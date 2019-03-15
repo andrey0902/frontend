@@ -1,9 +1,8 @@
-import {ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnChanges} from '@angular/core';
-import {Iteration} from '../../models/iteration.model';
-import {ItemNode} from '../../shared/tree/models/item-node.model';
-import {InfoPlanModel} from '../../personal-plan/shared/models/info-plan.model';
-import {IterationTreeService} from '../../core/services/iteration-tree.service';
-import {combineLatest, Observable} from 'rxjs';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit } from '@angular/core';
+import { User } from '../../models/user.model';
+import { Iteration } from '../../models/iteration.model';
+import { ItemNode } from '../../shared/tree/models/item-node.model';
+
 import {IterationTaskModel} from '../../personal-plan/shared/models/iteration-plan.model';
 import {IProgress} from '../../personal-plan/shared/models/progress.model';
 
@@ -13,10 +12,11 @@ import {IProgress} from '../../personal-plan/shared/models/progress.model';
   styleUrls: ['./profile-overview.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ProfileOverviewComponent {
+export class ProfileOverviewComponent implements OnInit {
   @Input() iteration: Iteration;
   progress: IProgress = null;
 
+  public objectValues = Object.values;
   constructor(private cd: ChangeDetectorRef) {
   }
 
@@ -44,5 +44,8 @@ export class ProfileOverviewComponent {
       };
       this.cd.detectChanges();
     }
+  }
+
+  ngOnInit(): void {
   }
 }

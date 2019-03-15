@@ -21,6 +21,7 @@ export class CurrentUserEffectService {
       return this.userService.getCurrentUser().pipe(
         map((res: any) => {
           const user = new User(res);
+          console.log(user);
           return new LoadUserSuccess(user);
         }),
         catchError(err => of(new LoadUserFail(err.error.errors)))
