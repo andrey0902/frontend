@@ -42,7 +42,7 @@
                   [checked]="checklistSelection.isSelected(node)"
                   [indeterminate]="descendantsPartiallySelected(node)"
                   (change)="todoItemSelectionToggle(node)">{{node.text}}</mat-checkbox>
-    <ng-container *ngTemplateOutlet="nodeMenu; context: {node: node}"></ng-container>
+    <ng-container *ngTemplateOutlet="nodeMenu; context: {node: node}" class="buttons"></ng-container>
   </mat-tree-node>
 </mat-tree>
 
@@ -50,16 +50,9 @@
 <span #emptyItem></span>
 
 <ng-template #nodeMenu let-node = "node">
-  <button mat-icon-button (click)="addNewItem(node)"><mat-icon>add</mat-icon></button>
-  <button mat-icon-button [matMenuTriggerFor]="menu"><mat-icon>more_vert</mat-icon></button>
-  <mat-menu #menu="matMenu">
-    <button mat-menu-item (click)="editItem(node)">
-      <mat-icon>edit</mat-icon>
-      <span>Edit</span>
-    </button>
-    <button mat-menu-item (click)="removeItem(node)">
-      <mat-icon>close</mat-icon>
-      <span>Delete</span>
-    </button>
-  </mat-menu>
+  <div class="buttons">
+  <button mat-icon-button (click)="redactItem(node)"><mat-icon>edit</mat-icon></button>
+  <button mat-icon-button (click)="removeItem(node)"><mat-icon>close</mat-icon></button>
+  <button *ngIf="isValidToAdd(node)" mat-icon-button (click)="addNewItem(node)"><mat-icon>add</mat-icon></button>
+  </div>
 </ng-template>

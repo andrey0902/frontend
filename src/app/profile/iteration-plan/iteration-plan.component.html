@@ -1,0 +1,11 @@
+  <div class="tree">
+    <lt-tree *ngIf="plan"
+             [data]="plan"
+             [type]="itemConstructor"
+             (deleteItem)="deleteTreeItem($event)"
+             (createItem)="createTreeItem($event)"
+             (editItem)="editTreeItem($event)"
+             (dataChanged)="treeDataChanged($event)"
+             (updateItem)="updateTreeItems($event)">
+    </lt-tree>
+  </div>

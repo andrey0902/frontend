@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {ApiConfig} from '../../helpers/apiConfig';
 import * as moment from 'moment';
+import {Iteration} from '../../models/iteration.model';
+import {map} from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +13,10 @@ export class IterationService {
   constructor(private http: HttpClient) { }
 
   getCurrentIteration(protegeId) {
-    return this.http.get(`${ApiConfig.protege}/${protegeId}/iterations/current`);
+    return this.http.get(`${ApiConfig.protege}/${protegeId}/iterations/current`)
+      .pipe(
+        map((config) => new Iteration(config))
+      );
   }
 
   createIteration(protegeId, payload) {

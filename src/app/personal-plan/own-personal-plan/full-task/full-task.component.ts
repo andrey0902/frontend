@@ -32,6 +32,18 @@ export class FullTaskComponent implements OnInit {
     /*return this.service.createIPRGoals(userId, bodyRequest);*/
   }
 
+  public editTask(event) {
+    console.log('[FullTaskComponent: editTask]', event);
+  }
+
+  public deleteTask(event) {
+    console.log('[FullTaskComponent: deleteTask]', event);
+  }
+
+  public updateTask(event) {
+    console.log('[FullTaskComponent: updateTask]', event);
+  }
+
   public addToRootCategory(event) {
     const requestBody = {
       text: event.value,
@@ -43,13 +55,5 @@ export class FullTaskComponent implements OnInit {
     requestBody[ 'is_completed' ] = false;
     this.tasks = [ ...this.tasks, new InfoPlanModel(requestBody) ];
     console.log('[FullTaskComponent: addToRootCategory]', event);
-  }
-
-  public deleteTask(event) {
-    console.log('[FullTaskComponent: deleteTask]', event);
-  }
-
-  public updateTask(event) {
-    console.log('[FullTaskComponent: updateTask]', event);
   }
 }

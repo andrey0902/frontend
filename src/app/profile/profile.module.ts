@@ -10,6 +10,10 @@ import { IterationTimelineComponent } from './iteration-timeline/iteration-timel
 import { CreateIterationComponent } from './create-iteration/create-iteration.component';
 import {ReactiveFormsModule} from '@angular/forms';
 import { CreateIterationFormComponent } from './create-iteration-form/create-iteration-form.component';
+import {SharedModule} from '../shared/shared.module';
+import {ProgressBarModule} from '../shared/progress-bar/progress-bar.module';
+import { IterationPlanComponent } from './iteration-plan/iteration-plan.component';
+import { IterationProgressComponent } from './iteration-progress/iteration-progress.component';
 
 @NgModule({
   declarations: [
@@ -17,14 +21,18 @@ import { CreateIterationFormComponent } from './create-iteration-form/create-ite
     ProfileOverviewComponent,
     IterationTimelineComponent,
     CreateIterationComponent,
-    CreateIterationFormComponent
+    CreateIterationFormComponent,
+    IterationPlanComponent,
+    IterationProgressComponent
   ],
   imports: [
     CommonModule,
     ProfileRoutingModule,
     MaterialModule,
     CoreModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    SharedModule,
+    ProgressBarModule
   ]
 })
 export class ProfileModule { }
