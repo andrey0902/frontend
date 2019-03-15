@@ -15,7 +15,7 @@ import {IProgress} from '../../personal-plan/shared/models/progress.model';
 })
 export class ProfileOverviewComponent {
   @Input() iteration: Iteration;
-  progress: IProgress;
+  progress: IProgress = null;
 
   constructor(private cd: ChangeDetectorRef) {
   }

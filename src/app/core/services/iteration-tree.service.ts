@@ -6,13 +6,6 @@ import {Observable} from 'rxjs';
 import {map} from 'rxjs/operators';
 import {IterationTaskModel} from '../../personal-plan/shared/models/iteration-plan.model';
 
-const httpOptions = {
-  headers: new HttpHeaders({
-    'Access-Control-Allow-Origin': '*',
-    'Authorization': 'Token 14119a9241b7432e424ee0d7b2ab75772663d259'
-  })
-};
-
 @Injectable({
   providedIn: 'root'
 })
@@ -23,7 +16,7 @@ export class IterationTreeService {
   }
 
   public getTree(iterationId: number, protegeId: number): Observable<IterationTaskModel[]> {
-    return this.http.get(`${ApiConfig.protege}/${protegeId}/iterations/${iterationId}/plans/tasks`, {...httpOptions})
+    return this.http.get(`${ApiConfig.protege}/${protegeId}/iterations/${iterationId}/plans/tasks`)
       .pipe(
         map((tasks: any[]) => {
           const plan: IterationTaskModel[] = [];
@@ -34,7 +27,7 @@ export class IterationTreeService {
   }
 
   public deleteTreeItem(item: ItemNode, protegeId: number, iterationId: number): Observable<any> {
-    return this.http.delete(`${ApiConfig.protege}/${protegeId}/iterations/${iterationId}/plans/tasks/${item.id}`, {...httpOptions});
+    return this.http.delete(`${ApiConfig.protege}/${protegeId}/iterations/${iterationId}/plans/tasks/${item.id}`);
   }
 
   public createTreeItem(item: ItemNode, protegeId: number, iterationId: number): Observable<any> {
@@ -44,7 +37,7 @@ export class IterationTreeService {
       is_completed: item.is_completed,
       parent_task_id: item.parentId
     };
-    return this.http.post(`${ApiConfig.protege}/${protegeId}/iterations/${iterationId}/plans/tasks`, request, {...httpOptions});
+    return this.http.post(`${ApiConfig.protege}/${protegeId}/iterations/${iterationId}/plans/tasks`, request );
   }
 
   public editTreeItem(item: ItemNode, protegeId: number, iterationId: number): Observable<any> {
@@ -54,7 +47,7 @@ export class IterationTreeService {
       is_completed: item.is_completed,
       parent_task_id: item.parentId
     };
-    return this.http.patch(`${ApiConfig.protege}/${protegeId}/iterations/${iterationId}/plans/tasks/${item.id}`, request, {...httpOptions});
+    return this.http.patch(`${ApiConfig.protege}/${protegeId}/iterations/${iterationId}/plans/tasks/${item.id}`, request);
   }
 
   public updateTreeItems(items: number[], status: boolean, protegeId: number, iterationId: number): Observable<any> {
@@ -62,6 +55,6 @@ export class IterationTreeService {
       id: items,
       is_completed: status
     };
-    return this.http.patch(`${ApiConfig.protege}/${protegeId}/iterations/${iterationId}/plans/tasks/status`, request, {...httpOptions});
+    return this.http.patch(`${ApiConfig.protege}/${protegeId}/iterations/${iterationId}/plans/tasks/status`, request);
   }
 }
