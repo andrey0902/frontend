@@ -1,5 +1,5 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {FormGroup} from '@angular/forms';
 import {Observable} from 'rxjs';
 import {IterationService} from '../../core/services/iteration.service';
 
@@ -23,7 +23,6 @@ export class CreateIterationFormComponent implements OnInit {
   ];
 
   constructor(
-    private fb: FormBuilder,
     private iterationService: IterationService
   ) { }
 
