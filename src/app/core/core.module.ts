@@ -7,6 +7,7 @@ import {MaterialModule} from '../material/material.module';
 import { UserComponent } from './components/user/user.component';
 import {RouterModule} from '@angular/router';
 import { NavTabsComponent } from './components/nav-tabs/nav-tabs.component';
+import { PortraitUserComponent } from './components/portrait-user/portrait-user.component';
 
 @NgModule({
   declarations: [
@@ -14,7 +15,8 @@ import { NavTabsComponent } from './components/nav-tabs/nav-tabs.component';
     SafeHtmlPipe,
     SvgIconComponent,
     UserComponent,
-    NavTabsComponent
+    NavTabsComponent,
+    PortraitUserComponent
   ],
   imports: [
     CommonModule,
@@ -25,7 +27,8 @@ import { NavTabsComponent } from './components/nav-tabs/nav-tabs.component';
     HeaderComponent,
     UserComponent,
     NavTabsComponent,
-    SafeHtmlPipe
+    SafeHtmlPipe,
+    PortraitUserComponent
   ]
 })
 export class CoreModule { }

@@ -1,5 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
 import { Iteration } from '../../models/iteration.model';
+import { User } from '../../models/user.model';
 
 @Component({
   selector: 'lt-profile-overview',
@@ -8,7 +9,9 @@ import { Iteration } from '../../models/iteration.model';
 })
 export class ProfileOverviewComponent implements OnInit {
   @Input() iteration: any;
+  @Input() user: User;
 
+  public objectValues = Object.values;
   constructor() {
   }
 
