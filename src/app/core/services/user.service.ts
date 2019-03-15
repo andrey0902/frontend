@@ -17,6 +17,10 @@ export class UserService {
     return this.http.get(`${ApiConfig.users}/${userId}`, { params });
   }
 
+  getCurrentUser() {
+    return this.http.get(`${ApiConfig.users}/current`);
+  }
+
   getMentors(params = {}) {
     return this.http.get(`${ApiConfig.mentors}`, { params });
   }
