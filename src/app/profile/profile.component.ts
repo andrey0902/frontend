@@ -49,6 +49,7 @@ export class ProfileComponent implements OnInit {
       switchMap((params: ParamMap) => {
         return this.iterationService.getCurrentIteration(params.get('id')).pipe(
           tap(() => this.iterationExists = true),
+          tap(() => this.iterationExists = true),
           catchError(err => {
             if (err.error.error.code === 404) {
               this.iterationExists = false;

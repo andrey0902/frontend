@@ -5,6 +5,7 @@ import {SelectionModel} from '@angular/cdk/collections';
 import {InsertionType, TreeDatabaseService} from './providers/tree-database.service';
 import {InputType, ItemFlatNode, ItemNode} from './models/item-node.model';
 import {Observable, of} from 'rxjs';
+import {filter} from 'rxjs/operators';
 
 
 @Component({
@@ -23,6 +24,7 @@ export class TreeComponent implements OnChanges {
   @Output() public deleteItem = new EventEmitter<ItemNode>();
   @Output() public createItem = new EventEmitter<ItemNode>();
   @Output() public editItem = new EventEmitter<ItemNode>();
+  @Output() public dataChanged = new EventEmitter<ItemNode[]>();
 
   /** Map from flat node to nested node. This helps us finding the nested node to be modified */
   flatNodeMap = new Map<ItemFlatNode, ItemNode>();
@@ -56,9 +58,11 @@ export class TreeComponent implements OnChanges {
     database.updateEventEmitter = this.updateItem;
     database.deleteEventEmitter = this.deleteItem;
 
-    database.dataChange.subscribe(data => {
+    database.dataChange
+      .subscribe(data => {
       this.dataSource.data = [];
       this.dataSource.data = data;
+      this.dataChanged.emit(data);
     });
   }
 
@@ -122,6 +126,7 @@ export class TreeComponent implements OnChanges {
     node.is_completed = !node.is_completed;
 
     this.updateItem.emit([...this.getChangedCheckedItems(node), node]);
+    this.database.updateData();
   }
 
   /** add item(add value-item)**/
@@ -158,10 +163,7 @@ export class TreeComponent implements OnChanges {
 
     if (node.showAsInput === 'add') {
       this.createItem.emit(data);
-      const changesCheckedItems = this.getChangedCheckedItems(data);
-      if (changesCheckedItems.length > 0) {
-        this.updateItem.emit(changesCheckedItems);
-      }
+      this.updateItemCheck(data);
     }
 
     if (node.showAsInput === 'edit') {
@@ -184,6 +186,14 @@ export class TreeComponent implements OnChanges {
     this.database.deleteItem(data);
     if (node.showAsInput !== 'add') {
       this.deleteItem.emit(data);
+    }
+  }
+
+  updateItemCheck(node: ItemNode) {
+    const changesCheckedItems = this.getChangedCheckedItems(node);
+    if (changesCheckedItems.length > 0) {
+      this.updateItem.emit(changesCheckedItems);
+      this.database.updateData();
     }
   }
 
@@ -246,10 +256,7 @@ export class TreeComponent implements OnChanges {
       }
 
       if (dragNodeParent.children && dragNodeParent.children.length > 0) {
-        const changesCheckedItems = this.getChangedCheckedItems(dragNodeParent.children[0]);
-        if (changesCheckedItems.length > 0) {
-          this.updateItem.emit(changesCheckedItems);
-        }
+        this.updateItemCheck(dragNodeParent.children[0]);
       }
     }
     this.dragNode = null;

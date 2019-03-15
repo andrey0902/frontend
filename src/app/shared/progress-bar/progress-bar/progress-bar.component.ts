@@ -13,11 +13,9 @@ export class ProgressBarComponent implements OnInit, OnChanges {
   public progressInPercent: number;
 
   public ngOnInit(): void {
-
   }
 
   public ngOnChanges(): void {
-    this.progressInPercent = Math.round(this.progress * 100 / this.endPoint);
+    this.progressInPercent = Math.round(this.progress * 100 / this.endPoint) || 0;
   }
-
 }

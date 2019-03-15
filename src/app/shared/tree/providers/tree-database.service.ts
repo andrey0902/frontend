@@ -168,6 +168,10 @@ export class TreeDatabaseService {
     return node;
   }
 
+  updateData() {
+    this.dataChange.next(this.data);
+  }
+
   deleteItem(node: ItemNode, raiseEvent = false) {
     this.deleteNode(node);
     this.dataChange.next(this.data);

@@ -1,12 +1,11 @@
-<div class="tree--wrapper">
-  <lt-progress-bar [endPoint]="progress.endPoint" [progress]="progress.progress"></lt-progress-bar>
   <div class="tree">
-    <lt-tree [data]="tasks"
+    <lt-tree *ngIf="plan"
+             [data]="plan"
              [type]="itemConstructor"
              (deleteItem)="deleteTreeItem($event)"
              (createItem)="createTreeItem($event)"
              (editItem)="editTreeItem($event)"
+             (dataChanged)="treeDataChanged($event)"
              (updateItem)="updateTreeItems($event)">
     </lt-tree>
   </div>
-</div>

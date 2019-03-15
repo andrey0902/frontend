@@ -1,17 +1,9 @@
 import { Injectable } from '@angular/core';
-import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
+import {HttpClient} from '@angular/common/http';
 import {ApiConfig} from '../../helpers/apiConfig';
-import {Observable} from 'rxjs';
+import * as moment from 'moment';
 import {Iteration} from '../../models/iteration.model';
-import {tap} from 'rxjs/internal/operators/tap';
 import {map} from 'rxjs/operators';
-
-const httpOptions = {
-  headers: new HttpHeaders({
-    'Access-Control-Allow-Origin': '*',
-    'Authorization': 'Token 14119a9241b7432e424ee0d7b2ab75772663d259'
-  })
-};
 
 @Injectable({
   providedIn: 'root'
@@ -20,9 +12,8 @@ export class IterationService {
 
   constructor(private http: HttpClient) { }
 
-  getCurrentIteration(protegeId): Observable<Iteration> {
-    httpOptions['params'] = new HttpParams().set('include', 'meets,plans');
-    return this.http.get(`${ApiConfig.protege}/${protegeId}/iterations/current`, { ...httpOptions })
+  getCurrentIteration(protegeId) {
+    return this.http.get(`${ApiConfig.protege}/${protegeId}/iterations/current`)
       .pipe(
         map((config) => new Iteration(config))
       );
@@ -30,22 +21,18 @@ export class IterationService {
 
   createIteration(protegeId, payload) {
     const iteration = {
-      start_date: payload.startDate,
-      end_date: payload.endDate,
+      start_date: moment(payload.startDate).format(),
+      end_date: moment(payload.endDate).format(),
       goal: payload.goal,
       meet_type_id: payload.meetType,
       week_day: payload.weekDay,
       test_project: payload.projectLink
     };
 
-    return this.http.post(
-      `${ApiConfig.protege}/${protegeId}/iterations`,
-      iteration,
-      { ...httpOptions }
-    );
+    return this.http.post(`${ApiConfig.protege}/${protegeId}/iterations`, iteration);
   }
 
   getMeetTypes() {
-    return this.http.get(`${ApiConfig.base}/data/iterations/meet_types`, { ...httpOptions });
+    return this.http.get(`${ApiConfig.base}/data/iterations/meet_types`);
   }
 }

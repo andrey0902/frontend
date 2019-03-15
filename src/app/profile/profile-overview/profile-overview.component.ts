@@ -13,12 +13,11 @@ import {IProgress} from '../../personal-plan/shared/models/progress.model';
   styleUrls: ['./profile-overview.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ProfileOverviewComponent implements OnChanges {
+export class ProfileOverviewComponent {
   @Input() iteration: Iteration;
-  public plan: IterationTaskModel[];
-  public progress: IProgress;
+  progress: IProgress;
 
-  constructor(private treeService: IterationTreeService, private cd: ChangeDetectorRef) {
+  constructor(private cd: ChangeDetectorRef) {
   }
 
   currentIteration = {
@@ -34,63 +33,16 @@ export class ProfileOverviewComponent implements OnChanges {
     ]
   };
 
-  ngOnChanges() {
-    if (this.iteration && !this.plan) {
-      this.treeService.getTree(this.iteration.id, this.iteration.user_id)
-        .subscribe((plan: IterationTaskModel[]) => {
-          this.plan = IterationTaskModel.treeStructureGenerator(plan);
-          this.updateProgress();
-          this.cd.detectChanges();
-        });
+  public treeDataChanged(items: ItemNode[]): void {
+    if (items && items.length > 0) {
+      const children = IterationTaskModel.getChildrenFromTree(items as IterationTaskModel[]);
+      let progress = 0;
+      children.forEach((child: IterationTaskModel) => progress += +child.is_completed);
+      this.progress = {
+        endPoint: children.length,
+        progress: progress
+      };
+      this.cd.detectChanges();
     }
-  }
-
-  public deleteTreeItem(item: ItemNode): void {
-    this.treeService.deleteTreeItem(item, this.iteration.user_id, this.iteration.id).subscribe();
-  }
-
-  public createTreeItem(item: ItemNode): void {
-    this.treeService.createTreeItem(item, this.iteration.user_id, this.iteration.id)
-      .subscribe((responseItem: ItemNode) => {
-        item.id = responseItem.id;
-        this.cd.detectChanges();
-      });
-  }
-
-  public editTreeItem(item: ItemNode): void {
-    this.treeService.editTreeItem(item, this.iteration.user_id, this.iteration.id).subscribe();
-  }
-
-  public updateTreeItems(items: ItemNode[]): void {
-    const checkedItemsIds: number[] = [];
-    const uncheckedItemsIds: number[] = [];
-    const requests: Observable<any>[] = [];
-
-    // get ids and sort in checked/unchecked arrays
-    items.forEach((item: ItemNode) => item.is_completed ? checkedItemsIds.push(item.id) : uncheckedItemsIds.push(item.id));
-
-    // create request for checked items
-    if (checkedItemsIds.length > 0) {
-      requests.push(this.treeService.updateTreeItems(checkedItemsIds, true, this.iteration.user_id, this.iteration.id));
-    }
-
-    // create request for unchecked items
-    if (uncheckedItemsIds.length > 0) {
-      requests.push(this.treeService.updateTreeItems(uncheckedItemsIds, false, this.iteration.user_id, this.iteration.id));
-    }
-
-    // send requests for checked and unchecked items together
-    combineLatest(...requests).subscribe(response => this.updateProgress());
-  }
-
-  private updateProgress(): void {
-    const children = IterationTaskModel.getChildrenFromTree(this.plan);
-    let progress = 0;
-    children.forEach((child: IterationTaskModel) => progress += +child.is_completed);
-    this.progress = {
-      endPoint: children.length,
-      progress: progress
-    };
-    this.cd.detectChanges();
   }
 }

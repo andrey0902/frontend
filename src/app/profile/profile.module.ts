@@ -9,9 +9,11 @@ import { ProfileOverviewComponent } from './profile-overview/profile-overview.co
 import { IterationTimelineComponent } from './iteration-timeline/iteration-timeline.component';
 import { CreateIterationComponent } from './create-iteration/create-iteration.component';
 import {ReactiveFormsModule} from '@angular/forms';
+import { CreateIterationFormComponent } from './create-iteration-form/create-iteration-form.component';
 import {SharedModule} from '../shared/shared.module';
 import {ProgressBarModule} from '../shared/progress-bar/progress-bar.module';
 import { IterationPlanComponent } from './iteration-plan/iteration-plan.component';
+import { IterationProgressComponent } from './iteration-progress/iteration-progress.component';
 
 @NgModule({
   declarations: [
@@ -19,7 +21,9 @@ import { IterationPlanComponent } from './iteration-plan/iteration-plan.componen
     ProfileOverviewComponent,
     IterationTimelineComponent,
     CreateIterationComponent,
-    IterationPlanComponent
+    CreateIterationFormComponent,
+    IterationPlanComponent,
+    IterationProgressComponent
   ],
   imports: [
     CommonModule,
