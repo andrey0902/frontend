@@ -15,7 +15,7 @@ export interface DialogData {
 
 const modeMap = {
   addMentor: { is_mentor: 0 },
-  addProtege: { is_protege: 1 },
+  addProtege: { is_protege: 0 },
   changeMentor: { is_mentor: 1 },
   assignMentor: { is_mentor: 1 }
 };

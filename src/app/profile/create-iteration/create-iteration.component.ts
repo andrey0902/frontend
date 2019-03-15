@@ -3,7 +3,6 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {IterationService} from '../../core/services/iteration.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import {MatVerticalStepper} from '@angular/material';
-import {CreateIterationFormComponent} from '../create-iteration-form/create-iteration-form.component';
 
 @Component({
   selector: 'lt-create-iteration',
@@ -14,7 +13,6 @@ import {CreateIterationFormComponent} from '../create-iteration-form/create-iter
 export class CreateIterationComponent implements OnInit {
 
   @ViewChild(MatVerticalStepper) public stepper: MatVerticalStepper;
-  @ViewChild(CreateIterationFormComponent) public iterationFormComponent: CreateIterationFormComponent;
 
   iterationForm: FormGroup;
   currentIteration: any;
@@ -41,13 +39,11 @@ export class CreateIterationComponent implements OnInit {
     const protegeId = this.route.snapshot.paramMap.get('id');
     const iteration = this.iterationForm.value;
 
-    this.stepper.next();
-
-    // this.iterationService.createIteration(protegeId, iteration).subscribe((res) => {
-    //   this.currentIteration = res;
-    //   console.log(res);
-    //   this.stepper.next();
-    // });
+    this.iterationService.createIteration(protegeId, iteration).subscribe((res) => {
+      this.currentIteration = res;
+      console.log(res);
+      this.stepper.next();
+    });
   }
   // TODO: Redirect to user profile after successful creation plan
   // this.router.navigate(['/profile', protegeId]);

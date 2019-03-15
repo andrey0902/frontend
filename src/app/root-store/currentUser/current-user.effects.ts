@@ -17,10 +17,11 @@ export class CurrentUserEffectService {
 
   @Effect() getUsers: Observable<Action> = this.actions$.pipe(
     ofType(CurrentUserActionTypes.LOAD_USER),
-    switchMap((action: LoadUser) => {
-      return this.userService.getUser(action.payload).pipe(
+    switchMap(() => {
+      return this.userService.getCurrentUser().pipe(
         map((res: any) => {
           const user = new User(res);
+          console.log(user);
           return new LoadUserSuccess(user);
         }),
         catchError(err => of(new LoadUserFail(err.error.errors)))

@@ -9,8 +9,6 @@ export enum CurrentUserActionTypes {
 
 export class LoadUser implements Action {
   readonly type = CurrentUserActionTypes.LOAD_USER;
-
-  constructor(public payload: string | number) {}
 }
 
 export class LoadUserSuccess implements Action {

@@ -8,7 +8,7 @@
 
   <!--tree tasks-->
   <div class="tree">
-    <lt-tree [data]="tasks" [type]="itemConstructor" (updateItem)="updateTask($event)" (deleteItem)="deleteTask($event)" (createItem)="createItem($event)">
+    <lt-tree [data]="tasks" [type]="itemConstructor" (updateItem)="updateTask($event)" (deleteItem)="deleteTask($event)" (createItem)="createTask($event)" (editItem)="editTask($event)">
     </lt-tree>
   </div>
   <!--end tree tasks-->
