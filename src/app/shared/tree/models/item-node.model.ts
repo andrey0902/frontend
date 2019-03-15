@@ -1,9 +1,11 @@
 /**
  * Node for to-do item
  */
+export type InputType = 'add' | 'edit' | false;
+
 export class ItemNode {
   children: ItemNode[];
-  showAsInput: boolean;
+  showAsInput: InputType;
   order: number;
   text: string;
   id: number;
@@ -15,7 +17,7 @@ export class ItemNode {
 /** Flat to-do item node with expandable and level information */
 export class ItemFlatNode {
   text: string;
-  showAsInput: boolean;
+  showAsInput: InputType;
   level: number;
   expandable: boolean;
 }

@@ -134,7 +134,7 @@ export class TreeDatabaseService {
 
   getParentsFromNodes(node: ItemNode): ItemNode[] {
     const parents: ItemNode[] = [];
-    if (node.parentId) {
+    if (node && node.parentId) {
       const parent: ItemNode = this.getParentFromNodes(node);
       parents.push(parent);
       parents.push(...this.getParentsFromNodes(parent));

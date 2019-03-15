@@ -16,3 +16,22 @@
 .drop-center {
   background-color: #dddddd;
 }
+
+.buttons {
+  display: none;
+}
+
+mat-tree-node:hover .buttons {
+  display: flex;
+  opacity: 0.7;
+  align-items: center;
+  margin-left: 10px;
+  button {
+    font-size: 12px;
+    width: 27px;
+  }
+
+  mat-icon {
+    font-size: 20px;
+  }
+}

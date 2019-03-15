@@ -8,7 +8,8 @@ import {map} from 'rxjs/operators';
 
 const httpOptions = {
   headers: new HttpHeaders({
-    'Access-Control-Allow-Origin': '*'
+    'Access-Control-Allow-Origin': '*',
+    'Authorization': 'Token 14119a9241b7432e424ee0d7b2ab75772663d259'
   })
 };
 

@@ -1,0 +1,12 @@
+<div class="tree--wrapper">
+  <lt-progress-bar [endPoint]="progress.endPoint" [progress]="progress.progress"></lt-progress-bar>
+  <div class="tree">
+    <lt-tree [data]="tasks"
+             [type]="itemConstructor"
+             (deleteItem)="deleteTreeItem($event)"
+             (createItem)="createTreeItem($event)"
+             (editItem)="editTreeItem($event)"
+             (updateItem)="updateTreeItems($event)">
+    </lt-tree>
+  </div>
+</div>
