@@ -13,7 +13,7 @@ export class IterationService {
   constructor(private http: HttpClient) { }
 
   getCurrentIteration(protegeId) {
-    return this.http.get(`${ApiConfig.protege}/${protegeId}/iterations/current`)
+    return this.http.get(`${ApiConfig.protege}/${protegeId}/iterations/current`, { params: { include: 'meets' } })
       .pipe(
         map((config) => new Iteration(config))
       );

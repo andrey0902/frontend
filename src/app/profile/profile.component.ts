@@ -76,7 +76,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
     });
 
     dialogRef.afterClosed().subscribe(text => {
-      if (text !== null) {
+      if (text !== null || text !== undefined) {
         this.route.paramMap.pipe(
           switchMap((params: ParamMap) => this.userService.createMentorRequest(params.get('id'), text)),
           takeWhile(() => this.componentActive)
@@ -96,7 +96,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
     });
 
     dialogRef.afterClosed().subscribe(text => {
-      if (text !== null) {
+      if (text !== null || text !== undefined) {
         this.route.paramMap.pipe(
           switchMap((params: ParamMap) => this.userService.createProtegeRequest(params.get('id'), text))
         ).subscribe(() => {

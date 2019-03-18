@@ -28,7 +28,7 @@
                 mat-raised-button
                 color="accent"
                 class="google-font-bold btn btn-width"
-                [disabled]="user.attributes.needMentor"
+                [disabled]="user.attributes.needMentor || user.attributes.mentor"
                 (click)="needMentor()">Нужен ментор</button>
             </div>
             <div class="horizontal-center request-buttons" *ngIf="showIterationBtn && !iterationExists">

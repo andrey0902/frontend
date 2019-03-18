@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit } from '@angular/core';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
 import { User } from '../../models/user.model';
 import { Iteration } from '../../models/iteration.model';
 import { ItemNode } from '../../shared/tree/models/item-node.model';
@@ -12,7 +12,7 @@ import {IProgress} from '../../personal-plan/shared/models/progress.model';
   styleUrls: ['./profile-overview.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ProfileOverviewComponent implements OnInit {
+export class ProfileOverviewComponent implements OnInit, OnChanges {
   @Input() iteration: Iteration;
   progress: IProgress = null;
 
@@ -47,5 +47,9 @@ export class ProfileOverviewComponent implements OnInit {
   }
 
   ngOnInit(): void {
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    console.log(changes);
   }
 }
