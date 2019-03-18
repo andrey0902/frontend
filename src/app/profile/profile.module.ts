@@ -14,6 +14,7 @@ import {SharedModule} from '../shared/shared.module';
 import {ProgressBarModule} from '../shared/progress-bar/progress-bar.module';
 import { IterationPlanComponent } from './iteration-plan/iteration-plan.component';
 import { IterationProgressComponent } from './iteration-progress/iteration-progress.component';
+import { CreateRequestDialogComponent } from './create-request-dialog/create-request-dialog.component';
 
 @NgModule({
   declarations: [
@@ -23,7 +24,8 @@ import { IterationProgressComponent } from './iteration-progress/iteration-progr
     CreateIterationComponent,
     CreateIterationFormComponent,
     IterationPlanComponent,
-    IterationProgressComponent
+    IterationProgressComponent,
+    CreateRequestDialogComponent
   ],
   imports: [
     CommonModule,
@@ -33,6 +35,7 @@ import { IterationProgressComponent } from './iteration-progress/iteration-progr
     ReactiveFormsModule,
     SharedModule,
     ProgressBarModule
-  ]
+  ],
+  entryComponents: [CreateRequestDialogComponent]
 })
 export class ProfileModule { }

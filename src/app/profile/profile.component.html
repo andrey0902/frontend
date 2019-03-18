@@ -1,4 +1,4 @@
-<div class="container" *ngIf="user$ | async as user">
+<div class="container" *ngIf="user">
   <h2 class="text-center page-caption">Профиль</h2>
 
   <mat-card class="top-block">
@@ -22,12 +22,14 @@
                 mat-raised-button
                 color="accent"
                 class="google-font-bold btn btn-width"
-                [disabled]="user.attributes.isMentor || user.attributes.wantBeMentor">Хочу стать ментором</button>
+                [disabled]="user.attributes.isMentor || user.attributes.wantBeMentor"
+                (click)="wantBeMentor()">Хочу стать ментором</button>
               <button
                 mat-raised-button
                 color="accent"
                 class="google-font-bold btn btn-width"
-                [disabled]="user.attributes.needMentor">Нужен ментор</button>
+                [disabled]="user.attributes.needMentor"
+                (click)="needMentor()">Нужен ментор</button>
             </div>
             <div class="horizontal-center request-buttons" *ngIf="showIterationBtn && !iterationExists">
               <button
