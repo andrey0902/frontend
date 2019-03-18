@@ -11,6 +11,11 @@ export class User {
     this.id = data.id;
     this.attributes = new Attributes(data.attributes);
   }
+
+  public patch(payload): User {
+    this.attributes.patch(payload);
+    return this;
+  }
 }
 
 export class Attributes {
@@ -45,6 +50,11 @@ export class Attributes {
   get fullName() {
     return `${this.firstName} ${this.lastName}`;
   }
+
+  patch(payload) {
+    Object.assign(this, ...payload);
+  }
+
 }
 
 export class UsersMap {

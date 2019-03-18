@@ -18,7 +18,7 @@ export class UserService {
   }
 
   getCurrentUser() {
-    return this.http.get(`${ApiConfig.users}/current`);
+    return this.http.get(`${ApiConfig.users}/current`, { params: { include: 'proteges,mentor' } });
   }
 
   getMentors(params = {}) {
@@ -52,7 +52,15 @@ export class UserService {
     return this.http.get(`${ApiConfig.mentors}/requests`, { params });
   }
 
+  createMentorRequest(user_id, text) {
+    return this.http.post(`${ApiConfig.mentors}/requests`, { user_id, text });
+  }
+
   deleteMentorRequest(requestId) {
     return this.http.delete(`${ApiConfig.mentors}/requests/${requestId}`);
+  }
+
+  createProtegeRequest(user_id, text) {
+    return this.http.post(`${ApiConfig.protege}/requests`, { user_id, text });
   }
 }
