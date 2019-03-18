@@ -3,10 +3,8 @@ import {FlatTreeControl} from '@angular/cdk/tree';
 import {MatTreeFlatDataSource, MatTreeFlattener} from '@angular/material';
 import {SelectionModel} from '@angular/cdk/collections';
 import {InsertionType, TreeDatabaseService} from './providers/tree-database.service';
-import {InputType, ItemFlatNode, ItemNode} from './models/item-node.model';
+import {ItemFlatNode, ItemNode} from './models/item-node.model';
 import {Observable, of} from 'rxjs';
-import {filter} from 'rxjs/operators';
-
 
 @Component({
   selector: 'lt-tree',
@@ -233,6 +231,7 @@ export class TreeComponent implements OnChanges {
 
   handleDrop(event, flatNode: ItemFlatNode) {
     event.preventDefault();
+
     const node: ItemNode = this.flatNodeMap.get(flatNode);
     const nestingLevel = this.database.getParentsFromNodes(node).length + 1;
     const parentChildren = node.parentId ? this.database.getParentFromNodes(node).children.length : 0;
@@ -255,10 +254,11 @@ export class TreeComponent implements OnChanges {
         this.treeControl.expandDescendants(this.nestedNodeMap.get(newItem));
       }
 
-      if (dragNodeParent.children && dragNodeParent.children.length > 0) {
+      if (dragNodeParent && dragNodeParent.children && dragNodeParent.children.length > 0) {
         this.updateItemCheck(dragNodeParent.children[0]);
       }
     }
+
     this.dragNode = null;
     this.dragNodeExpandOverNode = null;
     this.dragNodeExpandOverTime = 0;

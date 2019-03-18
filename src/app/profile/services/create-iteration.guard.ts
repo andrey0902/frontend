@@ -1,24 +1,26 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot, UrlTree} from '@angular/router';
 import {combineLatest, Observable, of, zip} from 'rxjs';
 import {Store} from '@ngrx/store';
 import {selectCurrentUser} from '../../root-store/currentUser/current-user.selectors';
 import {User} from '../../models/user.model';
 import {catchError, map, switchMap} from 'rxjs/operators';
-import {UserService} from './user.service';
-import {IterationService} from './iteration.service';
+import {UserService} from '../../core/services/user.service';
+import {IterationService} from '../../core/services/iteration.service';
+import {CurrentIterationService} from './iteration.service';
+import {Iteration} from '../../models/iteration.model';
+import {tap} from 'rxjs/internal/operators/tap';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class CreateIterationGuard implements CanActivate {
 
   constructor(
     private store: Store<any>,
     private userService: UserService,
-    private iterationService: IterationService,
+    private currentIterationService: CurrentIterationService,
     private router: Router,
-  ) {}
+  ) {
+  }
 
   currentUser$: Observable<User> = this.store.select(selectCurrentUser);
 
@@ -29,10 +31,18 @@ export class CreateIterationGuard implements CanActivate {
       this.currentUser$
     ).pipe(
       switchMap(([selectedUser, currentUser]) => {
-        if (selectedUser.attributes.mentor && selectedUser.attributes.mentor.id === currentUser.id) {
+        if (!this.currentIterationService.isNew && this.currentIterationService.isExist) {
+          this.router.navigate(['/profile', protegeId]);
+        }
+
+        if (!this.currentIterationService.isNew && !this.currentIterationService.isExist) {
+          return of(true);
+        }
+
+        if (this.currentIterationService.isNew && selectedUser.attributes.mentor && selectedUser.attributes.mentor.id === currentUser.id) {
           return this.getCurrentIteration(protegeId);
         }
-        this.router.navigate(['/profile', protegeId]);
+
         return of(false);
       })
     );
@@ -45,12 +55,11 @@ export class CreateIterationGuard implements CanActivate {
   }
 
   private getCurrentIteration(protegeId) {
-    return this.iterationService.getCurrentIteration(protegeId).pipe(
+    return this.currentIterationService.getIteration(protegeId).pipe(
       map(() => {
         this.router.navigate(['/profile', protegeId]);
         return false;
-      }),
-      catchError(() => of(true))
+      })
     );
   }
 }

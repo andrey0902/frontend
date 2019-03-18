@@ -1,35 +1,30 @@
-import { Injectable } from '@angular/core';
-import {HttpClient} from '@angular/common/http';
+import {Injectable} from '@angular/core';
+import {HttpClient, HttpParams} from '@angular/common/http';
 import {ApiConfig} from '../../helpers/apiConfig';
 import * as moment from 'moment';
 import {Iteration} from '../../models/iteration.model';
 import {map} from 'rxjs/operators';
+import {Observable} from 'rxjs';
+import {tap} from 'rxjs/internal/operators/tap';
 
 @Injectable({
   providedIn: 'root'
 })
 export class IterationService {
 
-  constructor(private http: HttpClient) { }
-
-  getCurrentIteration(protegeId) {
-    return this.http.get(`${ApiConfig.protege}/${protegeId}/iterations/current`)
-      .pipe(
-        map((config) => new Iteration(config))
-      );
+  constructor(private http: HttpClient) {
   }
 
-  createIteration(protegeId, payload) {
-    const iteration = {
-      start_date: moment(payload.startDate).format(),
-      end_date: moment(payload.endDate).format(),
-      goal: payload.goal,
-      meet_type_id: payload.meetType,
-      week_day: payload.weekDay,
-      test_project: payload.projectLink
-    };
+  getCurrentIteration(protegeId) {
+    return this.http.get(`${ApiConfig.protege}/${protegeId}/iterations/current`);
+  }
 
-    return this.http.post(`${ApiConfig.protege}/${protegeId}/iterations`, iteration);
+  createIteration(protegeId, payload, iteration) {
+    return this.http.post<Iteration>(`${ApiConfig.protege}/${protegeId}/iterations`, iteration);
+  }
+
+  deleteIteration(protegeId: number, iterationId: number, request): Observable<any> {
+    return this.http.delete(`${ApiConfig.protege}/${protegeId}/iterations/${iterationId}`, {params: request});
   }
 
   getMeetTypes() {

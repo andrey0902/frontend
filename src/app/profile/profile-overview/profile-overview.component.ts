@@ -14,13 +14,13 @@ import {IProgress} from '../../personal-plan/shared/models/progress.model';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ProfileOverviewComponent {
-  @Input() iteration: Iteration;
+  @Input() currentIteration: Iteration;
   progress: IProgress = null;
 
   constructor(private cd: ChangeDetectorRef) {
   }
 
-  currentIteration = {
+/*  currentIteration = {
     id: 1,
     user_id: 2,
     goal: 'Получить 5 уровень',
@@ -31,7 +31,7 @@ export class ProfileOverviewComponent {
       {type: 'meeting', title: 'Test title', date: new Date('2019-01-13 11:33:05')},
       {type: 'deploy', title: 'Test deploy', date: new Date('2019-01-19 11:33:05')}
     ]
-  };
+  };*/
 
   public treeDataChanged(items: ItemNode[]): void {
     if (items && items.length > 0) {

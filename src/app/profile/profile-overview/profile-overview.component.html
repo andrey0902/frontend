@@ -4,7 +4,6 @@
 </div>
 <lt-iteration-timeline [iteration]="currentIteration"></lt-iteration-timeline>
 <lt-iteration-progress [progress]="progress"></lt-iteration-progress>
-<lt-iteration-plan *ngIf="iteration" [iteration]="iteration" (dataChanged)="treeDataChanged($event)"></lt-iteration-plan>
-
+<lt-iteration-plan [iteration]="currentIteration" (dataChanged)="treeDataChanged($event)"></lt-iteration-plan>
 
 
