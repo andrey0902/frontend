@@ -40,7 +40,7 @@ export class Attributes {
     this.isMentor = data.is_mentor;
     this.portalId = data.portal_id;
     this.slack = data.slack;
-    this.specialization = new Specialization(data.specialization);
+    this.specialization = data.specialization ? new Specialization(data.specialization) : null;
     this.mentor = data.mentor ? new User(data.mentor) : null;
     this.proteges = data.proteges ? MentorsHelper.createUsersMap(data.proteges) : {};
     this.needMentor = data.need_mentor;

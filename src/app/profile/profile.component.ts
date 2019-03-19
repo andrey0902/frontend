@@ -9,7 +9,7 @@ import {selectCurrentUser} from '../root-store/currentUser/current-user.selector
 import {IterationService} from '../core/services/iteration.service';
 import {MatDialog} from '@angular/material';
 import {CreateRequestDialogComponent} from './create-request-dialog/create-request-dialog.component';
-import {LoadUser, LoadUserSuccess, PatchUser} from '../root-store/currentUser/current-user.actions';
+import {LoadUserSuccess, PatchUser} from '../root-store/currentUser/current-user.actions';
 
 @Component({
   selector: 'lt-profile',
@@ -56,7 +56,6 @@ export class ProfileComponent implements OnInit, OnDestroy {
     this.currentIteration$ = this.route.paramMap.pipe(
       switchMap((params: ParamMap) => {
         return this.iterationService.getCurrentIteration(params.get('id')).pipe(
-          tap(() => this.iterationExists = true),
           tap(() => this.iterationExists = true),
           catchError(err => {
             if (err.error.error.code === 404) {

@@ -7,7 +7,7 @@ export class Iteration {
   testProject: string;
   startDate: Date;
   endDate: Date;
-  format = 'YYYY-MM-DD';
+  format = 'DD-MM-YYYY';
   meets: any[];
   plan: InfoPlanModel[];
 
