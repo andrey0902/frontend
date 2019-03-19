@@ -13,7 +13,11 @@
       </lt-create-iteration-form>
     </mat-step>
     <mat-step label="Создание ИПР" editable="false" state="create-plan">
-      Content 2
+     <lt-iteration-plan *ngIf="currentIterationService.isExist" [iteration]="currentIterationService.currentIteration"></lt-iteration-plan>
+      <button
+        mat-raised-button
+        color="accent"
+        class="google-font-bold" (click)="onDone()">Завершить</button>
     </mat-step>
     <ng-template matStepperIcon="create-iteration">
       <mat-icon>today</mat-icon>
@@ -22,7 +26,4 @@
       <mat-icon>edit</mat-icon>
     </ng-template>
   </mat-vertical-stepper>
-
-
-
 </div>

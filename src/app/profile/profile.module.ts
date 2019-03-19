@@ -14,6 +14,8 @@ import {SharedModule} from '../shared/shared.module';
 import {ProgressBarModule} from '../shared/progress-bar/progress-bar.module';
 import { IterationPlanComponent } from './iteration-plan/iteration-plan.component';
 import { IterationProgressComponent } from './iteration-progress/iteration-progress.component';
+import {CurrentIterationService} from './services/iteration.service';
+import {CreateIterationGuard} from './services/create-iteration.guard';
 import { CreateRequestDialogComponent } from './create-request-dialog/create-request-dialog.component';
 
 @NgModule({
@@ -35,6 +37,10 @@ import { CreateRequestDialogComponent } from './create-request-dialog/create-req
     ReactiveFormsModule,
     SharedModule,
     ProgressBarModule
+  ],
+  providers: [
+    CurrentIterationService,
+    CreateIterationGuard
   ],
   entryComponents: [CreateRequestDialogComponent]
 })

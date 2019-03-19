@@ -7,9 +7,10 @@ export class Iteration {
   testProject: string;
   startDate: Date;
   endDate: Date;
-  format = 'DD-MM-YYYY';
   meets: any[];
+  format = 'YYYY DD.MM';
   plan: InfoPlanModel[];
+  activities = [];
 
   constructor(config) {
     this.id = config.id;

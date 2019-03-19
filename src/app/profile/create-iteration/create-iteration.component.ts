@@ -3,6 +3,8 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {IterationService} from '../../core/services/iteration.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import {MatVerticalStepper} from '@angular/material';
+import {Iteration} from '../../models/iteration.model';
+import {CurrentIterationService} from '../services/iteration.service';
 
 @Component({
   selector: 'lt-create-iteration',
@@ -13,16 +15,16 @@ import {MatVerticalStepper} from '@angular/material';
 export class CreateIterationComponent implements OnInit {
 
   @ViewChild(MatVerticalStepper) public stepper: MatVerticalStepper;
-
   iterationForm: FormGroup;
-  currentIteration: any;
+  private _protegeId: number;
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private iterationService: IterationService,
+    private currentIterationService: CurrentIterationService,
     private fb: FormBuilder,
-  ) { }
+  ) {
+  }
 
   ngOnInit() {
     this.iterationForm = this.fb.group({
@@ -33,19 +35,20 @@ export class CreateIterationComponent implements OnInit {
       meetType: ['', Validators.required],
       weekDay: ['', Validators.required]
     });
+
+    this._protegeId = +this.route.snapshot.paramMap.get('id');
   }
 
   createIteration() {
-    const protegeId = this.route.snapshot.paramMap.get('id');
     const iteration = this.iterationForm.value;
-
-    this.iterationService.createIteration(protegeId, iteration).subscribe((res) => {
-      this.currentIteration = res;
-      console.log(res);
-      this.stepper.next();
-    });
+    this.currentIterationService.createIteration(this._protegeId, iteration)
+      .subscribe(() => this.stepper.next());
   }
-  // TODO: Redirect to user profile after successful creation plan
-  // this.router.navigate(['/profile', protegeId]);
 
+  onDone() {
+    this.router.navigate(['/profile', this._protegeId]);
+  }
+
+  // TODO: Redirect to user profile after successful creation plan
+  //
 }
