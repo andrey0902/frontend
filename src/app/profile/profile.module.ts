@@ -16,7 +16,6 @@ import { IterationPlanComponent } from './iteration-plan/iteration-plan.componen
 import { IterationProgressComponent } from './iteration-progress/iteration-progress.component';
 import {CurrentIterationService} from './services/iteration.service';
 import {CreateIterationGuard} from './services/create-iteration.guard';
-import { CreateRequestDialogComponent } from './create-request-dialog/create-request-dialog.component';
 
 @NgModule({
   declarations: [
@@ -26,8 +25,7 @@ import { CreateRequestDialogComponent } from './create-request-dialog/create-req
     CreateIterationComponent,
     CreateIterationFormComponent,
     IterationPlanComponent,
-    IterationProgressComponent,
-    CreateRequestDialogComponent
+    IterationProgressComponent
   ],
   imports: [
     CommonModule,
@@ -41,7 +39,6 @@ import { CreateRequestDialogComponent } from './create-request-dialog/create-req
   providers: [
     CurrentIterationService,
     CreateIterationGuard
-  ],
-  entryComponents: [CreateRequestDialogComponent]
+  ]
 })
 export class ProfileModule { }

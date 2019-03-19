@@ -1,10 +1,12 @@
 import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
-import {MatButtonModule, MatDialogModule} from '@angular/material';
+import {MatButtonModule, MatDialogModule, MatFormFieldModule, MatInputModule} from '@angular/material';
 import {ConfirmDialogComponent} from './confirm-dialog/confirm-dialog.component';
 import {DialogService} from './providers/dialog.service';
 import {CoreModule} from '../../core/core.module';
 import {ActionBtnModule} from '../action-btn/action-btn.module';
+import {RequestDialogComponent} from './request-dialog/request-dialog.component';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 
 @NgModule({
   imports: [
@@ -12,19 +14,26 @@ import {ActionBtnModule} from '../action-btn/action-btn.module';
     CoreModule,
     MatDialogModule,
     ActionBtnModule,
-    MatButtonModule
+    MatButtonModule,
+    FormsModule,
+    ReactiveFormsModule,
+    MatFormFieldModule,
+    MatInputModule
   ],
   declarations: [
-    ConfirmDialogComponent
+    ConfirmDialogComponent,
+    RequestDialogComponent
   ],
   exports: [
-    ConfirmDialogComponent
+    ConfirmDialogComponent,
+    RequestDialogComponent
   ],
   providers: [
     DialogService
   ],
   entryComponents: [
-    ConfirmDialogComponent
+    ConfirmDialogComponent,
+    RequestDialogComponent
   ]
 })
 
