@@ -1,4 +1,4 @@
-import {ChangeDetectorRef, Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {User} from '../models/user.model';
 import {ActivatedRoute, ParamMap} from '@angular/router';
 import {combineLatest, Observable, of} from 'rxjs';
@@ -7,13 +7,10 @@ import {Store} from '@ngrx/store';
 import {selectCurrentUser} from '../root-store/currentUser/current-user.selectors';
 import {IterationService} from '../core/services/iteration.service';
 import {MatDialog} from '@angular/material';
-import {RequestDialogComponent} from '../shared/dialog/request-dialog/request-dialog.component';
 import {LoadUserSuccess, PatchUser} from '../root-store/currentUser/current-user.actions';
 import {CurrentIterationService} from './services/iteration.service';
 import {UserService} from '../core/services/user.service';
 import {DialogService} from '../shared/dialog/providers/dialog.service';
-import {FormControl} from '@angular/forms';
-
 @Component({
   selector: 'lt-profile',
   templateUrl: './profile.component.html',
@@ -76,7 +73,9 @@ export class ProfileComponent implements OnInit, OnDestroy {
   }
 
   public deleteIteration(userId: number): void {
-    this.currentIterationService.deleteIteration(userId).subscribe();
+    this.dialogService.openDeleteIterationDialog((request) => {
+      this.currentIterationService.deleteIteration(userId, request).subscribe();
+    });
   }
 
   public wantBeMentor(): void {

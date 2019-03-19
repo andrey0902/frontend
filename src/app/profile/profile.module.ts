@@ -16,6 +16,7 @@ import { IterationPlanComponent } from './iteration-plan/iteration-plan.componen
 import { IterationProgressComponent } from './iteration-progress/iteration-progress.component';
 import {CurrentIterationService} from './services/iteration.service';
 import {CreateIterationGuard} from './services/create-iteration.guard';
+import {DeleteIterationDialogComponent} from './delete-iteration-dialog/delete-iteration-dialog.component';
 
 @NgModule({
   declarations: [
@@ -25,7 +26,8 @@ import {CreateIterationGuard} from './services/create-iteration.guard';
     CreateIterationComponent,
     CreateIterationFormComponent,
     IterationPlanComponent,
-    IterationProgressComponent
+    IterationProgressComponent,
+    DeleteIterationDialogComponent
   ],
   imports: [
     CommonModule,
@@ -39,6 +41,9 @@ import {CreateIterationGuard} from './services/create-iteration.guard';
   providers: [
     CurrentIterationService,
     CreateIterationGuard
+  ],
+  entryComponents: [
+    DeleteIterationDialogComponent
   ]
 })
 export class ProfileModule { }

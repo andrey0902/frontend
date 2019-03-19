@@ -63,12 +63,7 @@ export class CurrentIterationService {
       );
   }
 
-  public deleteIteration(protegeId: number): Observable<any> {
-    const request = {
-      conclusion: 'hi',
-      test_project: 'null'
-    };
-
+  public deleteIteration(protegeId: number, request): Observable<any> {
     return this._iterationService.deleteIteration(protegeId, this.currentIteration.id, request)
       .pipe(
         tap(() => this.currentIteration = null)

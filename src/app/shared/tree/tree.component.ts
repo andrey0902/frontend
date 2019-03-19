@@ -5,6 +5,8 @@ import {SelectionModel} from '@angular/cdk/collections';
 import {InsertionType, TreeDatabaseService} from './providers/tree-database.service';
 import {ItemFlatNode, ItemNode} from './models/item-node.model';
 import {Observable, of} from 'rxjs';
+import {DeleteProtege} from '../../root-store/mentors/mentors.actions';
+import {DialogService} from '../dialog/providers/dialog.service';
 
 @Component({
   selector: 'lt-tree',
@@ -49,7 +51,7 @@ export class TreeComponent implements OnChanges {
 
   saveIsDisabled = true;
 
-  constructor(private database: TreeDatabaseService) {
+  constructor(private database: TreeDatabaseService, private dialogService: DialogService) {
     this.treeFlattener = new MatTreeFlattener(this.transformer, this.getLevel, this.isExpandable, this.getChildren);
     this.treeControl = new FlatTreeControl<ItemFlatNode>(this.getLevel, this.isExpandable);
     this.dataSource = new MatTreeFlatDataSource(this.treeControl, this.treeFlattener);
@@ -179,12 +181,18 @@ export class TreeComponent implements OnChanges {
 
   /** remove item **/
   removeItem(node: ItemFlatNode) {
-    const data = this.flatNodeMap.get(node);
-    const parent = this.database.getParentFromNodes(data);
-    this.database.deleteItem(data);
-    if (node.showAsInput !== 'add') {
-      this.deleteItem.emit(data);
-    }
+
+    const htmlContent = `<p>Вы уверены, что хотите удалить пункт <b>${node.text}</b> ?</p>`;
+    this.dialogService.openConfirmDialog({ htmlContent }, (confirm) => {
+      if (confirm) {
+        const data = this.flatNodeMap.get(node);
+        const parent = this.database.getParentFromNodes(data);
+        this.database.deleteItem(data);
+         if (node.showAsInput !== 'add') {
+           this.deleteItem.emit(data);
+         }
+      }
+    });
   }
 
   updateItemCheck(node: ItemNode) {
