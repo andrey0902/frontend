@@ -7,6 +7,7 @@ import {MaterialModule} from '../material/material.module';
 import { UserComponent } from './components/user/user.component';
 import {RouterModule} from '@angular/router';
 import { NavTabsComponent } from './components/nav-tabs/nav-tabs.component';
+import { UserPermissionDirective } from './directives/user-permission.directive';
 
 @NgModule({
   declarations: [
@@ -15,6 +16,7 @@ import { NavTabsComponent } from './components/nav-tabs/nav-tabs.component';
     SvgIconComponent,
     UserComponent,
     NavTabsComponent,
+    UserPermissionDirective,
   ],
   imports: [
     CommonModule,
@@ -26,6 +28,7 @@ import { NavTabsComponent } from './components/nav-tabs/nav-tabs.component';
     UserComponent,
     NavTabsComponent,
     SafeHtmlPipe,
+    UserPermissionDirective,
   ]
 })
 export class CoreModule { }
