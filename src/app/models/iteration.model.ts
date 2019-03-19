@@ -4,10 +4,11 @@ export class Iteration {
   id: number;
   user_id: number;
   goal: string;
+  testProject: string;
   startDate: Date;
   endDate: Date;
   format = 'YYYY-MM-DD';
-  activities: Activity[];
+  meets: any[];
   plan: InfoPlanModel[];
 
   constructor(config) {
@@ -16,11 +17,7 @@ export class Iteration {
     this.goal = config.attributes.goal;
     this.startDate = config.attributes.start_date;
     this.endDate = config.attributes.end_date;
+    this.testProject = config.attributes.test_project;
+    this.meets = config.attributes.meets;
   }
-}
-
-export interface Activity {
-  type: 'meeting' | 'deploy';
-  title: string;
-  date: Date;
 }
