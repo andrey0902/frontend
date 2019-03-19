@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {DialogService} from '../shared/services/dialog.service';
+import {DialogService} from '../../shared/dialog/providers/dialog.service';
 import {UserService} from '../../core/services/user.service';
 import {Store} from '@ngrx/store';
 import {
