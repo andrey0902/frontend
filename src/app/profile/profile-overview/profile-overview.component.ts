@@ -1,8 +1,9 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit } from '@angular/core';
-import { User } from '../../models/user.model';
-import { Iteration } from '../../models/iteration.model';
-import { ItemNode } from '../../shared/tree/models/item-node.model';
-
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnChanges} from '@angular/core';
+import {Iteration} from '../../models/iteration.model';
+import {ItemNode} from '../../shared/tree/models/item-node.model';
+import {InfoPlanModel} from '../../personal-plan/shared/models/info-plan.model';
+import {IterationTreeService} from '../../core/services/iteration-tree.service';
+import {combineLatest, Observable} from 'rxjs';
 import {IterationTaskModel} from '../../personal-plan/shared/models/iteration-plan.model';
 import {IProgress} from '../../personal-plan/shared/models/progress.model';
 
@@ -12,15 +13,15 @@ import {IProgress} from '../../personal-plan/shared/models/progress.model';
   styleUrls: ['./profile-overview.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ProfileOverviewComponent implements OnInit {
-  @Input() iteration: Iteration;
+export class ProfileOverviewComponent {
+  @Input() currentIteration: Iteration;
   progress: IProgress = null;
 
   public objectValues = Object.values;
   constructor(private cd: ChangeDetectorRef) {
   }
 
-  currentIteration = {
+/*  currentIteration = {
     id: 1,
     user_id: 2,
     goal: 'Получить 5 уровень',
@@ -31,7 +32,7 @@ export class ProfileOverviewComponent implements OnInit {
       {type: 'meeting', title: 'Test title', date: new Date('2019-01-13 11:33:05')},
       {type: 'deploy', title: 'Test deploy', date: new Date('2019-01-19 11:33:05')}
     ]
-  };
+  };*/
 
   public treeDataChanged(items: ItemNode[]): void {
     if (items && items.length > 0) {
@@ -44,8 +45,5 @@ export class ProfileOverviewComponent implements OnInit {
       };
       this.cd.detectChanges();
     }
-  }
-
-  ngOnInit(): void {
   }
 }

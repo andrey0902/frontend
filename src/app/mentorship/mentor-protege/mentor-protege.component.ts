@@ -63,7 +63,7 @@ export class MentorProtegeComponent implements OnInit {
   addProtege(mentorship) {
     this.dialogService.openMentorshipManagementDialog({
       mode: 'addProtege',
-      mentor: mentorship.attributes,
+      mentor: mentorship,
       placeholder: 'Протеже'
     }, (protege) => {
       if (protege) { this.store.dispatch(new AddProtege({protegeId: protege.id, mentorId: mentorship.id})); }
@@ -76,14 +76,6 @@ export class MentorProtegeComponent implements OnInit {
 
     this.dialogService.openConfirmDialog({ htmlContent }, (result) => {
       if (result) { this.store.dispatch(new DeleteProtege({protegeId: protege.id, mentorId: '', currentMentorId: mentor.id})); }
-    });
-  }
-
-  clearProtegeStatus(protege) {
-    const htmlContent = `<p>Вы уверены, что хотите очистить статус протеже для <b>${protege.attributes.fullName}</b> ?</p>`;
-
-    this.dialogService.openConfirmDialog({ htmlContent }, (result) => {
-      console.log('Clear protege status:', result);
     });
   }
 

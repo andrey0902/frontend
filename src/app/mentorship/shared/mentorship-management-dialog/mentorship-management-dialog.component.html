@@ -4,7 +4,7 @@
   </ng-container>
   <ng-container *ngIf="data.mode === 'addProtege'">
     <h3>Управление протеже</h3>
-    <p>для {{ data.mentor.fullName }}</p>
+    <p>для {{ data.mentor.attributes.fullName }}</p>
   </ng-container>
   <ng-container *ngIf="data.mode === 'changeMentor'">
     <h3>Изменить ментора</h3>

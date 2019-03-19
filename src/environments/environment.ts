@@ -4,7 +4,8 @@
 
 export const environment = {
   production: false,
-  API_PATH: 'https://mentors.dev-lt-portal.tk/api'
+  API_PATH: 'https://mentors.dev-lt-portal.tk/api',
+  redirectPath: 'https://dev-lt-portal.tk:50443/#/login'
 };
 
 /*

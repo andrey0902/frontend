@@ -13,13 +13,6 @@ export interface DialogData {
   placeholder?: string;
 }
 
-const modeMap = {
-  addMentor: { is_mentor: 0 },
-  addProtege: { is_protege: 0 },
-  changeMentor: { is_mentor: 1 },
-  assignMentor: { is_mentor: 1 }
-};
-
 @Component({
   selector: 'lt-add-mentor-dialog',
   templateUrl: './mentorship-management-dialog.component.html',
@@ -31,6 +24,12 @@ export class MentorshipManagementDialogComponent implements OnInit {
     private userService: UserService
   ) { }
 
+  modeMap = {
+    addMentor: { is_mentor: 0 },
+    addProtege: { is_protege: 0, exclude: this.data.mentor && this.data.mentor.id },
+    changeMentor: { is_mentor: 1 },
+    assignMentor: { is_mentor: 1 }
+  };
   filteredOptions$: Observable<User[]>;
   userInput: FormControl = new FormControl('', this.autocompleteSelectionValidator);
   selectedUser: User;
@@ -46,7 +45,7 @@ export class MentorshipManagementDialogComponent implements OnInit {
           }
           return this.userService.getUsers({
             name: value,
-            ...modeMap[this.data.mode]
+            ...this.modeMap[this.data.mode]
           })
             .pipe(
               map((res: any[]) => res.map(user => new User(user)))
