@@ -8,9 +8,9 @@ import {selectCurrentUser} from '../root-store/currentUser/current-user.selector
 import {IterationService} from '../core/services/iteration.service';
 import {MatDialog} from '@angular/material';
 import {CreateRequestDialogComponent} from './create-request-dialog/create-request-dialog.component';
+import {LoadUserSuccess, PatchUser} from '../root-store/currentUser/current-user.actions';
 import {CurrentIterationService} from './services/iteration.service';
 import {UserService} from '../core/services/user.service';
-import {LoadUserSuccess, PatchUser} from '../root-store/currentUser/current-user.actions';
 
 @Component({
   selector: 'lt-profile',
@@ -25,8 +25,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
     private iterationService: IterationService,
     private store: Store<any>,
     private dialog: MatDialog,
-    private currentIterationService: CurrentIterationService,
-    private cd: ChangeDetectorRef
+    private currentIterationService: CurrentIterationService
   ) {
   }
 
@@ -35,7 +34,6 @@ export class ProfileComponent implements OnInit, OnDestroy {
   objectValues = Object.values;
   showRequestButtons = false;
   showIterationBtn = false;
-  iterationExists = false;
   componentActive = true;
 
   ngOnInit() {
@@ -85,7 +83,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
     });
 
     dialogRef.afterClosed().subscribe(text => {
-      if (text !== null) {
+      if (text !== null || text !== undefined) {
         this.route.paramMap.pipe(
           switchMap((params: ParamMap) => this.userService.createMentorRequest(params.get('id'), text)),
           takeWhile(() => this.componentActive)
@@ -105,7 +103,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
     });
 
     dialogRef.afterClosed().subscribe(text => {
-      if (text !== null) {
+      if (text !== null || text !== undefined) {
         this.route.paramMap.pipe(
           switchMap((params: ParamMap) => this.userService.createProtegeRequest(params.get('id'), text))
         ).subscribe(() => {

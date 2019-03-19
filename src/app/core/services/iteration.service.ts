@@ -1,11 +1,8 @@
 import {Injectable} from '@angular/core';
 import {HttpClient, HttpParams} from '@angular/common/http';
 import {ApiConfig} from '../../helpers/apiConfig';
-import * as moment from 'moment';
 import {Iteration} from '../../models/iteration.model';
-import {map} from 'rxjs/operators';
 import {Observable} from 'rxjs';
-import {tap} from 'rxjs/internal/operators/tap';
 
 @Injectable({
   providedIn: 'root'
