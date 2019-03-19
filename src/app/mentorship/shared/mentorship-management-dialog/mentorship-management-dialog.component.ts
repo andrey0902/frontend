@@ -26,7 +26,7 @@ export class MentorshipManagementDialogComponent implements OnInit {
 
   modeMap = {
     addMentor: { is_mentor: 0 },
-    addProtege: { is_protege: 0, exclude: this.data.mentor.id },
+    addProtege: { is_protege: 0, exclude: this.data.mentor && this.data.mentor.id },
     changeMentor: { is_mentor: 1 },
     assignMentor: { is_mentor: 1 }
   };
