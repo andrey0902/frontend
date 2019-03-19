@@ -2,16 +2,20 @@
 
 .profile-wrapper {
   display: flex;
+  width: 100%;
 }
 
 .user-info {
-  margin-right: 50px;
-  margin-bottom: 100px;
+  //margin-right: 50px;
+  //margin-bottom: 100px;
 }
 
 .user-photo {
-  width: 350px;
-  height: 350px;
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  overflow: hidden;
+  box-shadow: 0 2px 1px -1px rgba(0,0,0,.2), 0 1px 1px 0 rgba(0,0,0,.14), 0 1px 3px 0 rgba(0,0,0,.12);
 
   img {
     width: 100%;
@@ -23,30 +27,47 @@
   font-family: "Google Sans", Roboto, Arial, sans-serif;
   font-size: 1.4rem;
   font-weight: 600;
-  margin: 30px 0 10px;
+  margin: 0;
+  color: #404446;
 }
 
 .user-specialization {
   margin: 0;
   font-family: "Google Sans", Roboto, Arial, sans-serif;
+  color: #aaadb1;
 }
 
 .request-buttons {
   @extend .flex-container;
   justify-content: space-around;
-  margin-top: 30px;
+  //margin-top: 30px;
 }
 
 .relations-block {
   @extend .flex-container;
-  margin: 30px 0;
+  //margin: 30px 0;
+  padding-left: 100px;
+  position: relative;
+  flex-direction: column;
+  height: 195px;
 
+  &:before {
+    content: '';
+    position: absolute;
+    left: 50px;
+    top: -10px;
+    bottom: -10px;
+    border-left: 1px solid #f5f5f5;
+
+  }
   .relation-title {
     @extend .vertical-center;
-    width: 100px;
-    height: 50px;
     font-family: "Google Sans", Roboto, Arial, sans-serif;
     font-weight: 600;
+    display: flex;
+    justify-content: center;
+    padding-bottom: 5px;
+    color: #404446;
   }
 }
 
@@ -59,7 +80,74 @@ lt-user {
   }
 }
 
+.top-block {
+  padding: 30px;
+  height: 250px;
+  display: flex;
+  align-items: center;
+}
+
+.user {
+
+  &-wrap {
+    display: flex;
+    height: 150px;
+  }
+
+  &-data {
+    padding-left: 25px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  &-description {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 50%;
+  }
+}
+
+.btn {
+
+  &:last-child {
+    margin-left: 20px;
+  }
+
+  &-width {
+    min-width: 180px;
+  }
+}
+
+.head-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.user-guest {
+  display: flex;
+}
+
+.horizontal-center {
+  padding-top: 20px;
+
+  button {
+    width: 100%;
+  }
+}
+
+mat-card {
+  margin: 1px 1px 1px 1px;
+}
+
 .mentorship-info {
   flex-grow: 1;
-  padding: 0 30px;
+  padding-top: 30px;
+
+  mat-card {
+    margin-top: 15px;
+  }
 }

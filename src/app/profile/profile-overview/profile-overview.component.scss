@@ -1,3 +1,5 @@
+@import "../../../scss/helpers";
+
 .section {
   margin: 30px 0;
 }
@@ -8,4 +10,23 @@
 
 .iteration-name {
   color: rgba(0, 0, 0, .5);
+}
+
+.relations-block {
+  @extend .flex-container;
+  margin: 30px 0;
+  flex-direction: column;
+
+  .relation-title {
+    @extend .vertical-center;
+    width: 100px;
+    height: 50px;
+    font-family: "Google Sans", Roboto, Arial, sans-serif;
+    font-weight: 600;
+  }
+}
+
+.user-container {
+  display: flex;
+  flex-wrap: wrap;
 }

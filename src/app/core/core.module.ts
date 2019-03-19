@@ -14,7 +14,7 @@ import { NavTabsComponent } from './components/nav-tabs/nav-tabs.component';
     SafeHtmlPipe,
     SvgIconComponent,
     UserComponent,
-    NavTabsComponent
+    NavTabsComponent,
   ],
   imports: [
     CommonModule,
@@ -25,7 +25,7 @@ import { NavTabsComponent } from './components/nav-tabs/nav-tabs.component';
     HeaderComponent,
     UserComponent,
     NavTabsComponent,
-    SafeHtmlPipe
+    SafeHtmlPipe,
   ]
 })
 export class CoreModule { }

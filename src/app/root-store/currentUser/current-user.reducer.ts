@@ -40,6 +40,13 @@ export function currentUserReducer(state = initialState, action: CurrentUserActi
       };
     }
 
+    case CurrentUserActionTypes.PATCH_USER: {
+      return {
+        ...state,
+        user: state.user.patch(action.payload)
+      };
+    }
+
     default: {
       return state;
     }

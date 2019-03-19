@@ -17,6 +17,7 @@ export class ProfileOverviewComponent {
   @Input() currentIteration: Iteration;
   progress: IProgress = null;
 
+  public objectValues = Object.values;
   constructor(private cd: ChangeDetectorRef) {
   }
 

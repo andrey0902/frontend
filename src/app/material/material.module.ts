@@ -2,11 +2,15 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
   MatAutocompleteModule,
-  MatButtonModule, MatDatepickerModule,
+  MatButtonModule, MatCardModule,
+  MatDatepickerModule,
   MatDialogModule,
   MatFormFieldModule,
-  MatIconModule, MatInputModule,
-  MatMenuModule, MatSelectModule, MatStepperModule,
+  MatIconModule,
+  MatInputModule,
+  MatMenuModule,
+  MatSelectModule,
+  MatStepperModule,
   MatTabsModule,
   MatTooltipModule
 } from '@angular/material';
@@ -26,7 +30,8 @@ import {
     MatAutocompleteModule,
     MatDatepickerModule,
     MatSelectModule,
-    MatStepperModule
+    MatStepperModule,
+    MatCardModule,
   ],
   exports: [
     MatMenuModule,
@@ -40,7 +45,8 @@ import {
     MatAutocompleteModule,
     MatDatepickerModule,
     MatSelectModule,
-    MatStepperModule
+    MatStepperModule,
+    MatCardModule,
   ]
 })
 export class MaterialModule { }

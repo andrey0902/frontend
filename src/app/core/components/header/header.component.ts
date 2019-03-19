@@ -22,7 +22,7 @@ export class HeaderComponent implements OnInit {
 
   ngOnInit(): void {
     this.currentUser$ = this.store.select(selectCurrentUser);
-    this.store.dispatch(new LoadUser(1));
+    this.store.dispatch(new LoadUser());
   }
 
 }

@@ -5,12 +5,11 @@ export enum CurrentUserActionTypes {
   LOAD_USER = '[Current User] Load User',
   LOAD_USER_SUCCESS = '[Current User] Load User Success',
   LOAD_USER_FAIL = '[Current User] Load User Fail',
+  PATCH_USER = '[Current User] Patch User'
 }
 
 export class LoadUser implements Action {
   readonly type = CurrentUserActionTypes.LOAD_USER;
-
-  constructor(public payload: string | number) {}
 }
 
 export class LoadUserSuccess implements Action {
@@ -25,7 +24,14 @@ export class LoadUserFail implements Action {
   constructor(public payload: any) {}
 }
 
+export class PatchUser implements Action {
+  readonly type = CurrentUserActionTypes.PATCH_USER;
+
+  constructor(public payload: any) {}
+}
+
 export type CurrentUserActionUnion =
   | LoadUser
   | LoadUserSuccess
-  | LoadUserFail;
+  | LoadUserFail
+  | PatchUser;
