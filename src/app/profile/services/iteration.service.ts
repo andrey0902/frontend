@@ -9,7 +9,7 @@ import {Injectable, OnInit} from '@angular/core';
 @Injectable()
 export class CurrentIterationService {
   private _currentIteration: BehaviorSubject<Iteration> = new BehaviorSubject(null);
-  private _isNew = true;
+  private _userId: BehaviorSubject<number> = new BehaviorSubject(undefined);
 
   constructor(private _iterationService: IterationService) {
   }
@@ -22,21 +22,27 @@ export class CurrentIterationService {
     this._currentIteration.next(iteration);
   }
 
+  get userId(): number {
+    return this._userId.getValue();
+  }
+
+  set userId(id: number) {
+    this._userId.next(id);
+  }
+
+  get userIdAsObserv(): Observable<number> {
+    return this._userId as Observable<number>;
+  }
+
   public get isExist(): boolean {
     return this.currentIteration !== null;
   }
 
-  public get isNew(): boolean {
-    return this._isNew;
-  }
-
   public getIteration(protegeId: number) {
-    this._isNew = false;
     return this._iterationService.getCurrentIteration(protegeId)
       .pipe(
         map(data => new Iteration(data)),
-        tap((itr: Iteration) => this.currentIteration = itr),
-        catchError(() => of(true))
+        tap((itr: Iteration) => this.currentIteration = itr)
       );
   }
 

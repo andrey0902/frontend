@@ -2,7 +2,7 @@ import {ChangeDetectorRef, Component, OnDestroy, OnInit} from '@angular/core';
 import {User} from '../models/user.model';
 import {ActivatedRoute, ParamMap} from '@angular/router';
 import {combineLatest, Observable, of} from 'rxjs';
-import {catchError, map, switchMap, takeWhile, tap} from 'rxjs/operators';
+import {catchError, map, skip, switchMap, takeWhile, tap} from 'rxjs/operators';
 import {Store} from '@ngrx/store';
 import {selectCurrentUser} from '../root-store/currentUser/current-user.selectors';
 import {IterationService} from '../core/services/iteration.service';
@@ -47,8 +47,13 @@ export class ProfileComponent implements OnInit, OnDestroy {
           this.getSelectedUser(params.get('id')),
           this.currentUser$
         ).pipe(
-          tap(([selectedUser, currentUser]) => this.showButtons(selectedUser, currentUser)),
-          map(([selectedUser]) => selectedUser)
+          tap(([selectedUser, currentUser]) => {
+            this.showButtons(selectedUser, currentUser);
+            if (+selectedUser.id !== this.currentIterationService.userId) {
+              this.currentIterationService.userId = +selectedUser.id;
+            }
+          }),
+          map(([selectedUser]) => selectedUser),
         );
       }),
       takeWhile(() => this.componentActive)
@@ -56,10 +61,18 @@ export class ProfileComponent implements OnInit, OnDestroy {
       this.user = res;
     });
 
-    if (this.currentIterationService.isNew) {
-      const routeId: number = +this.route.snapshot.paramMap.get('id');
-      this.currentIterationService.getIteration(routeId).subscribe();
-    }
+
+    this.currentIterationService.userIdAsObserv
+      .pipe(
+        skip(1),
+        tap(() => {
+          this.currentIterationService.getIteration(+this.route.snapshot.paramMap.get('id')).
+          pipe(
+            catchError(() => of(false))
+          ).subscribe();
+        })
+      )
+      .subscribe();
   }
 
   public deleteIteration(userId: number): void {
@@ -79,8 +92,8 @@ export class ProfileComponent implements OnInit, OnDestroy {
         ).subscribe(() => {
           this.store.select(selectCurrentUser).pipe(
             takeWhile(() => this.componentActive)
-          ).subscribe((data: User) => this.user = data );
-          this.store.dispatch(new PatchUser({ wantBeMentor: true }));
+          ).subscribe((data: User) => this.user = data);
+          this.store.dispatch(new PatchUser({wantBeMentor: true}));
         });
       }
     });
@@ -98,8 +111,8 @@ export class ProfileComponent implements OnInit, OnDestroy {
         ).subscribe(() => {
           this.store.select(selectCurrentUser).pipe(
             takeWhile(() => this.componentActive)
-          ).subscribe((data: User) => this.user = data );
-          this.store.dispatch(new PatchUser({ needMentor: true }));
+          ).subscribe((data: User) => this.user = data);
+          this.store.dispatch(new PatchUser({needMentor: true}));
         });
       }
     });

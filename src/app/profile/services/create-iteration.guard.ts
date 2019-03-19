@@ -31,19 +31,16 @@ export class CreateIterationGuard implements CanActivate {
       this.currentUser$
     ).pipe(
       switchMap(([selectedUser, currentUser]) => {
-        if (!this.currentIterationService.isNew && this.currentIterationService.isExist) {
+        if (this.currentIterationService.isExist) {
           this.router.navigate(['/profile', protegeId]);
+          return of(false);
         }
 
-        if (!this.currentIterationService.isNew && !this.currentIterationService.isExist) {
+        if (this.currentIterationService.userId !== undefined && !this.currentIterationService.isExist) {
           return of(true);
         }
 
-        if (this.currentIterationService.isNew && selectedUser.attributes.mentor && selectedUser.attributes.mentor.id === currentUser.id) {
-          return this.getCurrentIteration(protegeId);
-        }
-
-        return of(false);
+        return this.getCurrentIteration(protegeId);
       })
     );
   }
@@ -56,10 +53,11 @@ export class CreateIterationGuard implements CanActivate {
 
   private getCurrentIteration(protegeId) {
     return this.currentIterationService.getIteration(protegeId).pipe(
-      map(() => {
+      switchMap(() => {
         this.router.navigate(['/profile', protegeId]);
-        return false;
-      })
+        return of(false);
+      }),
+      catchError(() => of(true))
     );
   }
 }
