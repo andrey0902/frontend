@@ -45,3 +45,19 @@ h1, h2, h3, h4, h5, h6 {
 .mat-step-header {
   pointer-events: none !important;
 }
+
+.progress-bar {
+
+  .mat-progress-bar-background {
+    fill:  #eeeeee;
+  }
+  .mat-progress-bar-buffer {
+    background: linear-gradient(to right, #eeeeee 0%, #fcfcfc 35%, #f7f7f7 68%, #eeeeee 100%, #eeeeee 100%);
+  }
+
+  .mat-progress-bar-fill::after {
+    background: #141460;
+  }
+
+
+}
