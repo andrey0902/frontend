@@ -25,7 +25,7 @@ export class ProfileOverviewComponent {
     id: 1,
     user_id: 2,
     goal: 'Получить 5 уровень',
-    format: 'YYYY-MM-DD',
+    format: 'YYYY DD.MM',
     startDate: new Date('2019-01-07 11:33:05'),
     endDate: new Date('2019-04-21 11:33:05'),
     activities: [
