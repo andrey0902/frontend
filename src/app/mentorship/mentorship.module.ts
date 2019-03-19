@@ -5,12 +5,15 @@ import {MentorshipRoutingModule} from './mentorship-routing.module';
 import { MentorshipComponent } from './mentorship.component';
 import {MaterialModule} from '../material/material.module';
 import {CoreModule} from '../core/core.module';
-import {SharedModule} from './shared/shared.module';
-import {DialogModule} from '../shared/dialog/dialog.module';
+import {MentorshipManagementDialogComponent} from './mentorship-management-dialog/mentorship-management-dialog.component';
+import {SharedModule} from '../shared/shared.module';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+
 
 @NgModule({
   declarations: [
-    MentorshipComponent
+    MentorshipComponent,
+    MentorshipManagementDialogComponent
   ],
   imports: [
     CommonModule,
@@ -18,7 +21,11 @@ import {DialogModule} from '../shared/dialog/dialog.module';
     MaterialModule,
     CoreModule,
     SharedModule,
-    DialogModule
+    ReactiveFormsModule,
+    FormsModule
+  ],
+  entryComponents: [
+    MentorshipManagementDialogComponent
   ]
 })
 

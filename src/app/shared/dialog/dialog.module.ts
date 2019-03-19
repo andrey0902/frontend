@@ -4,12 +4,14 @@ import {MatDialogModule} from '@angular/material';
 import {ConfirmDialogComponent} from './confirm-dialog/confirm-dialog.component';
 import {DialogService} from './providers/dialog.service';
 import {CoreModule} from '../../core/core.module';
+import {ActionBtnModule} from '../action-btn/action-btn.module';
 
 @NgModule({
   imports: [
     CommonModule,
     CoreModule,
-    MatDialogModule
+    MatDialogModule,
+    ActionBtnModule
   ],
   declarations: [
     ConfirmDialogComponent

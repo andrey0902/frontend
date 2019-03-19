@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import {MatDialog} from '@angular/material';
 import {ConfirmDialogComponent} from '../confirm-dialog/confirm-dialog.component';
-import {MentorshipManagementDialogComponent} from '../../../mentorship/shared/mentorship-management-dialog/mentorship-management-dialog.component';
+import {MentorshipManagementDialogComponent} from '../../../mentorship/mentorship-management-dialog/mentorship-management-dialog.component';
 
 @Injectable({
   providedIn: 'root'
