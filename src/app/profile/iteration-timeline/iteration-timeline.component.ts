@@ -14,8 +14,11 @@ export class IterationTimelineComponent implements OnInit {
 
   @Input() iteration: Iteration;
 
-  public selectedEvent = [];
   public months = [];
+
+  public weeks = [];
+  public days = [];
+
   public progress_percent: number;
 
   public get startDate(): any {
@@ -26,8 +29,35 @@ export class IterationTimelineComponent implements OnInit {
     return moment(this.iteration.endDate).format(this.iteration.format);
   }
 
+  ngOnInit() {
+    const range = moment().range(moment(this.iteration.startDate), moment(this.iteration.endDate));
+    for (const week of range.by('days')) {
+      this.days.push(week.format('DD-MM-YYYY'));
+    }
+    console.log(this.days);
+    for (const week of range.by('weeks')) {
+      this.weeks.push(week.format('DD'));
+    }
+    console.log(this.weeks);
+    for (const month of range.by('months')) {
+      console.log(month);
+      const addMonth = {
+        'date': month.format('DD-MM-YYYY'),
+        'name': month.format('MMMM-YYYY'),
+        'days': []
+      };
+      console.log(addMonth);
+      // const dayRange = moment().range(moment(month.startOf('month'), this.iteration.format), moment(month.endOf('month'), this.iteration.format));
+      for (const week of range.by('weeks')) {
+        addMonth.days.push(week.format('DD'));
+      }
+      this.months.push(addMonth);
+    }
+    this.progress_percent = this.getPosition(moment());
+  }
+
   public getPosition(date) {
-    date = moment(date, this.iteration.format);
+    date = moment(date);
     const diff = date.diff(moment(this.startDate, this.iteration.format), 'months');
     const curWeekWidth = 100 / this.months[ diff ].days.length;
     const monthsWidth = 100 / this.months.length;
@@ -36,22 +66,4 @@ export class IterationTimelineComponent implements OnInit {
 
     return ((monthsWidth * diff) + (((ixOfWeek * curWeekWidth) + (curDOfMPercent / 100 * curWeekWidth)) / 100 * monthsWidth));
   }
-
-  ngOnInit() {
-    const range = moment().range(moment(this.startDate, this.iteration.format), moment(this.endDate, this.iteration.format));
-    for (const month of range.by('months')) {
-      const addMonth = {
-        'date': month.format('YYYY-MM'),
-        'name': month.format('MMMM'),
-        'days': []
-      };
-      const dayRange = moment().range(moment(month.startOf('month'), this.iteration.format), moment(month.endOf('month'), this.iteration.format));
-      for (const week of dayRange.by('weeks')) {
-        addMonth.days.push(week.format('DD'));
-      }
-      this.months.push(addMonth);
-    }
-    this.progress_percent = this.getPosition(moment().format(this.iteration.format));
-  }
-
 }

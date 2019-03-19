@@ -52,7 +52,7 @@ export class MentorProtegeComponent implements OnInit {
   changeMentor(mentorship, protege) {
     this.dialogService.openMentorshipManagementDialog({
       mode: 'changeMentor',
-      mentor: mentorship.attributes,
+      mentor: mentorship,
       protege: protege.attributes,
       placeholder: 'Новый ментор'
     }, (mentor) => {

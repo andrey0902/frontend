@@ -9,7 +9,7 @@
   <ng-container *ngIf="data.mode === 'changeMentor'">
     <h3>Изменить ментора</h3>
     <p>Протеже: {{ data.protege.fullName }}</p>
-    <p>Ментор: {{ data.mentor.fullName }}</p>
+    <p>Ментор: {{ data.mentor.attributes.fullName }}</p>
   </ng-container>
   <ng-container *ngIf="data.mode === 'assignMentor'">
     <h3>Назначить ментора</h3>
