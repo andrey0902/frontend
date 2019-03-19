@@ -1,6 +1,4 @@
 <div class="container" *ngIf="user">
-  <h2 class="text-center page-caption">Профиль</h2>
-
   <mat-card class="top-block">
     <div class="profile-wrapper" >
 
@@ -37,7 +35,7 @@
                 color="accent"
                 class="google-font-bold" [routerLink]="['create-iteration']">Создать итерацию</button>
             </div>
-            <div class="horizontal-center" *ngIf="currentIterationService.isExist">
+            <div class="horizontal-center" *ngIf="showIterationBtn && currentIterationService.isExist">
               <button
                 mat-raised-button
                 color="accent"

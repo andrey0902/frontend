@@ -4,7 +4,8 @@ import { Directive, ElementRef, Input, TemplateRef, ViewContainerRef } from '@an
   selector: '[ltUserPermission]'
 })
 export class UserPermissionDirective {
-  private defoultPermission = 'admin';
+  private defaultPermission = 'admin';
+  private view = null;
   constructor(
     private element: ElementRef,
     private templateRef: TemplateRef<any>,
@@ -13,16 +14,17 @@ export class UserPermissionDirective {
 
   @Input()
   set ltUserPermission(val) {
-    if (this.checkPermission(val)) {
-      this.viewContainer.createEmbeddedView(this.templateRef);
-    } else {
+    if (this.checkPermission(val) && !this.view) {
+      this.view = this.viewContainer.createEmbeddedView(this.templateRef);
+    } else if (!this.checkPermission(val)) {
       this.viewContainer.clear();
+      this.view = null;
     }
   }
 
   private checkPermission(val: string[]): boolean {
     if (val) {
-      return val.some((item: string) => item.toLocaleLowerCase() === this.defoultPermission);
+      return val.some((item: string) => item.toLocaleLowerCase() === this.defaultPermission);
     }
     return false;
   }
