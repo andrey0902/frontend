@@ -1,6 +1,6 @@
 import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
-import {MatDialogModule} from '@angular/material';
+import {MatButtonModule, MatDialogModule} from '@angular/material';
 import {ConfirmDialogComponent} from './confirm-dialog/confirm-dialog.component';
 import {DialogService} from './providers/dialog.service';
 import {CoreModule} from '../../core/core.module';
@@ -11,7 +11,8 @@ import {ActionBtnModule} from '../action-btn/action-btn.module';
     CommonModule,
     CoreModule,
     MatDialogModule,
-    ActionBtnModule
+    ActionBtnModule,
+    MatButtonModule
   ],
   declarations: [
     ConfirmDialogComponent
