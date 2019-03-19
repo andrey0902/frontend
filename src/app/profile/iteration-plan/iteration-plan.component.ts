@@ -2,7 +2,6 @@ import {ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Inp
 import {IterationTaskModel} from '../../personal-plan/shared/models/iteration-plan.model';
 import {ItemNode} from '../../shared/tree/models/item-node.model';
 import {InfoPlanModel} from '../../personal-plan/shared/models/info-plan.model';
-import {IProgress} from '../../personal-plan/shared/models/progress.model';
 import {IterationTreeService} from '../../core/services/iteration-tree.service';
 import {combineLatest, Observable} from 'rxjs';
 import {Iteration} from '../../models/iteration.model';
