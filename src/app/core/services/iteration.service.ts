@@ -13,7 +13,14 @@ export class IterationService {
   }
 
   getCurrentIteration(protegeId) {
-    return this.http.get(`${ApiConfig.protege}/${protegeId}/iterations/current`);
+    return this.http.get(
+      `${ApiConfig.protege}/${protegeId}/iterations/current`,
+      {
+        params: {
+          include: 'meets'
+        }
+      }
+    );
   }
 
   createIteration(protegeId, payload, iteration) {
