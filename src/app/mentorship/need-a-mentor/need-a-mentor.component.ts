@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {UserService} from '../../core/services/user.service';
-import {DialogService} from '../shared/services/dialog.service';
+import {DialogService} from '../../shared/dialog/services/dialog.service';
 import {Store} from '@ngrx/store';
 import {Observable} from 'rxjs';
 import {MentorRequestMap} from '../../models/mentor-request';

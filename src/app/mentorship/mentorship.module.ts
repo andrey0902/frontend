@@ -1,11 +1,12 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import {NgModule} from '@angular/core';
+import {CommonModule} from '@angular/common';
 import {MentorshipRoutingModule} from './mentorship-routing.module';
-
-import { MentorshipComponent } from './mentorship.component';
+import {MentorshipComponent} from './mentorship.component';
 import {MaterialModule} from '../material/material.module';
 import {CoreModule} from '../core/core.module';
-import {SharedModule} from './shared/shared.module';
+import {SharedModule} from '../shared/shared.module';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+
 
 @NgModule({
   declarations: [
@@ -16,7 +17,11 @@ import {SharedModule} from './shared/shared.module';
     MentorshipRoutingModule,
     MaterialModule,
     CoreModule,
-    SharedModule.forRoot()
+    SharedModule,
+    ReactiveFormsModule,
+    FormsModule
   ]
 })
-export class MentorshipModule { }
+
+export class MentorshipModule {
+}

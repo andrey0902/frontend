@@ -4,7 +4,7 @@ import { CommonModule } from '@angular/common';
 import { NeedAMentorRoutingModule } from './need-a-mentor-routing.module';
 import { NeedAMentorComponent } from './need-a-mentor.component';
 import {CoreModule} from '../../core/core.module';
-import {SharedModule} from '../shared/shared.module';
+import {SharedModule} from '../../shared/shared.module';
 
 @NgModule({
   declarations: [NeedAMentorComponent],

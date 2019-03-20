@@ -1,9 +1,6 @@
-import {ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnChanges} from '@angular/core';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, Input} from '@angular/core';
 import {Iteration} from '../../models/iteration.model';
 import {ItemNode} from '../../shared/tree/models/item-node.model';
-import {InfoPlanModel} from '../../personal-plan/shared/models/info-plan.model';
-import {IterationTreeService} from '../../core/services/iteration-tree.service';
-import {combineLatest, Observable} from 'rxjs';
 import {IterationTaskModel} from '../../personal-plan/shared/models/iteration-plan.model';
 import {IProgress} from '../../personal-plan/shared/models/progress.model';
 
