@@ -58,10 +58,10 @@ export class TreeComponent implements OnChanges {
 
     database.dataChange
       .subscribe(data => {
-      this.dataSource.data = [];
-      this.dataSource.data = data;
-      this.dataChanged.emit(data);
-    });
+        this.dataSource.data = [];
+        this.dataSource.data = data;
+        this.dataChanged.emit(data);
+      });
   }
 
   getLevel = (node: ItemFlatNode) => node.level;
@@ -181,8 +181,19 @@ export class TreeComponent implements OnChanges {
   removeItem(node: ItemFlatNode) {
     const data = this.flatNodeMap.get(node);
     const parent = this.database.getParentFromNodes(data);
-    this.database.deleteItem(data);
-    if (node.showAsInput !== 'add') {
+
+    if (node.showAsInput === 'add') {
+      this.database.deleteItem(data);
+    }
+
+    if (node.showAsInput === 'edit') {
+      console.log('hi');
+      data.showAsInput = false;
+      this.database.updateItem(data, data.text);
+    }
+
+    if (node.showAsInput !== 'add' && node.showAsInput !== 'edit') {
+      this.database.deleteItem(data);
       this.deleteItem.emit(data);
     }
   }
