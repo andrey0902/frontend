@@ -4,27 +4,29 @@
   </div>
   <div class="timeline-center">
     <div class="progress">
-      <span [ngStyle]="{width: progress_percent + '%'}"></span>
-      <ul class="timeline-events">
-        <li class="timeline-event"
-            *ngFor="let meet of iteration.meets; let i=index"
-            [ngStyle]="{left:(getPosition(meet.attributes.meet_date))+'%'}">
-          <span></span>
-        </li>
-      </ul>
-      <ul class="timeline-bg">
-        <li class="timeline-month">
-          <ul>
-            <li class="timeline-day" *ngFor="let day of weeks; let y=index"
-                [ngStyle]="{left:(y * (100/weeks.length))+'%'}">
-              <span>
-                <i></i>
-                {{day}}
-              </span>
-            </li>
-          </ul>
-        </li>
-      </ul>
+      <div class="wrap-days">
+        <div class="day"
+             *ngFor="let day of days; let last = last"
+             [ngStyle]="{width: getWidth(last)}"
+             [ngClass]="{
+              'future': !timeLineCompleted(day),
+              'weekend': day.weekend,
+              'past': timeLineCompleted(day),
+              'today': getToday(day)
+             }">
+          <div class="circle" *ngIf="day.meet">
+            {{ day.day }}
+          </div>
+        </div>
+      </div>
+      <div class="wrap-weeks">
+        <div class="week" *ngFor="let week of weeks" [style.width]="calculateDayWidth() * week.length + '%'">
+          <div class="curly-brace"></div>
+          <div class="weeks-number">
+            <span>{{ week.weekNumber }}</span>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
   <div class="timeline-right">
