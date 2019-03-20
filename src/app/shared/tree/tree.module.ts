@@ -5,6 +5,7 @@ import {MatFormFieldModule} from '@angular/material/form-field';
 import {CommonModule} from '@angular/common';
 import {CreateTreeItemComponent} from './components/create-tree-item/create-tree-item.component';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {DialogModule} from '../dialog/dialog.module';
 
 @NgModule({
   declarations: [TreeComponent, CreateTreeItemComponent],
@@ -19,7 +20,8 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
     MatTreeModule,
     FormsModule,
     ReactiveFormsModule,
-    MatMenuModule
+    MatMenuModule,
+    DialogModule
   ]
 })
 export class TreeModule {

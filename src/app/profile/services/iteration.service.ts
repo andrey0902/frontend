@@ -9,6 +9,7 @@ import {Injectable, OnInit} from '@angular/core';
 @Injectable({
   providedIn: 'root'
 })
+
 export class CurrentIterationService {
   private _currentIteration: BehaviorSubject<Iteration> = new BehaviorSubject(null);
   private _userId: BehaviorSubject<number> = new BehaviorSubject(undefined);
@@ -37,11 +38,11 @@ export class CurrentIterationService {
   }
 
   public get isExist(): boolean {
-    return this.currentIteration !== null;
+    return this.currentIteration !== null && this.currentIteration !== undefined;
   }
 
   public getIteration(protegeId: number) {
-    this.currentIteration = null;
+   this.currentIteration = null;
     return this._iterationService.getCurrentIteration(protegeId)
       .pipe(
         map(data => new Iteration(data)),
@@ -66,12 +67,7 @@ export class CurrentIterationService {
       );
   }
 
-  public deleteIteration(protegeId: number): Observable<any> {
-    const request = {
-      conclusion: 'hi',
-      test_project: 'null'
-    };
-
+  public deleteIteration(protegeId: number, request): Observable<any> {
     return this._iterationService.deleteIteration(protegeId, this.currentIteration.id, request)
       .pipe(
         tap(() => this.currentIteration = null)

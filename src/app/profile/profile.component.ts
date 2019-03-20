@@ -1,4 +1,4 @@
-import {ChangeDetectorRef, Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {User} from '../models/user.model';
 import {ActivatedRoute, ParamMap} from '@angular/router';
 import {combineLatest, Observable, of} from 'rxjs';
@@ -7,10 +7,10 @@ import {Store} from '@ngrx/store';
 import {selectCurrentUser} from '../root-store/currentUser/current-user.selectors';
 import {IterationService} from '../core/services/iteration.service';
 import {MatDialog} from '@angular/material';
-import {CreateRequestDialogComponent} from './create-request-dialog/create-request-dialog.component';
 import {LoadUserSuccess, PatchUser} from '../root-store/currentUser/current-user.actions';
 import {CurrentIterationService} from './services/iteration.service';
 import {UserService} from '../core/services/user.service';
+import {DialogService} from '../shared/dialog/services/dialog.service';
 
 @Component({
   selector: 'lt-profile',
@@ -23,6 +23,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
     private userService: UserService,
     private iterationService: IterationService,
     private store: Store<any>,
+    private dialogService: DialogService,
     private dialog: MatDialog,
     private currentIterationService: CurrentIterationService
   ) {
@@ -64,23 +65,25 @@ export class ProfileComponent implements OnInit, OnDestroy {
         skip(1),
         takeWhile(() => this.componentActive),
         tap(() => {
-          this.currentIterationService.getIteration(+this.route.snapshot.paramMap.get('id'))
-          .subscribe();
+          this.currentIterationService.getIteration(+this.route.snapshot.paramMap.get('id')).
+          pipe(
+            catchError(() => of(false))
+          ).subscribe();
         })
       )
       .subscribe();
   }
 
   public deleteIteration(userId: number): void {
-    this.currentIterationService.deleteIteration(userId).subscribe();
+    this.dialogService.openDeleteIterationDialog((request) => {
+      if (request) {
+        this.currentIterationService.deleteIteration(userId, request).subscribe();
+      }
+    });
   }
 
-  wantBeMentor() {
-    const dialogRef = this.dialog.open(CreateRequestDialogComponent, {
-      width: '500px'
-    });
-
-    dialogRef.afterClosed().subscribe(text => {
+  public wantBeMentor(): void {
+    this.dialogService.openRequestDialog('Примечание', (text) => {
       if (text !== null || text !== undefined) {
         this.route.paramMap.pipe(
           switchMap((params: ParamMap) => this.userService.createMentorRequest(params.get('id'), text)),
@@ -95,12 +98,8 @@ export class ProfileComponent implements OnInit, OnDestroy {
     });
   }
 
-  needMentor() {
-    const dialogRef = this.dialog.open(CreateRequestDialogComponent, {
-      width: '500px'
-    });
-
-    dialogRef.afterClosed().subscribe(text => {
+  public needMentor(): void {
+    this.dialogService.openRequestDialog('Примечание (необязательно)', (text) => {
       if (text !== null || text !== undefined) {
         this.route.paramMap.pipe(
           switchMap((params: ParamMap) => this.userService.createProtegeRequest(params.get('id'), text))
