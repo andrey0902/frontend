@@ -16,6 +16,7 @@ import {IterationPlanComponent} from './iteration-plan/iteration-plan.component'
 import {IterationProgressComponent} from './iteration-progress/iteration-progress.component';
 import {CurrentIterationService} from './services/iteration.service';
 import {IterationTreeService} from './services/iteration-tree.service';
+import {CreateIterationGuard} from '../core/guards/create-iteration.guard';
 
 @NgModule({
   declarations: [
@@ -38,7 +39,8 @@ import {IterationTreeService} from './services/iteration-tree.service';
   ],
   providers: [
     CurrentIterationService,
-    IterationTreeService
+    IterationTreeService,
+    CreateIterationGuard
   ]
 })
 export class ProfileModule {

@@ -8,6 +8,7 @@ import {catchError, map, switchMap} from 'rxjs/operators';
 import {UserService} from '../services/user.service';
 import {CurrentIterationService} from '../../profile/services/iteration.service';
 
+
 @Injectable({
   providedIn: 'root'
 })

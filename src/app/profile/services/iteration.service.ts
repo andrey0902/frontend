@@ -38,10 +38,11 @@ export class CurrentIterationService {
   }
 
   public get isExist(): boolean {
-    return this.currentIteration !== null;
+    return this.currentIteration !== null && this.currentIteration !== undefined;
   }
 
   public getIteration(protegeId: number) {
+   this.currentIteration = null;
     return this._iterationService.getCurrentIteration(protegeId)
       .pipe(
         map(data => new Iteration(data)),

@@ -1,8 +1,5 @@
+<h2 class="section-title">Индивидуальный план развития: <span class="iteration-percent">{{progressInPercent}}%</span></h2>
 <div class="progress-bar">
-  Прогресс ИПР:
-  <div class="bar">
-    <div class="progress" [style.width.%]="progressInPercent" ></div>
-  </div>
-  {{progressInPercent}}%
+ <span>0%</span> <mat-progress-bar mode="determinate" [value]="progressInPercent"></mat-progress-bar> <span>100%</span>
 </div>
 

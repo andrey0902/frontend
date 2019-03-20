@@ -26,3 +26,14 @@
     transition: width 1s ease-out;
   }
 }
+
+.iteration-percent {
+  color: rgba(0, 0, 0, .5);
+  font-size: 20px;
+}
+
+.progress-bar {
+  span {
+    padding: 0 5px;
+  }
+}

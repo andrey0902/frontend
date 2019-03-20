@@ -18,7 +18,6 @@ import {DialogService} from '../shared/dialog/services/dialog.service';
   styleUrls: ['./profile.component.scss']
 })
 export class ProfileComponent implements OnInit, OnDestroy {
-
   constructor(
     private route: ActivatedRoute,
     private userService: UserService,
@@ -64,8 +63,10 @@ export class ProfileComponent implements OnInit, OnDestroy {
     this.currentIterationService.userIdAsObserv
       .pipe(
         skip(1),
+        takeWhile(() => this.componentActive),
         tap(() => {
-          this.currentIterationService.getIteration(+this.route.snapshot.paramMap.get('id')).pipe(
+          this.currentIterationService.getIteration(+this.route.snapshot.paramMap.get('id')).
+          pipe(
             catchError(() => of(false))
           ).subscribe();
         })
