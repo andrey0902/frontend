@@ -2,11 +2,11 @@ import {Component, ElementRef, EventEmitter, Input, OnChanges, Output, SimpleCha
 import {FlatTreeControl} from '@angular/cdk/tree';
 import {MatTreeFlatDataSource, MatTreeFlattener} from '@angular/material';
 import {SelectionModel} from '@angular/cdk/collections';
-import {InsertionType, TreeDatabaseService} from './providers/tree-database.service';
+import {InsertionType, TreeDatabaseService} from './services/tree-database.service';
 import {ItemFlatNode, ItemNode} from './models/item-node.model';
 import {Observable, of} from 'rxjs';
 import {DeleteProtege} from '../../root-store/mentors/mentors.actions';
-import {DialogService} from '../dialog/providers/dialog.service';
+import {DialogService} from '../dialog/services/dialog.service';
 
 @Component({
   selector: 'lt-tree',

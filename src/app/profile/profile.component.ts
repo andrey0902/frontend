@@ -10,7 +10,8 @@ import {MatDialog} from '@angular/material';
 import {LoadUserSuccess, PatchUser} from '../root-store/currentUser/current-user.actions';
 import {CurrentIterationService} from './services/iteration.service';
 import {UserService} from '../core/services/user.service';
-import {DialogService} from '../shared/dialog/providers/dialog.service';
+import {DialogService} from '../shared/dialog/services/dialog.service';
+
 @Component({
   selector: 'lt-profile',
   templateUrl: './profile.component.html',
@@ -74,12 +75,14 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
   public deleteIteration(userId: number): void {
     this.dialogService.openDeleteIterationDialog((request) => {
-      this.currentIterationService.deleteIteration(userId, request).subscribe();
+      if (request) {
+        this.currentIterationService.deleteIteration(userId, request).subscribe();
+      }
     });
   }
 
   public wantBeMentor(): void {
-    this.dialogService.openRequestDialog('Примечание (необязательно)', (text) => {
+    this.dialogService.openRequestDialog('Примечание', (text) => {
       if (text !== null || text !== undefined) {
         this.route.paramMap.pipe(
           switchMap((params: ParamMap) => this.userService.createMentorRequest(params.get('id'), text)),

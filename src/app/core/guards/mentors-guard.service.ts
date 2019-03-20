@@ -2,9 +2,9 @@ import {Injectable} from '@angular/core';
 import {CanActivate} from '@angular/router';
 import {Observable} from 'rxjs';
 import {Store} from '@ngrx/store';
-import {selectCurrentUser} from '../../../root-store/currentUser/current-user.selectors';
+import {selectCurrentUser} from '../../root-store/currentUser/current-user.selectors';
 import {map} from 'rxjs/operators';
-import {User} from '../../../models/user.model';
+import {User} from '../../models/user.model';
 
 @Injectable({
   providedIn: 'root'

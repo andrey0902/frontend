@@ -11,7 +11,7 @@ export class DeleteIterationDialogComponent {
 
   group: FormGroup = new FormGroup({
     conclusion: new FormControl(''),
-    test_project: new FormControl('')
+    test_project: new FormControl(null)
   });
 
   constructor(@Inject(MAT_DIALOG_DATA) public data) {

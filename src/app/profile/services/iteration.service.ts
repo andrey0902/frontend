@@ -6,7 +6,10 @@ import {IterationService} from '../../core/services/iteration.service';
 import {tap} from 'rxjs/internal/operators/tap';
 import {Injectable, OnInit} from '@angular/core';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
+
 export class CurrentIterationService {
   private _currentIteration: BehaviorSubject<Iteration> = new BehaviorSubject(null);
   private _userId: BehaviorSubject<number> = new BehaviorSubject(undefined);

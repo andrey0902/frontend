@@ -1,39 +1,40 @@
 import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
-import {MatButtonModule, MatDialogModule, MatFormFieldModule, MatInputModule} from '@angular/material';
+import {MatAutocompleteModule, MatButtonModule, MatDialogModule, MatFormFieldModule, MatInputModule} from '@angular/material';
 import {ConfirmDialogComponent} from './confirm-dialog/confirm-dialog.component';
-import {DialogService} from './providers/dialog.service';
-import {CoreModule} from '../../core/core.module';
-import {ActionBtnModule} from '../action-btn/action-btn.module';
+import {DialogService} from './services/dialog.service';
 import {RequestDialogComponent} from './request-dialog/request-dialog.component';
+import {MentorshipManagementDialogComponent} from './mentorship-management-dialog/mentorship-management-dialog.component';
+import {DeleteIterationDialogComponent} from './delete-iteration-dialog/delete-iteration-dialog.component';
+import {ComponentsModule} from '../components/components.module';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 
 @NgModule({
   imports: [
     CommonModule,
-    CoreModule,
     MatDialogModule,
-    ActionBtnModule,
-    MatButtonModule,
-    FormsModule,
-    ReactiveFormsModule,
+    ComponentsModule,
     MatFormFieldModule,
-    MatInputModule
+    MatAutocompleteModule,
+    MatButtonModule,
+    MatInputModule,
+    FormsModule,
+    ReactiveFormsModule
   ],
   declarations: [
     ConfirmDialogComponent,
-    RequestDialogComponent
-  ],
-  exports: [
-    ConfirmDialogComponent,
-    RequestDialogComponent
+    RequestDialogComponent,
+    MentorshipManagementDialogComponent,
+    DeleteIterationDialogComponent
   ],
   providers: [
     DialogService
   ],
   entryComponents: [
     ConfirmDialogComponent,
-    RequestDialogComponent
+    RequestDialogComponent,
+    MentorshipManagementDialogComponent,
+    DeleteIterationDialogComponent
   ]
 })
 

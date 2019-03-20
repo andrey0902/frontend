@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { TreeModule } from './tree/tree.module';
 import {ProgressBarModule} from './progress-bar/progress-bar.module';
 import {DialogModule} from './dialog/dialog.module';
-import {ActionBtnModule} from './action-btn/action-btn.module';
+import {ComponentsModule} from './components/components.module';
 
 @NgModule({
   imports: [
@@ -11,13 +11,13 @@ import {ActionBtnModule} from './action-btn/action-btn.module';
     CommonModule,
     DialogModule,
     ProgressBarModule,
-    ActionBtnModule
+    ComponentsModule
   ],
   exports: [
     TreeModule,
     ProgressBarModule,
     DialogModule,
-    ActionBtnModule
+    ComponentsModule
   ]
 })
 export class SharedModule {
