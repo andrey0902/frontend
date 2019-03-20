@@ -5,13 +5,13 @@ import {Store} from '@ngrx/store';
 import {selectCurrentUser} from '../../root-store/currentUser/current-user.selectors';
 import {User} from '../../models/user.model';
 import {catchError, map, switchMap} from 'rxjs/operators';
-import {UserService} from '../../core/services/user.service';
-import {IterationService} from '../../core/services/iteration.service';
-import {CurrentIterationService} from './iteration.service';
-import {Iteration} from '../../models/iteration.model';
-import {tap} from 'rxjs/internal/operators/tap';
+import {UserService} from '../services/user.service';
+import {CurrentIterationService} from '../../profile/services/iteration.service';
 
-@Injectable()
+
+@Injectable({
+  providedIn: 'root'
+})
 export class CreateIterationGuard implements CanActivate {
 
   constructor(

@@ -1,7 +1,6 @@
 import {ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
 import { Iteration } from '../../models/iteration.model';
 import { ItemNode } from '../../shared/tree/models/item-node.model';
-
 import {IterationTaskModel} from '../../personal-plan/shared/models/iteration-plan.model';
 import {IProgress} from '../../personal-plan/shared/models/progress.model';
 

@@ -1,0 +1,28 @@
+.title-container {
+  display: flex;
+  align-items: center;
+
+  mat-form-field {
+    width: 100%;
+  }
+}
+
+:host {
+  display: block;
+  padding: 20px;
+}
+
+.full-width {
+  width: 100%;
+}
+
+
+.modal-content {
+  padding: 20px;
+}
+
+.form {
+  width: 100%;
+}
+
+textarea.mat-autosize { resize: vertical !important; overflow: hidden !important; }

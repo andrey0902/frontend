@@ -1,0 +1,26 @@
+<div mat-dialog-content class="modal-content">
+  <div class="title-container">
+    <form [formGroup]="group" (ngSubmit)="onSubmit($event)" class="form">
+    <mat-form-field class="full-width">
+      <textarea matInput matTextareaAutosize formControlName="conclusion" placeholder="Вывод и результат обучения" class="reason"></textarea>
+    </mat-form-field>
+    <mat-form-field class="full-width">
+      <input matInput formControlName="test_project" placeholder="Ссылка на проект/репозиторий (не обязательно)">
+    </mat-form-field>
+    </form>
+  </div>
+</div>
+<mat-dialog-actions align="end">
+  <button
+    mat-raised-button
+    color="warn"
+    class="google-font-bold"
+    [disabled]="group.invalid"
+    [mat-dialog-close]="group.value">
+    Ок
+  </button>
+  <button
+    mat-button
+    class="google-font-bold"
+    [mat-dialog-close]="null">Отмена</button>
+</mat-dialog-actions>

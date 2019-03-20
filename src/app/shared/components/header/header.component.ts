@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {UserService} from '../../services/user.service';
+import {UserService} from '../../../core/services/user.service';
 import {User} from '../../../models/user.model';
 import {Store} from '@ngrx/store';
 import {selectCurrentUser} from '../../../root-store/currentUser/current-user.selectors';
