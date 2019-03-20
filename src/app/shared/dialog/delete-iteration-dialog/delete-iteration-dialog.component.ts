@@ -1,6 +1,7 @@
 import {Component, Inject} from '@angular/core';
-import {FormControl, FormGroup} from '@angular/forms';
+import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {MAT_DIALOG_DATA} from '@angular/material';
+import {Validator} from '@angular/forms/src/directives/validators';
 
 @Component({
   selector: 'lt-delete-iteration-dialog',
@@ -10,7 +11,7 @@ import {MAT_DIALOG_DATA} from '@angular/material';
 export class DeleteIterationDialogComponent {
 
   group: FormGroup = new FormGroup({
-    conclusion: new FormControl(''),
+    conclusion: new FormControl('', [Validators.required]),
     test_project: new FormControl(null)
   });
 
