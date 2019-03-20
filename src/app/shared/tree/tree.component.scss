@@ -36,3 +36,10 @@ mat-tree-node:hover .buttons {
   }
 }
 
+::ng-deep .mat-checkbox-checked .mat-checkbox-background {
+  background-color: #141460 !important;
+}
+
+::ng-deep .mat-checkbox-ripple .mat-ripple-element {
+  background-color: #141460 !important;
+}

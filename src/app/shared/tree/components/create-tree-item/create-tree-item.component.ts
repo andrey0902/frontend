@@ -1,5 +1,5 @@
-import {Component, EventEmitter, Input, OnChanges, OnInit, Output} from '@angular/core';
-import {FormControl, Validators} from '@angular/forms';
+import {Component, EventEmitter, HostListener, Input, OnChanges, OnInit, Output} from '@angular/core';
+import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {ItemNode} from '../../models/item-node.model';
 import {LtValidators} from '../../../helpers/validator-methods.static';
 
@@ -37,6 +37,16 @@ export class CreateTreeItemComponent implements OnInit {
     this.checkValidators();
   }
 
+  @HostListener('window:keydown', ['$event'])
+  keyEvent(event: KeyboardEvent) {
+    if (event.key === 'Enter') {
+      this.saveTask();
+    }
+    if (event.key === 'Escape') {
+      this.deleteTask();
+    }
+  }
+
   public setValue() {
     this.checkedValue(this.item);
   }
@@ -58,7 +68,6 @@ export class CreateTreeItemComponent implements OnInit {
    * will call after creating control
    */
   private listenChanges(): void {
-
     this.control.valueChanges.subscribe((value) => {
       if ((this.control.valid && this.control.value !== null) && value.length) {
         this.isDisabled = false;

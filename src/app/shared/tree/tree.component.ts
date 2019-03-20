@@ -1,4 +1,4 @@
-import {Component, ElementRef, EventEmitter, Input, OnChanges, Output, SimpleChanges, ViewChild} from '@angular/core';
+import {Component, ElementRef, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild} from '@angular/core';
 import {FlatTreeControl} from '@angular/cdk/tree';
 import {MatTreeFlatDataSource, MatTreeFlattener} from '@angular/material';
 import {SelectionModel} from '@angular/cdk/collections';
@@ -15,7 +15,7 @@ import {DialogService} from '../dialog/services/dialog.service';
   providers: [TreeDatabaseService]
 })
 
-export class TreeComponent implements OnChanges {
+export class TreeComponent implements OnChanges, OnInit {
   @Input() private data: ItemNode[];
   @Input() public canEdit = true;
   @Input() public type: new (...arg: any[]) => ItemNode;
@@ -60,10 +60,14 @@ export class TreeComponent implements OnChanges {
 
     database.dataChange
       .subscribe(data => {
-      this.dataSource.data = [];
-      this.dataSource.data = data;
-      this.dataChanged.emit(data);
-    });
+        this.dataSource.data = [];
+        this.dataSource.data = data;
+        this.dataChanged.emit(data);
+      });
+  }
+
+  ngOnInit(): void {
+    this.treeControl.expandAll();
   }
 
   getLevel = (node: ItemFlatNode) => node.level;
@@ -181,18 +185,27 @@ export class TreeComponent implements OnChanges {
 
   /** remove item **/
   removeItem(node: ItemFlatNode) {
+    const data = this.flatNodeMap.get(node);
+    const parent = this.database.getParentFromNodes(data);
+    console.log(node);
+    if (node.showAsInput !== 'add' && node.showAsInput !== 'edit') {
+      const htmlContent = `<p>Вы уверены, что хотите удалить пункт <b>${node.text}</b> ?</p>`;
+      this.dialogService.openConfirmDialog({ htmlContent }, (confirm) => {
+        if (confirm) {
+          this.database.deleteItem(data);
+          this.deleteItem.emit(data);
+        }
+      });
+    }
 
-    const htmlContent = `<p>Вы уверены, что хотите удалить пункт <b>${node.text}</b> ?</p>`;
-    this.dialogService.openConfirmDialog({ htmlContent }, (confirm) => {
-      if (confirm) {
-        const data = this.flatNodeMap.get(node);
-        const parent = this.database.getParentFromNodes(data);
-        this.database.deleteItem(data);
-         if (node.showAsInput !== 'add') {
-           this.deleteItem.emit(data);
-         }
-      }
-    });
+    if (node.showAsInput === 'add') {
+      this.database.deleteItem(data);
+    }
+
+    if (node.showAsInput === 'edit') {
+      data.showAsInput = false;
+      this.database.updateItem(data, data.text);
+    }
   }
 
   updateItemCheck(node: ItemNode) {
