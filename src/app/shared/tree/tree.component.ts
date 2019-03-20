@@ -181,21 +181,21 @@ export class TreeComponent implements OnChanges {
   removeItem(node: ItemFlatNode) {
     const data = this.flatNodeMap.get(node);
     const parent = this.database.getParentFromNodes(data);
+    console.log(node);
+    if (node.showAsInput !== 'add' && node.showAsInput !== 'edit') {
+      this.database.deleteItem(data);
+      this.deleteItem.emit(data);
+    }
 
     if (node.showAsInput === 'add') {
       this.database.deleteItem(data);
     }
 
     if (node.showAsInput === 'edit') {
-      console.log('hi');
       data.showAsInput = false;
       this.database.updateItem(data, data.text);
     }
 
-    if (node.showAsInput !== 'add' && node.showAsInput !== 'edit') {
-      this.database.deleteItem(data);
-      this.deleteItem.emit(data);
-    }
   }
 
   updateItemCheck(node: ItemNode) {
