@@ -1,4 +1,4 @@
-import {Component, ElementRef, EventEmitter, Input, OnChanges, Output, SimpleChanges, ViewChild} from '@angular/core';
+import {Component, ElementRef, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild} from '@angular/core';
 import {FlatTreeControl} from '@angular/cdk/tree';
 import {MatTreeFlatDataSource, MatTreeFlattener} from '@angular/material';
 import {SelectionModel} from '@angular/cdk/collections';
@@ -15,7 +15,7 @@ import {DialogService} from '../dialog/services/dialog.service';
   providers: [TreeDatabaseService]
 })
 
-export class TreeComponent implements OnChanges {
+export class TreeComponent implements OnChanges, OnInit {
   @Input() private data: ItemNode[];
   @Input() public canEdit = true;
   @Input() public type: new (...arg: any[]) => ItemNode;
@@ -64,6 +64,10 @@ export class TreeComponent implements OnChanges {
         this.dataSource.data = data;
         this.dataChanged.emit(data);
       });
+  }
+
+  ngOnInit(): void {
+    this.treeControl.expandAll();
   }
 
   getLevel = (node: ItemFlatNode) => node.level;
