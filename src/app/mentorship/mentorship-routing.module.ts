@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import {MentorshipComponent} from './mentorship.component';
-import { MentorsGuard } from '../core/guards/mentors-guard.service';
+import { MentorsGuard } from '../core/guards/mentors.guard';
 
 const routes: Routes = [
   { path: '', component: MentorshipComponent, children: [
