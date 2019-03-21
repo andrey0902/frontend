@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { MentorsGuard } from './core/guards/mentors-guard.service';
+import { MentorsGuard } from './core/guards/mentors.guard';
 
 const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: 'mentorship' },

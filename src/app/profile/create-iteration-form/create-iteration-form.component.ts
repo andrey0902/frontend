@@ -12,7 +12,7 @@ export class CreateIterationFormComponent implements OnInit {
 
   @Input() public iterationForm: FormGroup;
   @Output() public submitForm = new EventEmitter<any>();
-
+  @Input() public disableEdnIteration = true;
   meetTypes$: Observable<any>;
   weekDays = [
     { id: 1, title: 'Пн' },
@@ -26,8 +26,8 @@ export class CreateIterationFormComponent implements OnInit {
     private iterationService: IterationService
   ) { }
 
-  get startDate() { return this.iterationForm.get('startDate'); }
-  get endDate() { return this.iterationForm.get('endDate'); }
+  get startDate() { return this.iterationForm.get('time').get('startDate'); }
+  get endDate() { return this.iterationForm.get('time').get('endDate'); }
   get goal() { return this.iterationForm.get('goal'); }
   get meetType() { return this.iterationForm.get('meetType'); }
   get weekDay() { return this.iterationForm.get('weekDay'); }
