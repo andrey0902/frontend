@@ -8,7 +8,7 @@ export class Iteration {
   startDate: Date;
   endDate: Date;
   meets: any[];
-  format = 'YYYY DD.MM';
+  format = 'DD.MM.YYYY';
   plan: InfoPlanModel[];
 
   constructor(config) {

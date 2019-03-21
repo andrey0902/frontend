@@ -1,8 +1,8 @@
 <div class="timeline">
-  <div class="timeline-left">
-    <label>{{startDate}}</label>
-  </div>
-  <div class="timeline-center">
+  <!--<div class="timeline-left">-->
+    <!--<label>{{startDate}}</label>-->
+  <!--</div>-->
+  <div class="timeline-center center-block">
     <div class="progress">
       <div class="wrap-days">
         <div class="day"
@@ -16,6 +16,9 @@
              }">
           <div class="circle" *ngIf="day.meet">
             {{ day.day }}
+          </div>
+          <div class="date-limit">
+            {{ last ? endDate : startDate }}
           </div>
         </div>
       </div>
@@ -31,8 +34,8 @@
       </div>
     </div>
   </div>
-  <div class="timeline-right">
-    <label>{{endDate}}</label>
-  </div>
+  <!--<div class="timeline-right">-->
+    <!--<label>{{endDate}}</label>-->
+  <!--</div>-->
 </div>
 
