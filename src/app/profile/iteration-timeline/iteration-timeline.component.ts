@@ -28,7 +28,6 @@ export class IterationTimelineComponent implements OnInit {
 
   ngOnInit() {
     this.init();
-    console.log(this.iteration);
   }
 
   init() {
