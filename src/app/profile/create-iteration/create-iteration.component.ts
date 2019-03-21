@@ -5,6 +5,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {MatVerticalStepper} from '@angular/material';
 import {Iteration} from '../../models/iteration.model';
 import {CurrentIterationService} from '../services/iteration.service';
+import { LtValidators } from '../../shared/helpers/validator-methods.static';
 
 @Component({
   selector: 'lt-create-iteration',
@@ -28,7 +29,10 @@ export class CreateIterationComponent implements OnInit {
 
   ngOnInit() {
     this.iterationForm = this.fb.group({
-      startDate: ['', Validators.required],
+      startDate: ['', [
+        Validators.required,
+        LtValidators.checkDataStartIteration
+        ]],
       endDate: ['', Validators.required],
       goal: ['', Validators.required],
       projectLink: [''],
