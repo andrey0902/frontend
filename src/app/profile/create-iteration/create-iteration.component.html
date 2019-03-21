@@ -13,11 +13,18 @@
       </lt-create-iteration-form>
     </mat-step>
     <mat-step label="Создание ИПР" editable="false" state="create-plan">
-     <lt-iteration-plan *ngIf="currentIterationService.isExist" [iteration]="currentIterationService.currentIteration"></lt-iteration-plan>
-      <button
-        mat-raised-button
-        color="accent"
-        class="google-font-bold" (click)="onDone()">Завершить</button>
+      <div class="plan">
+        <lt-iteration-plan *ngIf="currentIterationService.isExist"
+                           class="plan--tree"
+                           (createItem)="treeDataChanged($event)"
+                           [iteration]="currentIterationService.currentIteration"></lt-iteration-plan>
+        <button
+          mat-raised-button
+          color="accent"
+          [disabled]="!treeChanged"
+          class="google-font-bold plan--btn" (click)="onDone()">Завершить
+        </button>
+      </div>
     </mat-step>
     <ng-template matStepperIcon="create-iteration">
       <mat-icon>today</mat-icon>
