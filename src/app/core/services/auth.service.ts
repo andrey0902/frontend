@@ -10,7 +10,7 @@ export class AuthService {
   constructor(private cookieService: CookieService) {
 
     // TODO: Remove this in the future. This is a temporary solution
-    // this.cookieService.set( 'ltp.token', '784a6c050f44b2b18992acb39c2e0498c664b3ce' );
+     this.cookieService.set( 'ltp.token', '680a31821cc55ea4cc2352a2be269ace6b1643f9' );
   }
 
   getAuthToken() {

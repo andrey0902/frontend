@@ -32,6 +32,8 @@ export class ProfileOverviewComponent implements OnInit, OnChanges {
   }
 
   ngOnInit(): void {
+    console.log('hi');
+    console.log(this.currentIteration);
   }
 
   ngOnChanges(changes: SimpleChanges): void {
