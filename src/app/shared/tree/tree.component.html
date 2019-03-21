@@ -1,11 +1,12 @@
 <lt-create-tree-item *ngIf="canEdit" label="Добавить задачу" (createItem)="addItemToRoot($event)" class="create-tree-item" [main] = 'true'></lt-create-tree-item>
 <mat-tree [dataSource]="dataSource" [treeControl]="treeControl">
   <mat-tree-node *matTreeNodeDef="let node" matTreeNodePadding>
-    <button mat-icon-button disabled></button>
-    <mat-checkbox class="checklist-leaf-node"
+ <!--   <button mat-icon-button disabled></button>-->
+    <mat-checkbox class="checklist-leaf-node padding"
                   [ngClass]="{'drop-above': dragNodeExpandOverArea === 'above' && dragNodeExpandOverNode === node,
                               'drop-below': dragNodeExpandOverArea === 'below' && dragNodeExpandOverNode === node,
-                              'drop-center': dragNodeExpandOverArea === 'center' && dragNodeExpandOverNode === node}"
+                              'drop-center': dragNodeExpandOverArea === 'center' && dragNodeExpandOverNode === node
+                             }"
                   [checked]="checklistSelection.isSelected(node)"
                   (change)="todoItemSelectionToggle(node);"
                   draggable="true"
@@ -17,11 +18,12 @@
   </mat-tree-node>
 
   <mat-tree-node *matTreeNodeDef="let node; when: showAsInput" matTreeNodePadding>
+   <!-- <button mat-icon-button disabled></button>-->
     <lt-create-tree-item *ngIf="canEdit"
                          [value] = "node.text"
                          (createItem)="addItem($event, node)"
                          (removeItem)="removeItem(node)"
-                         class="create-tree-item"></lt-create-tree-item>
+                         class="create-tree-item padding"></lt-create-tree-item>
   </mat-tree-node>
 
   <mat-tree-node *matTreeNodeDef="let node; when: hasChild" matTreeNodePadding>
