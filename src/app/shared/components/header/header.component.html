@@ -1,15 +1,17 @@
 <div class="container center-between">
-  <div class="app-logo">
+  <a class="app-logo" [href]="linkToPortal">
     <lt-svg-icon [name]="'logo'"></lt-svg-icon>
-  </div>
+  </a>
   <div class="user-block" *ngIf="currentUser$ | async as currentUser">
     <img class="avatar"
          [src]="currentUser.attributes.photoThumbnail"
          [matMenuTriggerFor]="menu">
     <mat-menu #menu="matMenu" overlapTrigger="false">
       <button mat-menu-item [routerLink]="['/profile', currentUser.id]">Профиль</button>
-      <button *ltUserPermission="currentUser.attributes.roles" mat-menu-item routerLink="mentorship">Таблица ответствености</button>
-     <!--TODO: hide item menu in this iteration-->
+      <button *ltUserPermission="currentUser.attributes.roles" mat-menu-item routerLink="mentorship">Таблица
+        ответствености
+      </button>
+      <!--TODO: hide item menu in this iteration-->
       <!--<button mat-menu-item [routerLink]="['/plan/own', currentUser.id]">Мой ИПР</button>-->
     </mat-menu>
   </div>

@@ -5,6 +5,7 @@ import {Store} from '@ngrx/store';
 import {selectCurrentUser} from '../../../root-store/currentUser/current-user.selectors';
 import {LoadUser} from '../../../root-store/currentUser/current-user.actions';
 import {Observable} from 'rxjs';
+import {environment} from '../../../../environments/environment';
 
 @Component({
   selector: 'lt-header',
@@ -12,6 +13,8 @@ import {Observable} from 'rxjs';
   styleUrls: ['./header.component.scss']
 })
 export class HeaderComponent implements OnInit {
+
+  linkToPortal: string;
 
   constructor(
     private userService: UserService,
@@ -23,6 +26,7 @@ export class HeaderComponent implements OnInit {
   ngOnInit(): void {
     this.currentUser$ = this.store.select(selectCurrentUser);
     this.store.dispatch(new LoadUser());
+    this.linkToPortal = environment.redirectPath;
   }
 
 }
