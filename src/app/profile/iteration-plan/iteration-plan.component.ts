@@ -17,6 +17,7 @@ export class IterationPlanComponent implements OnInit {
   @Input() plan: IterationTaskModel[];
 
   @Output() public dataChanged = new EventEmitter<ItemNode[]>();
+  @Output() public createItem = new EventEmitter<ItemNode>();
 
   public itemConstructor = InfoPlanModel;
 
@@ -39,6 +40,7 @@ export class IterationPlanComponent implements OnInit {
     this.treeService.createTreeItem(item, this.iteration.user_id, this.iteration.id)
       .subscribe((responseItem: ItemNode) => {
         item.id = responseItem.id;
+        this.createItem.emit(responseItem);
         this.cd.detectChanges();
       });
   }

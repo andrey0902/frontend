@@ -4,6 +4,7 @@
 </div>
 <lt-iteration-timeline [iteration]="currentIteration"></lt-iteration-timeline>
 <lt-iteration-progress [progress]="progress"></lt-iteration-progress>
+<div class="plan">
 <lt-iteration-plan [iteration]="currentIteration" (dataChanged)="treeDataChanged($event)"></lt-iteration-plan>
-
+</div>
 

@@ -16,6 +16,7 @@ export class CreateIterationComponent implements OnInit {
 
   @ViewChild(MatVerticalStepper) public stepper: MatVerticalStepper;
   iterationForm: FormGroup;
+  treeChanged = false;
   private _protegeId: number;
 
   constructor(
@@ -47,6 +48,12 @@ export class CreateIterationComponent implements OnInit {
 
   onDone() {
     this.router.navigate(['/profile', this._protegeId]);
+  }
+
+  treeDataChanged($event) {
+    if (!this.treeChanged && $event) {
+      this.treeChanged = true;
+    }
   }
 
   // TODO: Redirect to user profile after successful creation plan

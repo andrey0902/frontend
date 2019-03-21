@@ -1,5 +1,5 @@
 import {Component, EventEmitter, HostListener, Input, OnChanges, OnInit, Output} from '@angular/core';
-import {FormControl, FormGroup, Validators} from '@angular/forms';
+import {AbstractControl, FormControl, FormGroup, ValidatorFn, Validators} from '@angular/forms';
 import {ItemNode} from '../../models/item-node.model';
 import {LtValidators} from '../../../helpers/validator-methods.static';
 
@@ -34,7 +34,6 @@ export class CreateTreeItemComponent implements OnInit {
 
   ngOnInit() {
     this.createControl();
-    this.checkValidators();
   }
 
   @HostListener('window:keydown', ['$event'])
@@ -64,23 +63,22 @@ export class CreateTreeItemComponent implements OnInit {
     this.control.patchValue(value);
   }
 
+  public noWhitespaceValidator(control: AbstractControl) {
+    const isWhitespace = (control.value || '').trim().length === 0;
+    return isWhitespace ?  null : {whitespace: 'value is only whitespace'} ;
+  }
+
   /**
    * will call after creating control
    */
   private listenChanges(): void {
     this.control.valueChanges.subscribe((value) => {
-      if ((this.control.valid && this.control.value !== null) && value.length) {
+      if (value && value.length > 0 && this.noWhitespaceValidator(this.control)) {
         this.isDisabled = false;
       } else {
         this.isDisabled = true;
       }
     });
-  }
-
-  private checkValidators() {
-    if (this.validators) {
-      this.setValidators(this.validators);
-    }
   }
 
   public saveTask() {
@@ -98,30 +96,6 @@ export class CreateTreeItemComponent implements OnInit {
     this.control.markAsUntouched({onlySelf: true});
     this.control.reset();
     this.isDisabled = true;
-  }
-
-  private setValidators(validators) {
-    const tempValidators = [];
-
-    for (const validator in validators) {
-
-      if (validators.hasOwnProperty(validator)) {
-        switch (validator) {
-          case 'required':
-            tempValidators.push(Validators.required);
-            break;
-          default:
-            if (typeof Validators[validator] === 'function') {
-              tempValidators.push(Validators[validator](validators[validator]));
-            } else if (typeof LtValidators[validator] === 'function') {
-              tempValidators.push(LtValidators[validator]);
-            }
-            break;
-        }
-      }
-    }
-
-    this.control.setValidators(tempValidators);
   }
 
 }

@@ -13,18 +13,19 @@ export class IterationService {
   }
 
   getCurrentIteration(protegeId) {
-    return this.http.get(
-      `${ApiConfig.protege}/${protegeId}/iterations/current`,
-      {
-        params: {
-          include: 'meets'
-        }
+    return this.http.get(`${ApiConfig.protege}/${protegeId}/iterations/current`, {
+      params: {
+        include: 'meets'
       }
-    );
+    });
   }
 
   createIteration(protegeId, payload, iteration) {
-    return this.http.post<Iteration>(`${ApiConfig.protege}/${protegeId}/iterations`, iteration);
+    return this.http.post<Iteration>(`${ApiConfig.protege}/${protegeId}/iterations`, iteration, {
+      params: {
+        include: 'meets'
+      }
+    });
   }
 
   deleteIteration(protegeId: number, iterationId: number, request): Observable<any> {
