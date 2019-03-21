@@ -1,15 +1,15 @@
 @import "../../../scss/variables";
 @import "../../../scss/helpers";
 
-//.data-container {
-//  display: flex;
-//  align-items: center;
-//  padding: 0 10px;
-//  justify-content: center;
-//  font-size: 18px;
-//  color: #202124;
-//  font-weight: bold;
-//}
+.data-container {
+  display: flex;
+  align-items: center;
+  padding: 0 10px;
+  justify-content: center;
+  font-size: 18px;
+  color: #202124;
+  font-weight: bold;
+}
 
 :host {
   display: block;
@@ -18,17 +18,31 @@
 }
 
 .timeline {
-  display: inline-block;
+  display: flex;
   height: 80px;
   width: 100%;
   line-height: 20px;
   filter: progid:DXImageTransform.Microsoft.gradient(gradientType=1, startColorstr='#FFEEEEEE', endColorstr='#FFEEEEEE');
   background: #ffffff;
 
+  &-left {
+    width: 7%;
+    height: 100%;
+    text-align: center;
+    @extend .data-container;
+  }
+
   &-center {
     height: 100%;
-    padding-top: 50px;
-    width: 97%;
+    padding-top: 32px;
+    width: 86%;
+  }
+
+  &-right {
+    width: 7%;
+    height: 100%;
+    text-align: center;
+    @extend .data-container;
   }
 }
 
@@ -63,12 +77,12 @@
       margin-right: 1px;
     }
 
-    &:first-child, &:last-child {
-
-      .date-limit {
-        display: flex;
-      }
-    }
+    //&:first-child, &:last-child {
+    //
+    //  .date-limit {
+    //    display: flex;
+    //  }
+    //}
 
     .circle {
       height: 18px;
@@ -97,32 +111,32 @@
       }
     }
 
-    .date-limit {
-      height: 18px;
-      width: 70px;
-      border-radius: 4px;
-      background:  $primary-color;
-      position: absolute;
-      top: -250%;
-      left: 50%;
-      transform: translateX(-50%);
-      align-items: center;
-      justify-content: center;
-      color: #ffffff;
-      font-size: 12px;
-      display: none;
-
-      &::after {
-        content: '';
-        position: absolute;
-        width: 2px;
-        height: 42px;
-        background: $primary-color;
-        top: 100%;
-        left: 50%;
-        transform: translateX(-50%);
-      }
-    }
+    //.date-limit {
+    //  height: 18px;
+    //  width: 70px;
+    //  border-radius: 4px;
+    //  background:  $primary-color;
+    //  position: absolute;
+    //  top: -250%;
+    //  left: 50%;
+    //  transform: translateX(-50%);
+    //  align-items: center;
+    //  justify-content: center;
+    //  color: #ffffff;
+    //  font-size: 12px;
+    //  display: none;
+    //
+    //  &::after {
+    //    content: '';
+    //    position: absolute;
+    //    width: 2px;
+    //    height: 42px;
+    //    background: $primary-color;
+    //    top: 100%;
+    //    left: 50%;
+    //    transform: translateX(-50%);
+    //  }
+    //}
   }
 
   .future {
