@@ -8,6 +8,7 @@
       state="create-iteration"
       [stepControl]="iterationForm">
       <lt-create-iteration-form
+        [disableEdnIteration]="disableEdnIteration"
         [iterationForm]="iterationForm"
         (submitForm)="createIteration()">
       </lt-create-iteration-form>

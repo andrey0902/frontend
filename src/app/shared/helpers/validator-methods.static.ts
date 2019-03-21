@@ -1,5 +1,6 @@
 import { AbstractControl } from '@angular/forms';
 import { Moment } from 'moment';
+import { ValidateFn } from 'codelyzer/walkerFactory/walkerFn';
 
 export class LtValidators {
   public static checkSpace(control: AbstractControl) {
@@ -9,11 +10,9 @@ export class LtValidators {
   }
 
   public static checkDataStartIteration(control: AbstractControl) {
-    // check first if date valid or on
     const value: Moment = control.value;
 
     if (value && value.valueOf()) {
-      console.log(value.isSameOrAfter(new Date()));
 
       if (value.isSameOrAfter(new Date())) {
         return null;
@@ -22,5 +21,23 @@ export class LtValidators {
       }
     }
     return null;
+  }
+
+  public static checkEndDateIteration(control: AbstractControl) {
+    const startDate = control.get('startDate').value;
+    const endDate = control.get('endDate').value;
+
+    if (startDate && endDate) {
+
+      if (endDate.diff(startDate, 'months', true) < 1) {
+        control.get('endDate').setErrors({ endDateMin: true });
+      } else if (endDate.diff(startDate, 'months', true) >= 6) {
+        control.get('endDate').setErrors({ endDateMax: true });
+      } else {
+        control.get('endDate').setErrors(null);
+        return null;
+      }
+
+    }
   }
 }

@@ -1,9 +1,7 @@
-import {Component, OnInit, ViewChild, ViewEncapsulation} from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {IterationService} from '../../core/services/iteration.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import {MatVerticalStepper} from '@angular/material';
-import {Iteration} from '../../models/iteration.model';
 import {CurrentIterationService} from '../services/iteration.service';
 import { LtValidators } from '../../shared/helpers/validator-methods.static';
 
@@ -13,10 +11,12 @@ import { LtValidators } from '../../shared/helpers/validator-methods.static';
   styleUrls: ['./create-iteration.component.scss'],
   encapsulation: ViewEncapsulation.None
 })
-export class CreateIterationComponent implements OnInit {
+export class CreateIterationComponent implements OnInit, OnDestroy {
 
   @ViewChild(MatVerticalStepper) public stepper: MatVerticalStepper;
-  iterationForm: FormGroup;
+  public iterationForm: FormGroup;
+  public disableEdnIteration = true;
+  private componentActive = true;
   private _protegeId: number;
 
   constructor(
@@ -29,12 +29,19 @@ export class CreateIterationComponent implements OnInit {
 
   ngOnInit() {
     this.iterationForm = this.fb.group({
-      startDate: ['', [
-        Validators.required,
-        LtValidators.checkDataStartIteration
+      time: this.fb.group({
+        startDate: ['', [
+          Validators.required,
+          LtValidators.checkDataStartIteration
         ]],
-      endDate: ['', Validators.required],
-      goal: ['', Validators.required],
+        endDate: ['', [
+          Validators.required
+        ]]
+      }, {validator: LtValidators.checkEndDateIteration}),
+      goal: ['', [
+        Validators.required,
+        Validators.minLength(3)
+      ]],
       projectLink: [''],
       meetType: ['', Validators.required],
       weekDay: ['', Validators.required]
@@ -51,6 +58,10 @@ export class CreateIterationComponent implements OnInit {
 
   onDone() {
     this.router.navigate(['/profile', this._protegeId]);
+  }
+
+  ngOnDestroy(): void {
+    this.componentActive = false;
   }
 
   // TODO: Redirect to user profile after successful creation plan
