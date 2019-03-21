@@ -7,7 +7,7 @@
     <button mat-icon-button class="action-save" (click)="saveTask()" [disabled]="isDisabled">
       <mat-icon class="material-icons" aria-hidden="true">done</mat-icon>
     </button>
-    <button mat-icon-button class="action-save" (click)="deleteTask()" >
+    <button mat-icon-button class="action-save" (click)="deleteTask()" *ngIf="!main">
       <mat-icon class="material-icons" aria-hidden="true">close</mat-icon>
     </button>
   </div>
