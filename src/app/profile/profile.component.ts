@@ -99,7 +99,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
   }
 
   public needMentor(): void {
-    this.dialogService.openRequestDialog('Примечание (необязательно)', (text) => {
+    this.dialogService.openRequestDialog('Примечание', (text) => {
       if (text !== null || text !== undefined) {
         this.route.paramMap.pipe(
           switchMap((params: ParamMap) => this.userService.createProtegeRequest(params.get('id'), text))

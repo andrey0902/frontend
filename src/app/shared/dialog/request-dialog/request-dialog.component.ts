@@ -1,5 +1,5 @@
 import {Component, Inject} from '@angular/core';
-import {FormControl} from '@angular/forms';
+import {FormControl, Validators} from '@angular/forms';
 import {MAT_DIALOG_DATA} from '@angular/material';
 
 @Component({
@@ -9,7 +9,7 @@ import {MAT_DIALOG_DATA} from '@angular/material';
 })
 export class RequestDialogComponent  {
 
-  title = new FormControl('');
+  title = new FormControl('', Validators.required);
 
   constructor(@Inject(MAT_DIALOG_DATA) public data) { }
 }

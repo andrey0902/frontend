@@ -10,6 +10,7 @@
     mat-raised-button
     color="accent"
     class="google-font-bold"
+    [disabled]="title.invalid"
     [mat-dialog-close]="title.value">
     Ок
   </button>

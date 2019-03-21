@@ -38,7 +38,7 @@ export class CreateTreeItemComponent implements OnInit {
 
   @HostListener('window:keydown', ['$event'])
   keyEvent(event: KeyboardEvent) {
-    if (event.key === 'Enter') {
+    if (event.key === 'Enter' && !this.isDisabled) {
       this.saveTask();
     }
     if (event.key === 'Escape') {
