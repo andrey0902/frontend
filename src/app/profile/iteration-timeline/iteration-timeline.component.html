@@ -20,7 +20,9 @@
         </div>
       </div>
       <div class="wrap-weeks">
-        <div class="week" *ngFor="let week of weeks" [style.width]="calculateDayWidth() * week.length + '%'">
+        <div class="week"
+             *ngFor="let week of weeks"
+             [style.width]="calculateDayWidth() * week.length + '%'">
           <div class="curly-brace"></div>
           <div class="weeks-number">
             <span>{{ week.weekNumber }}</span>

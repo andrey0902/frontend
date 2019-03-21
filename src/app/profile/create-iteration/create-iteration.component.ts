@@ -11,37 +11,23 @@ import { LtValidators } from '../../shared/helpers/validator-methods.static';
   styleUrls: ['./create-iteration.component.scss'],
   encapsulation: ViewEncapsulation.None
 })
-export class CreateIterationComponent implements OnInit, OnDestroy {
+export class CreateIterationComponent implements OnInit {
 
   @ViewChild(MatVerticalStepper) public stepper: MatVerticalStepper;
-  public iterationForm: FormGroup;
-  public disableEdnIteration = true;
-  private componentActive = true;
+  iterationForm: FormGroup;
+  treeChanged = false;
+
   private _protegeId: number;
 
-  constructor(
-    private route: ActivatedRoute,
-    private router: Router,
-    private currentIterationService: CurrentIterationService,
-    private fb: FormBuilder,
-  ) {
+  constructor(private route: ActivatedRoute, private router: Router, private currentIterationService: CurrentIterationService, private fb: FormBuilder,) {
   }
 
   ngOnInit() {
     this.iterationForm = this.fb.group({
       time: this.fb.group({
-        startDate: ['', [
-          Validators.required,
-          LtValidators.checkDataStartIteration
-        ]],
-        endDate: ['', [
-          Validators.required
-        ]]
+        startDate: ['', [Validators.required, LtValidators.checkDataStartIteration]], endDate: ['', [Validators.required]]
       }, {validator: LtValidators.checkEndDateIteration}),
-      goal: ['', [
-        Validators.required,
-        Validators.minLength(3)
-      ]],
+      goal: ['', [Validators.required, Validators.minLength(3)]],
       projectLink: [''],
       meetType: ['', Validators.required],
       weekDay: ['', Validators.required]
@@ -60,10 +46,13 @@ export class CreateIterationComponent implements OnInit, OnDestroy {
     this.router.navigate(['/profile', this._protegeId]);
   }
 
-  ngOnDestroy(): void {
-    this.componentActive = false;
-  }
 
-  // TODO: Redirect to user profile after successful creation plan
-  //
+  treeDataChanged($event) {
+    if (!this.treeChanged && $event) {
+      this.treeChanged = true;
+    }
+
+    // TODO: Redirect to user profile after successful creation plan
+    //
+  }
 }

@@ -10,7 +10,6 @@ export class Iteration {
   meets: any[];
   format = 'YYYY DD.MM';
   plan: InfoPlanModel[];
-  activities = [];
 
   constructor(config) {
     this.id = config.id;

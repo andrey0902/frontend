@@ -29,3 +29,11 @@
   display: flex;
   flex-wrap: wrap;
 }
+
+.plan {
+  margin-bottom: 200px;
+
+  &>*{
+    width: 100%;
+  }
+}

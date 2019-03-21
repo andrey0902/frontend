@@ -39,4 +39,18 @@
   font-size: 1.1em;
 }
 
+.plan {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  &--tree {
+    width: 100%;
+  }
+
+  &--btn {
+    margin-top: 40px;
+  }
+}
+
 

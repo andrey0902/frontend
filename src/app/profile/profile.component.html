@@ -40,7 +40,7 @@
                 mat-raised-button
                 color="accent"
                 class="google-font-bold"
-                (click)="deleteIteration(+user.id)">Завершение итерации</button>
+                (click)="deleteIteration(+user.id)">Завершить итерацию</button>
             </div>
           </div>
         </div>
@@ -79,7 +79,7 @@
   <div class="mentorship-info" *ngIf="currentIterationService.isExist">
     <mat-tab-group>
       <mat-tab label="Обзор">
-        <mat-card>
+        <mat-card class="iteration">
           <lt-profile-overview [currentIteration]="currentIterationService.currentIteration"
           ></lt-profile-overview>
         </mat-card>
