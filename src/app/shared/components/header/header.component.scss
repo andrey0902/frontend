@@ -1,4 +1,5 @@
 @import '../../../../scss/variables';
+@import '../../../../scss/helpers';
 
 :host {
   display: block;
@@ -11,9 +12,22 @@
   box-shadow: 0 3px 3px -2px rgba(0,0,0,.2), 0 3px 4px 0 rgba(0,0,0,.14), 0 1px 8px 0 rgba(0,0,0,.12);
 }
 
+.nav-wrapper {
+  flex-grow: 1;
+  @extend .vertical-center;
+}
+
+.nav-item {
+  text-transform: uppercase;
+  font-family: "Google Sans", Roboto, Arial, sans-serif;
+  padding: 0 30px;
+  cursor: pointer;
+}
+
 .app-logo {
   width: 160px;
   cursor: pointer;
+  margin-right: 15px;
 }
 
 .mat-menu-item {
