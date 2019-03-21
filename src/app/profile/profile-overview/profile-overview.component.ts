@@ -1,6 +1,6 @@
-import {ChangeDetectionStrategy, ChangeDetectorRef, Component, Input} from '@angular/core';
-import {Iteration} from '../../models/iteration.model';
-import {ItemNode} from '../../shared/tree/models/item-node.model';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
+import { Iteration } from '../../models/iteration.model';
+import { ItemNode } from '../../shared/tree/models/item-node.model';
 import {IterationTaskModel} from '../../personal-plan/shared/models/iteration-plan.model';
 import {IProgress} from '../../personal-plan/shared/models/progress.model';
 
@@ -10,26 +10,13 @@ import {IProgress} from '../../personal-plan/shared/models/progress.model';
   styleUrls: ['./profile-overview.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ProfileOverviewComponent {
+export class ProfileOverviewComponent implements OnInit, OnChanges {
   @Input() currentIteration: Iteration;
+
   progress: IProgress = null;
+  objectValues = Object.values;
 
-  public objectValues = Object.values;
-  constructor(private cd: ChangeDetectorRef) {
-  }
-
-/*  currentIteration = {
-    id: 1,
-    user_id: 2,
-    goal: 'Получить 5 уровень',
-    format: 'YYYY DD.MM',
-    startDate: new Date('2019-01-07 11:33:05'),
-    endDate: new Date('2019-04-21 11:33:05'),
-    activities: [
-      {type: 'meeting', title: 'Test title', date: new Date('2019-01-13 11:33:05')},
-      {type: 'deploy', title: 'Test deploy', date: new Date('2019-01-19 11:33:05')}
-    ]
-  };*/
+  constructor(private cd: ChangeDetectorRef) {}
 
   public treeDataChanged(items: ItemNode[]): void {
     if (items && items.length > 0) {
@@ -42,5 +29,12 @@ export class ProfileOverviewComponent {
       };
       this.cd.detectChanges();
     }
+  }
+
+  ngOnInit(): void {
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    console.log(changes);
   }
 }
