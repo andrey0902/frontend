@@ -52,8 +52,8 @@ export class CurrentIterationService {
 
   public createIteration(protegeId, payload): Observable<Iteration> {
     const iteration = {
-      start_date: moment(payload.startDate).format(),
-      end_date: moment(payload.endDate).format(),
+      start_date: moment(payload.time.startDate).format(),
+      end_date: moment(payload.time.endDate).format(),
       goal: payload.goal,
       meet_type_id: payload.meetType,
       week_day: payload.weekDay,

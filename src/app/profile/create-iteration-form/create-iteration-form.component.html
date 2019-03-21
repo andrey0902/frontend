@@ -1,39 +1,46 @@
 <form class="iteration-form" [formGroup]="iterationForm" (ngSubmit)="onSubmit()">
-  <div class="form-control">
-    <label class="control-title">
-      Дата начала:
-      <span class="required-asterisk">*</span>
-    </label>
-    <div class="control-input">
-      <mat-form-field hintLabel="d.m.yyyy">
-        <input
-          matInput
-          [matDatepicker]="startDatePicker"
-          formControlName="startDate">
-        <mat-error *ngIf="startDate.hasError('required')">Это поле обязательно для заполнения</mat-error>
-        <mat-datepicker-toggle matSuffix [for]="startDatePicker"></mat-datepicker-toggle>
-        <mat-datepicker #startDatePicker></mat-datepicker>
-      </mat-form-field>
+  <div class="form-group-time" formGroupName="time">
+    <div class="form-control">
+      <label class="control-title">
+        Дата начала:
+        <span class="required-asterisk">*</span>
+      </label>
+      <div class="control-input">
+        <mat-form-field hintLabel="d.m.yyyy">
+          <input
+            matInput
+            [matDatepicker]="startDatePicker"
+            formControlName="startDate">
+          <mat-error *ngIf="startDate.hasError('required')">Недопустимый формат даты</mat-error>
+          <mat-error *ngIf="startDate.hasError('startDateIteration')">Дата начала должна быть не раньше чем завтра</mat-error>
+          <mat-datepicker-toggle matSuffix [for]="startDatePicker"></mat-datepicker-toggle>
+          <mat-datepicker #startDatePicker></mat-datepicker>
+        </mat-form-field>
+      </div>
+    </div>
+    <div class="form-control">
+      <label class="control-title">
+        Дата окончания:
+        <span class="required-asterisk">*</span>
+      </label>
+      <div class="control-input">
+        <mat-form-field hintLabel="d.m.yyyy">
+          <input
+            matInput
+            [matDatepicker]="endDatePicker"
+            formControlName="endDate"
+            [min]="startDate.value">
+          <mat-error *ngIf="endDate.hasError('required')">Недопустимый формат даты</mat-error>
+          <mat-error *ngIf="endDate.hasError('endDateMin')">Итерация не может быть короче одного месяца</mat-error>
+          <mat-error *ngIf="endDate.hasError('endDateMax')">Итерация не может быть длиннее 6 месяцев</mat-error>
+          <mat-datepicker-toggle  matSuffix [for]="endDatePicker"></mat-datepicker-toggle>
+          <mat-datepicker #endDatePicker></mat-datepicker>
+        </mat-form-field>
+      </div>
     </div>
   </div>
-  <div class="form-control">
-    <label class="control-title">
-      Дата окончания:
-      <span class="required-asterisk">*</span>
-    </label>
-    <div class="control-input">
-      <mat-form-field hintLabel="d.m.yyyy">
-        <input
-          matInput
-          [matDatepicker]="endDatePicker"
-          formControlName="endDate"
-          [min]="startDate.value">
-        <mat-error *ngIf="endDate.hasError('required')">Это поле обязательно для заполнения</mat-error>
-        <mat-datepicker-toggle matSuffix [for]="endDatePicker"></mat-datepicker-toggle>
-        <mat-datepicker #endDatePicker></mat-datepicker>
-      </mat-form-field>
-    </div>
-  </div>
+
+
   <div class="form-control">
     <label class="control-title">
       Цель:
@@ -43,6 +50,7 @@
       <mat-form-field>
         <input matInput formControlName="goal">
         <mat-error *ngIf="goal.hasError('required')">Это поле обязательно для заполнения</mat-error>
+        <mat-error *ngIf="goal.hasError('minlength')">Нужно больше 3 символов</mat-error>
       </mat-form-field>
     </div>
   </div>
