@@ -1,5 +1,6 @@
 export const environment = {
   production: true,
   API_PATH: 'https://mentors.dev-lt-portal.tk/api',
-  redirectPath: 'https://portal.light-it.net/#/login'
+  redirectPath: 'https://portal.light-it.net/#/login',
+  redirectProfile: 'https://portal.light-it.net/#/profile/'
 };
