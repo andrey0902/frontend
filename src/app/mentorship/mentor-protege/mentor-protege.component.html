@@ -19,6 +19,7 @@
         </lt-user>
         <div class="actions">
           <lt-action-btn
+            *ngIf="objectValues(mentorship.attributes.proteges).length < 3"
             [tooltip]="'Добавить протеже ментору'"
             [icon]="'person_add'"
             (action)="addProtege(mentorship)">
