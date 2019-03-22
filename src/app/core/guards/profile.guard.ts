@@ -28,7 +28,7 @@ export class ProfileGuard implements CanActivate {
           if (isAdmin || currentUser || isMentor) {
             return true;
           } else {
-            const portalId = user.attributes.mentor ? user.attributes.mentor.attributes.portalId : null;
+            const portalId = user.attributes.mentor ? user.attributes.mentor.attributes.portalId : user.attributes.portalId;
             window.location.href = `${environment.redirectProfile}${portalId}`;
             return false;
           }
