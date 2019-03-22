@@ -63,17 +63,12 @@ export class CreateTreeItemComponent implements OnInit {
     this.control.patchValue(value);
   }
 
-  public noWhitespaceValidator(control: AbstractControl) {
-    const isWhitespace = (control.value || '').trim().length === 0;
-    return isWhitespace ?  null : {whitespace: 'value is only whitespace'} ;
-  }
-
   /**
    * will call after creating control
    */
   private listenChanges(): void {
     this.control.valueChanges.subscribe((value) => {
-      if (value && value.length > 0 && this.noWhitespaceValidator(this.control)) {
+      if (value && value.length > 0 && !LtValidators.noWhitespaceValidator(this.control)) {
         this.isDisabled = false;
       } else {
         this.isDisabled = true;
