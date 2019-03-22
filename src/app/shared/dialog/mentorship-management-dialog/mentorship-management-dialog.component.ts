@@ -41,9 +41,10 @@ export class MentorshipManagementDialogComponent implements OnInit {
       .pipe(
         debounceTime(500),
         distinctUntilChanged(),
-        filter(() => this.userInput.valid && !this.selectedUser),
-        tap((value) => value.trim()),
         switchMap(value => {
+          if (this.userInput.invalid) {
+            return of([]);
+          }
           return this.userService.getUsers({
             name: value,
             ...this.modeMap[this.data.mode]
