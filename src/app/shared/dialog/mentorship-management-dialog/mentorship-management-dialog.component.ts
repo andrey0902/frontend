@@ -1,10 +1,12 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA} from '@angular/material';
-import {FormControl, ValidationErrors} from '@angular/forms';
+import {AbstractControl, FormControl, ValidationErrors, Validators} from '@angular/forms';
 import {Observable, of} from 'rxjs';
-import {debounceTime, distinctUntilChanged, map, switchMap} from 'rxjs/operators';
+import {debounceTime, distinctUntilChanged, filter, map, switchMap} from 'rxjs/operators';
 import {UserService} from '../../../core/services/user.service';
 import {User} from '../../../models/user.model';
+import {LtValidators} from '../../helpers/validator-methods.static';
+import {tap} from 'rxjs/internal/operators/tap';
 
 export interface DialogData {
   mode: string;
@@ -31,7 +33,7 @@ export class MentorshipManagementDialogComponent implements OnInit {
     assignMentor: { is_mentor: 1 }
   };
   filteredOptions$: Observable<User[]>;
-  userInput: FormControl = new FormControl('', this.autocompleteSelectionValidator);
+  userInput: FormControl = new FormControl('', [LtValidators.noWhitespaceValidator, Validators.required]);
   selectedUser: User;
 
   ngOnInit(): void {
@@ -39,10 +41,9 @@ export class MentorshipManagementDialogComponent implements OnInit {
       .pipe(
         debounceTime(500),
         distinctUntilChanged(),
+        filter(() => this.userInput.valid && !this.selectedUser),
+        tap((value) => value.trim()),
         switchMap(value => {
-          if (value.length === 0) {
-            return of([]);
-          }
           return this.userService.getUsers({
             name: value,
             ...this.modeMap[this.data.mode]
@@ -61,13 +62,4 @@ export class MentorshipManagementDialogComponent implements OnInit {
   selectUser(event) {
     this.selectedUser = event.option.value;
   }
-
-  private autocompleteSelectionValidator(control: FormControl): ValidationErrors | null {
-    const selection = control.value;
-    if (typeof selection === 'string') {
-      return { incorrect: true };
-    }
-    return null;
-  }
-
 }

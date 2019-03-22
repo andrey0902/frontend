@@ -49,7 +49,7 @@
     mat-raised-button
     color="accent"
     [mat-dialog-close]="selectedUser"
-    [disabled]="userInput.invalid"
+    [disabled]="!selectedUser"
     class="google-font-bold">Выбрать</button>
 </div>
 
@@ -60,5 +60,4 @@
 </ng-template>
 
 <ng-template #addMenthor>
-
 </ng-template>
