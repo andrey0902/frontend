@@ -6,7 +6,7 @@
         <div class="user-wrap">
 
           <div class="user-photo">
-            <img [src]="user.attributes.photoThumbnail" *ltLazyImage="user.attributes.photo">
+            <img [defaultImage]="user.attributes.photoThumbnail" [lazyLoad]="user.attributes.photo">
           </div>
 
           <div class="user-data">

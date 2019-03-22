@@ -9,7 +9,6 @@ import {UserComponent} from './user/user.component';
 import {MatButtonModule, MatIconModule, MatMenuModule, MatTabsModule, MatTooltipModule} from '@angular/material';
 import {RouterModule} from '@angular/router';
 import {UserPermissionDirective} from './directives/user-permission.directive';
-import {LazyImageDirective} from './directives/lazy-image.directive';
 
 @NgModule({
   declarations: [
@@ -19,8 +18,7 @@ import {LazyImageDirective} from './directives/lazy-image.directive';
     SafeHtmlPipe,
     SvgIconComponent,
     UserComponent,
-    UserPermissionDirective,
-    LazyImageDirective
+    UserPermissionDirective
   ],
   exports: [
     ActionBtnComponent,
@@ -29,8 +27,7 @@ import {LazyImageDirective} from './directives/lazy-image.directive';
     SafeHtmlPipe,
     SvgIconComponent,
     UserComponent,
-    UserPermissionDirective,
-    LazyImageDirective
+    UserPermissionDirective
   ],
   imports: [
     CommonModule,

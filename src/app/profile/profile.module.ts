@@ -17,6 +17,7 @@ import {IterationProgressComponent} from './iteration-progress/iteration-progres
 import {CurrentIterationService} from './services/iteration.service';
 import {IterationTreeService} from './services/iteration-tree.service';
 import {CreateIterationGuard} from '../core/guards/create-iteration.guard';
+import {LazyLoadImageModule} from 'ng-lazyload-image';
 
 @NgModule({
   declarations: [
@@ -35,7 +36,8 @@ import {CreateIterationGuard} from '../core/guards/create-iteration.guard';
     CoreModule,
     ReactiveFormsModule,
     SharedModule,
-    ProgressBarModule
+    ProgressBarModule,
+    LazyLoadImageModule
   ],
   providers: [
     CurrentIterationService,
