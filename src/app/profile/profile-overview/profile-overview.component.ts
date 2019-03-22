@@ -10,7 +10,7 @@ import {IProgress} from '../../personal-plan/shared/models/progress.model';
   styleUrls: ['./profile-overview.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ProfileOverviewComponent implements OnInit, OnChanges {
+export class ProfileOverviewComponent implements OnChanges {
   @Input() currentIteration: Iteration;
 
   progress: IProgress = null;
@@ -29,9 +29,6 @@ export class ProfileOverviewComponent implements OnInit, OnChanges {
       };
       this.cd.detectChanges();
     }
-  }
-
-  ngOnInit(): void {
   }
 
   ngOnChanges(changes: SimpleChanges): void {

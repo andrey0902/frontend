@@ -3,6 +3,10 @@
   <h2 class="iteration-name">{{ currentIteration.goal }}</h2>
 </div>
 <lt-iteration-timeline [iteration]="currentIteration"></lt-iteration-timeline>
+<div class="section vertical-center" *ngIf="currentIteration.testProject">
+  <h2 class="section-title">Тестовое задание:</h2>
+  <h2 class="iteration-name">{{ currentIteration.testProject }}</h2>
+</div>
 <lt-iteration-progress [progress]="progress"></lt-iteration-progress>
 <div class="plan">
 <lt-iteration-plan [iteration]="currentIteration" (dataChanged)="treeDataChanged($event)"></lt-iteration-plan>
