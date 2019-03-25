@@ -25,9 +25,21 @@ export class CreateIterationComponent implements OnInit {
   ngOnInit() {
     this.iterationForm = this.fb.group({
       time: this.fb.group({
-        startDate: ['', [Validators.required, LtValidators.checkDataStartIteration]], endDate: ['', [Validators.required]]
-      }, {validator: LtValidators.checkEndDateIteration}),
-      goal: ['', [Validators.required, Validators.minLength(3)]],
+        startDate: ['', [
+          Validators.required,
+          LtValidators.checkDataStartIteration
+        ]],
+        endDate: ['', [
+          Validators.required
+        ]]
+      }, {
+        validator: LtValidators.checkEndDateIteration
+      }),
+      goal: ['', [
+        Validators.required,
+        Validators.minLength(3),
+        LtValidators.checkSpace
+      ]],
       projectLink: [''],
       meetType: ['', Validators.required],
       weekDay: ['', Validators.required]
