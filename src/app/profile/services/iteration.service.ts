@@ -54,7 +54,7 @@ export class CurrentIterationService {
     const iteration = {
       start_date: moment(payload.time.startDate).format(),
       end_date: moment(payload.time.endDate).format(),
-      goal: payload.goal,
+      goal: payload.goal ? payload.goal.trim() : '',
       meet_type_id: payload.meetType,
       week_day: payload.weekDay,
       test_project: payload.projectLink

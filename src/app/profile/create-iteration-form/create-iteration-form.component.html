@@ -51,6 +51,7 @@
         <input matInput formControlName="goal">
         <mat-error *ngIf="goal.hasError('required')">Это поле обязательно для заполнения</mat-error>
         <mat-error *ngIf="goal.hasError('minlength')">Нужно больше 3 символов</mat-error>
+        <mat-error *ngIf="goal.hasError('strEmpty')">Неверный формат ввода.</mat-error>
       </mat-form-field>
     </div>
   </div>
