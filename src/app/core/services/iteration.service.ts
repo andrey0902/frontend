@@ -20,7 +20,7 @@ export class IterationService {
     });
   }
 
-  createIteration(protegeId, payload, iteration) {
+  createIteration(protegeId, iteration) {
     return this.http.post<Iteration>(`${ApiConfig.protege}/${protegeId}/iterations`, iteration, {
       params: {
         include: 'meets'

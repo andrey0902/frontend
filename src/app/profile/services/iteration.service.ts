@@ -38,7 +38,7 @@ export class CurrentIterationService {
   }
 
   public get isExist(): boolean {
-    return this.currentIteration !== null && this.currentIteration !== undefined;
+    return this.currentIteration !== null;
   }
 
   public getIteration(protegeId: number) {
@@ -60,7 +60,7 @@ export class CurrentIterationService {
       test_project: payload.projectLink
     };
 
-    return this._iterationService.createIteration(protegeId, payload, iteration)
+    return this._iterationService.createIteration(protegeId, iteration)
       .pipe(
         map(data => new Iteration(data)),
         tap((itr: Iteration) => this.currentIteration = itr)
