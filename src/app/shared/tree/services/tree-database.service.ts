@@ -14,20 +14,11 @@ export enum InsertionType {
 
 @Injectable()
 export class TreeDatabaseService {
-  set deleteEventEmitter(value: EventEmitter<ItemNode>) {
-    this._deleteEventEmitter = value;
-  }
-
-  set updateEventEmitter(value: EventEmitter<ItemNode[]>) {
-    this._updateEventEmitter = value;
-  }
 
   set type(value: { new(...args: any[]): ItemNode }) {
     this._type = value;
   }
 
-  private _updateEventEmitter: EventEmitter<ItemNode[]>;
-  private _deleteEventEmitter: EventEmitter<ItemNode>;
   private _type: new (...args: any[]) => ItemNode = ItemNode;
 
   dataChange = new BehaviorSubject<ItemNode[]>([]);
@@ -42,6 +33,10 @@ export class TreeDatabaseService {
   initialize(data: ItemNode[]) {
     // Notify the change.
     this.dataChange.next(this.buildFileTree(data));
+  }
+
+  update() {
+    this.dataChange.next(this.data);
   }
 
   /**
@@ -61,7 +56,7 @@ export class TreeDatabaseService {
   }
 
   /** Add an item to to-do list */
-  insertItem(parent: ItemNode, item: ItemNode, isNew = false, raiseEvent = false): ItemNode {
+  insertItem(parent: ItemNode, item: ItemNode, isNew = false): ItemNode {
     let arr: ItemNode[];
     if (parent === null) {
       item.parentId = null;
@@ -83,15 +78,11 @@ export class TreeDatabaseService {
       const oldArr = oldParent ? oldParent.children : this.data;
       const oldIndex = oldArr.indexOf(item);
       this.deleteNode(item, oldArr);
-      this.recalculateOrdering(oldArr, oldIndex, item.order);
+      this._recalculateOrdering(oldArr, oldIndex, item.order);
     }
 
     arr.unshift(item);
-    this.recalculateOrdering(arr, 1, 1);
-    this.dataChange.next(this.data);
-    if (raiseEvent) {
-      this.updateEventEmitter.emit([item]);
-    }
+    this._recalculateOrdering(arr, 1, 1);
     return item;
   }
 
@@ -103,7 +94,7 @@ export class TreeDatabaseService {
     const oldIndex = oldArr.indexOf(insertNode);
 
     this.deleteNode(insertNode, oldArr);
-    this.recalculateOrdering(oldArr, oldIndex, insertNode.order);
+    this._recalculateOrdering(oldArr, oldIndex, insertNode.order);
 
     let newOrder: number = nodeAnchor.order;
     let index: number = arr.indexOf(nodeAnchor);
@@ -116,8 +107,7 @@ export class TreeDatabaseService {
     insertNode.parentId = parentNode ? parentNode.id : null;
     insertNode.order = newOrder;
     arr.splice(index, 0, insertNode);
-    this.recalculateOrdering(arr, index + 1, insertNode.order + 1);
-    this.dataChange.next(this.data);
+    this._recalculateOrdering(arr, index + 1, insertNode.order + 1);
     return insertNode;
   }
 
@@ -159,27 +149,6 @@ export class TreeDatabaseService {
     return null;
   }
 
-  updateItem(node: ItemNode, name: string, raiseEvent = false): ItemNode {
-    node.text = name;
-    this.dataChange.next(this.data);
-    if (raiseEvent) {
-      this.updateEventEmitter.emit([node]);
-    }
-    return node;
-  }
-
-  updateData() {
-    this.dataChange.next(this.data);
-  }
-
-  deleteItem(node: ItemNode, raiseEvent = false) {
-    this.deleteNode(node);
-    this.dataChange.next(this.data);
-    if (raiseEvent) {
-      this.deleteEventEmitter.emit(node);
-    }
-  }
-
   copyPasteItem(from: ItemNode, to: ItemNode): ItemNode {
     return this.insertItem(to, from);
   }
@@ -193,7 +162,7 @@ export class TreeDatabaseService {
     }
   }
 
-  private recalculateOrdering(arr: ItemNode[], beginIndex: number, startOrder = 0, endIndex?: number): ItemNode[] {
+  private _recalculateOrdering(arr: ItemNode[], beginIndex: number, startOrder = 0, endIndex?: number): ItemNode[] {
     let order = startOrder;
     const lastIndex = endIndex || arr.length - 1;
     for (let i = beginIndex; i <= lastIndex; i++) {

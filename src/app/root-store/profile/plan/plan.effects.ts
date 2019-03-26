@@ -43,7 +43,8 @@ export class PlanEffectsService {
   @Effect() createPlanTask: Observable<PlanActionUnion> = this.actions$.pipe(
     ofType(PlanActionTypes.CREATE_PLAN_TASK_REQUEST),
     switchMap((action: PlanActionUnion) => {
-      return this.planService.createPlanTask(action.payload.userId, action.payload.iterationId, action.payload.task)
+      const request = IterationTaskModel.requestStructureGenerator(action.payload.task);
+      return this.planService.createPlanTask(action.payload.userId, action.payload.iterationId, request)
         .pipe(
           map(data => {
             const task = new IterationTaskModel(data);
@@ -57,7 +58,8 @@ export class PlanEffectsService {
   @Effect() editPlanTask: Observable<PlanActionUnion> = this.actions$.pipe(
     ofType(PlanActionTypes.EDIT_PLAN_TASK_REQUEST),
     switchMap((action: PlanActionUnion) => {
-      return this.planService.editPlanTask(action.payload.userId, action.payload.iterationId, action.payload.taskId, action.payload.task)
+      const request = IterationTaskModel.requestStructureGenerator(action.payload.task);
+      return this.planService.editPlanTask(action.payload.userId, action.payload.iterationId, action.payload.task.id, request)
         .pipe(
           map(data => {
             const task = new IterationTaskModel(data);
@@ -73,10 +75,7 @@ export class PlanEffectsService {
     switchMap((action: PlanActionUnion) => {
       return this.planService.deletePlanTask(action.payload.userId, action.payload.iterationId, action.payload.taskId)
         .pipe(
-          map(data => {
-            const task = new IterationTaskModel(data);
-            return new DeletePlanTaskSuccess({taskId: task.id});
-          }),
+          map(() => new DeletePlanTaskSuccess({taskId: action.payload.taskId})),
           catchError(err => of(new DeletePlanTaskFail({error: err.error.errors})))
         );
     })

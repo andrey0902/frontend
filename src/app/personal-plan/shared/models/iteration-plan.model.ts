@@ -8,6 +8,7 @@ export class IterationTaskModel extends ItemNode {
   public type: string;
   public children: IterationTaskModel[];
   public is_completed: null | boolean;
+
   /* this variables used for google analytic*/
   public isEditable = null;
   public isStatus = null;
@@ -25,13 +26,27 @@ export class IterationTaskModel extends ItemNode {
     }
   }
 
+  public static requestStructureGenerator(task: IterationTaskModel) {
+    return {
+      order: task.order,
+      text: task.text || '',
+      is_completed: task.is_completed,
+      parent_task_id: task.parentId
+    };
+  }
+
   public static treeStructureGenerator(tasks: IterationTaskModel[]): IterationTaskModel[] {
     const tasksTree: IterationTaskModel[] = [];
     const tasksDictionary: { number: IterationTaskModel } | {} = {};
-    tasks.forEach((task: IterationTaskModel) => tasksDictionary[task.id] = task);
-    tasks.forEach((task: IterationTaskModel) => {
-      task.parentId ? tasksDictionary[task.parentId].children.push(task) : tasksTree.push(task);
-    });
+    if (tasks && tasks.length > 0) {
+      tasks.forEach((task: IterationTaskModel) => tasksDictionary[task.id] = task);
+      tasks.forEach((task: IterationTaskModel) => {
+        task.parentId ? tasksDictionary[task.parentId].children.push(task) : tasksTree.push(task);
+      });
+    }
+    console.log('tasksTree');
+    console.log(tasks);
+    console.log(tasksTree);
     return tasksTree;
   }
 

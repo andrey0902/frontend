@@ -24,7 +24,6 @@ export class TreeComponent implements OnChanges, OnInit {
   @Output() public deleteItem = new EventEmitter<ItemNode>();
   @Output() public createItem = new EventEmitter<ItemNode>();
   @Output() public editItem = new EventEmitter<ItemNode>();
-  @Output() public dataChanged = new EventEmitter<ItemNode[]>();
 
   /** Map from flat node to nested node. This helps us finding the nested node to be modified */
   flatNodeMap = new Map<ItemFlatNode, ItemNode>();
@@ -55,19 +54,27 @@ export class TreeComponent implements OnChanges, OnInit {
     this.treeFlattener = new MatTreeFlattener(this.transformer, this.getLevel, this.isExpandable, this.getChildren);
     this.treeControl = new FlatTreeControl<ItemFlatNode>(this.getLevel, this.isExpandable);
     this.dataSource = new MatTreeFlatDataSource(this.treeControl, this.treeFlattener);
-    database.updateEventEmitter = this.updateItem;
-    database.deleteEventEmitter = this.deleteItem;
 
     database.dataChange
       .subscribe(data => {
         this.dataSource.data = [];
         this.dataSource.data = data;
-        this.dataChanged.emit(data);
       });
   }
 
   ngOnInit(): void {
     this.treeControl.expandAll();
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+
+    if (changes.data && changes.data.currentValue) {
+      this.database.initialize(changes.data.currentValue);
+    }
+
+    if (changes.type && changes.type.currentValue) {
+      this.database.type = changes.type.currentValue;
+    }
   }
 
   getLevel = (node: ItemFlatNode) => node.level;
@@ -130,7 +137,6 @@ export class TreeComponent implements OnChanges, OnInit {
     node.is_completed = !node.is_completed;
 
     this.updateItem.emit([...this.getChangedCheckedItems(node), node]);
-    this.database.updateData();
   }
 
   /** add item(add value-item)**/
@@ -147,13 +153,13 @@ export class TreeComponent implements OnChanges, OnInit {
   /** add item(add input-item) **/
   addNewItem(node: ItemFlatNode) {
     const parentNode = this.flatNodeMap.get(node);
-    const nestingLevel = this.database.getParentsFromNodes(parentNode).length + 2;
 
     const data = new this.type();
     data.showAsInput = 'add';
     data.is_completed = false;
 
     this.database.insertItem(parentNode, data, true);
+    this.database.update();
     if (!!parentNode.children) {
       this.treeControl.expand(node);
     }
@@ -163,9 +169,10 @@ export class TreeComponent implements OnChanges, OnInit {
   addItem(nodeText: string, node: ItemFlatNode) {
     const data = this.flatNodeMap.get(node);
     data.showAsInput = false;
-    this.database.updateItem(data, nodeText);
+    data.text = nodeText;
 
     if (node.showAsInput === 'add') {
+      console.log(data);
       this.createItem.emit(data);
       this.updateItemCheck(data);
     }
@@ -180,7 +187,6 @@ export class TreeComponent implements OnChanges, OnInit {
     const data = this.flatNodeMap.get(node);
     data.showAsInput = 'edit';
     data.isNew = false;
-    this.database.updateItem(data, data.text);
   }
 
   /** remove item **/
@@ -192,19 +198,18 @@ export class TreeComponent implements OnChanges, OnInit {
       const htmlContent = `<p>Вы уверены, что хотите удалить пункт <b>${node.text}</b> ?</p>`;
       this.dialogService.openConfirmDialog({ htmlContent }, (confirm) => {
         if (confirm) {
-          this.database.deleteItem(data);
+          this.database.deleteNode(data);
           this.deleteItem.emit(data);
         }
       });
     }
 
     if (node.showAsInput === 'add') {
-      this.database.deleteItem(data);
+      this.database.deleteNode(data);
     }
 
     if (node.showAsInput === 'edit') {
       data.showAsInput = false;
-      this.database.updateItem(data, data.text);
     }
   }
 
@@ -212,7 +217,6 @@ export class TreeComponent implements OnChanges, OnInit {
     const changesCheckedItems = this.getChangedCheckedItems(node);
     if (changesCheckedItems.length > 0) {
       this.updateItem.emit(changesCheckedItems);
-      this.database.updateData();
     }
   }
 
@@ -289,17 +293,6 @@ export class TreeComponent implements OnChanges, OnInit {
     this.dragNode = null;
     this.dragNodeExpandOverNode = null;
     this.dragNodeExpandOverTime = 0;
-  }
-
-  ngOnChanges(changes: SimpleChanges): void {
-
-    if (changes.data && changes.data.currentValue) {
-      this.database.initialize(changes.data.currentValue);
-    }
-
-    if (changes.type && changes.type.currentValue) {
-      this.database.type = changes.type.currentValue;
-    }
   }
 
   getChangedCheckedItems(startNode: ItemNode, checkChildren: boolean = true): ItemNode[] {
