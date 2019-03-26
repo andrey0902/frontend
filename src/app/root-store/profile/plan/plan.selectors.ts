@@ -1,9 +1,9 @@
 import {createFeatureSelector, createSelector} from '@ngrx/store';
-import {PlanState} from './plan.reducer';
+import {ProfileState} from '../profile.reducer';
 
-export const PlanFeatureSelector = createFeatureSelector('plan');
+export const PlanFeatureSelector = createFeatureSelector('profile');
 
 export const plan = createSelector(
   PlanFeatureSelector,
-  (state: PlanState) => state.plan
+  (state: ProfileState) => state.plan.plan
 );
