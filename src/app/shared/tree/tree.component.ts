@@ -172,7 +172,6 @@ export class TreeComponent implements OnChanges, OnInit {
     data.text = nodeText;
 
     if (node.showAsInput === 'add') {
-      console.log(data);
       this.createItem.emit(data);
       this.updateItemCheck(data);
     }
@@ -187,13 +186,13 @@ export class TreeComponent implements OnChanges, OnInit {
     const data = this.flatNodeMap.get(node);
     data.showAsInput = 'edit';
     data.isNew = false;
+    this.database.update();
   }
 
   /** remove item **/
   removeItem(node: ItemFlatNode) {
     const data = this.flatNodeMap.get(node);
-    const parent = this.database.getParentFromNodes(data);
-    console.log(node);
+
     if (node.showAsInput !== 'add' && node.showAsInput !== 'edit') {
       const htmlContent = `<p>Вы уверены, что хотите удалить пункт <b>${node.text}</b> ?</p>`;
       this.dialogService.openConfirmDialog({ htmlContent }, (confirm) => {
@@ -206,10 +205,12 @@ export class TreeComponent implements OnChanges, OnInit {
 
     if (node.showAsInput === 'add') {
       this.database.deleteNode(data);
+      this.database.update();
     }
 
     if (node.showAsInput === 'edit') {
       data.showAsInput = false;
+      this.database.update();
     }
   }
 

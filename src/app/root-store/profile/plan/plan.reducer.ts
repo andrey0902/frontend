@@ -1,14 +1,16 @@
-import {IterationTaskModel} from '../../../personal-plan/shared/models/iteration-plan.model';
+import {IterationTaskModel, TreeHelper} from '../../../personal-plan/shared/models/iteration-plan.model';
 import {PlanActionTypes, PlanActionUnion} from './plan.actions';
 
+export type PlanDictionary = { [id: number]: IterationTaskModel };
+
 export interface PlanState {
-  plan: IterationTaskModel[];
+  planDictionary: PlanDictionary;
   loading: boolean;
   error: any;
 }
 
 const initialState: PlanState = {
-  plan: null,
+  planDictionary: null,
   loading: false,
   error: null
 };
@@ -28,44 +30,43 @@ export function planReducer(state = initialState, action: PlanActionUnion): Plan
     }
 
     case PlanActionTypes.GET_PLAN_SUCCESS: {
+      const newPlan: PlanDictionary = {};
+      action.payload.tasks.forEach((task: IterationTaskModel) => newPlan[task.id] = task);
       return {
         ...state,
-        plan: action.payload.plan,
+        planDictionary: newPlan,
         loading: false
       };
     }
 
-    case PlanActionTypes.CREATE_PLAN_TASK_SUCCESS: {
-      return {
-        ...state,
-        plan: [...state.plan, action.payload.task],
-        loading: false
-      };
-    }
-
+    case PlanActionTypes.CREATE_PLAN_TASK_SUCCESS:
     case PlanActionTypes.EDIT_PLAN_TASK_SUCCESS: {
+      const newPlan: PlanDictionary = Object.assign({}, state.planDictionary);
+      newPlan[action.payload.task.id] = action.payload.task;
       return {
         ...state,
-        plan: state.plan.map((task) => task.id === action.payload.taskId ? action.payload.task : task),
+        planDictionary: newPlan,
         loading: false
       };
     }
 
     case PlanActionTypes.DELETE_PLAN_TASK_SUCCESS: {
+      const newPlan: PlanDictionary = Object.assign({}, state.planDictionary);
+      action.payload.tasksId.forEach((taskId: number) => delete newPlan[taskId]);
       return {
         ...state,
-        plan: state.plan.filter((task) => task.id !== action.payload.taskId),
+        planDictionary: newPlan,
         loading: false
       };
     }
 
     case PlanActionTypes.UPDATE_PLAN_TASKS_SUCCESS: {
+      console.log(action.payload.tasks);
+      const newPlan: PlanDictionary = Object.assign({}, state.planDictionary);
+      action.payload.tasks.forEach((task: IterationTaskModel) => newPlan[task.id].is_completed = task.is_completed);
       return {
         ...state,
-        plan: state.plan.map((task) => {
-          task.isStatus = action.payload.tasksId.includes(task.id) ? task.isStatus = action.payload.status : task.isStatus;
-          return task;
-        }),
+        planDictionary: newPlan,
         loading: false
       };
     }

@@ -15,26 +15,45 @@ export class IterationTaskModel extends ItemNode {
 
   constructor(config: any = {}) {
     super();
-    if (config && config.attributes) {
-      this.id = config.id;
-      this.order = config.attributes.order;
-      this.parentId = config.attributes.parent_task_id;
-      this.text = config.attributes.text;
-      this.type = config.type;
-      this.children = config.children || [];
-      this.is_completed = config.attributes.is_completed;
-    }
+
+    this.id = config.id || null;
+    this.order = config.order || 0;
+    this.text = config.text || '';
+    this.type = config.type || '';
+    this.children = config.children && config.children.length > 0 ? config.children.map((child: IterationTaskModel) => child.clone()) : [];
+    this.is_completed = config.is_completed || false;
+    this.isEditable = config.isEditable || null;
+    this.isStatus = config.isStatus || null;
+    this.parentId = config.parentId;
   }
 
-  public static requestStructureGenerator(task: IterationTaskModel) {
+  public clone() {
+    return new IterationTaskModel(this);
+  }
+
+  public request() {
     return {
-      order: task.order,
-      text: task.text || '',
-      is_completed: task.is_completed,
-      parent_task_id: task.parentId
+      order: this.order,
+      text: this.text || '',
+      is_completed: this.is_completed,
+      parent_task_id: this.parentId || null
     };
   }
+}
 
+export class IterationTaskModelByConfig extends IterationTaskModel {
+  constructor(config: any = {}) {
+    super(config);
+    if (config && config.attributes) {
+      this.order = config.attributes.order || 0;
+      this.text = config.attributes.text || '';
+      this.is_completed = config.attributes.is_completed || false;
+      this.parentId = config.attributes.parent_task_id;
+    }
+  }
+}
+
+export class TreeHelper {
   public static treeStructureGenerator(tasks: IterationTaskModel[]): IterationTaskModel[] {
     const tasksTree: IterationTaskModel[] = [];
     const tasksDictionary: { number: IterationTaskModel } | {} = {};
@@ -44,16 +63,25 @@ export class IterationTaskModel extends ItemNode {
         task.parentId ? tasksDictionary[task.parentId].children.push(task) : tasksTree.push(task);
       });
     }
-    console.log('tasksTree');
-    console.log(tasks);
-    console.log(tasksTree);
     return tasksTree;
   }
 
   // get all items, that doesn't have children, so they are not parents
   public static getChildrenFromTree(tasks: IterationTaskModel[]): IterationTaskModel[] {
     const children: IterationTaskModel[] = [];
-    tasks.forEach((task: IterationTaskModel) => task.children.length > 0 ? children.push(...IterationTaskModel.getChildrenFromTree(task.children)) : children.push(task));
+    tasks.forEach((task: IterationTaskModel) => task.children.length > 0 ? children.push(...TreeHelper.getChildrenFromTree(task.children)) : children.push(task));
     return children;
+  }
+
+  public static getAllNodeIds(task: IterationTaskModel) {
+    const nodeIds: number[] = [task.id];
+    if (task.children.length > 0) {
+      task.children.forEach((child: IterationTaskModel) => nodeIds.push(...TreeHelper.getAllNodeIds(child)));
+    }
+    return nodeIds;
+  }
+
+  public static getNodeByIdFromArray(taskId: number, tasks: IterationTaskModel[]) {
+    return
   }
 }

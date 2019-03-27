@@ -1,8 +1,7 @@
 import {ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {IterationTaskModel} from '../../personal-plan/shared/models/iteration-plan.model';
+import {IterationTaskModel, TreeHelper} from '../../personal-plan/shared/models/iteration-plan.model';
 import {ItemNode} from '../../shared/tree/models/item-node.model';
 import {InfoPlanModel} from '../../personal-plan/shared/models/info-plan.model';
-import {combineLatest, Observable} from 'rxjs';
 import {Iteration} from '../../models/iteration.model';
 import {IterationTreeService} from '../services/iteration-tree.service';
 import {Store} from '@ngrx/store';
@@ -34,39 +33,25 @@ export class IterationPlanComponent implements OnInit {
 
     this.store.select(plan)
       .subscribe((data: IterationTaskModel[]) => {
-        this.plan = IterationTaskModel.treeStructureGenerator(data);
+        this.plan = TreeHelper.treeStructureGenerator(data);
         this.cd.detectChanges();
       });
   }
 
   public deleteTreeItem(task: ItemNode): void {
-    this.store.dispatch(new DeletePlanTaskRequest({userId: this.iteration.user_id, iterationId: this.iteration.id, taskId: task.id}));
+    this.store.dispatch(new DeletePlanTaskRequest({userId: this.iteration.user_id, iterationId: this.iteration.id, task: new IterationTaskModel(task)}));
   }
 
   public createTreeItem(task: ItemNode): void {
-   this.store.dispatch(new CreatePlanTaskRequest({userId: this.iteration.user_id, iterationId: this.iteration.id, task: task as IterationTaskModel}));
+    this.store.dispatch(new CreatePlanTaskRequest({userId: this.iteration.user_id, iterationId: this.iteration.id, task: new IterationTaskModel(task)}));
   }
 
   public editTreeItem(task: ItemNode): void {
-    this.store.dispatch(new EditPlanTaskRequest({userId: this.iteration.user_id, iterationId: this.iteration.id, task: task as IterationTaskModel}));
+    this.store.dispatch(new EditPlanTaskRequest({userId: this.iteration.user_id, iterationId: this.iteration.id, task: new IterationTaskModel(task)}));
   }
 
   public updateTreeItems(items: ItemNode[]): void {
-    const checkedItemsIds: number[] = [];
-    const uncheckedItemsIds: number[] = [];
-    const requests: Observable<any>[] = [];
-
-    // get ids and sort in checked/unchecked arrays
-    items.forEach((item: ItemNode) => item.is_completed ? checkedItemsIds.push(item.id) : uncheckedItemsIds.push(item.id));
-
-    // create request for checked items
-    if (checkedItemsIds.length > 0) {
-      this.store.dispatch(new UpdatePlanTasksRequest({userId: this.iteration.user_id, iterationId: this.iteration.id, tasksId: checkedItemsIds, status: true}));
-    }
-
-    // create request for unchecked items
-    if (uncheckedItemsIds.length > 0) {
-      this.store.dispatch(new UpdatePlanTasksRequest({userId: this.iteration.user_id, iterationId: this.iteration.id, tasksId: checkedItemsIds, status: false}));
-    }
+    const tasks = items.map((item: ItemNode) => new IterationTaskModel(item));
+    this.store.dispatch(new UpdatePlanTasksRequest({userId: this.iteration.user_id, iterationId: this.iteration.id, tasks: tasks}));
   }
 }

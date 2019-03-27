@@ -32,7 +32,8 @@ export class TreeDatabaseService {
 
   initialize(data: ItemNode[]) {
     // Notify the change.
-    this.dataChange.next(this.buildFileTree(data));
+    const tree = this.buildFileTree(data);
+    this.dataChange.next(tree);
   }
 
   update() {
