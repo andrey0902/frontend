@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import {Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
 import { Iteration } from '../../models/iteration.model';
 import * as momentOld from 'moment';
 import { extendMoment } from 'moment-range';
@@ -10,7 +10,7 @@ const moment = extendMoment(momentOld);
   templateUrl: './iteration-timeline.component.html',
   styleUrls: [ './iteration-timeline.component.scss' ]
 })
-export class IterationTimelineComponent implements OnInit {
+export class IterationTimelineComponent implements OnInit, OnChanges {
 
   @Input() iteration: Iteration;
 
@@ -26,11 +26,17 @@ export class IterationTimelineComponent implements OnInit {
     return moment(this.iteration.endDate).format(this.iteration.format);
   }
 
-  ngOnInit() {
+  ngOnInit(): void {}
+
+  ngOnChanges(changes: SimpleChanges): void {
     this.init();
   }
 
   init() {
+    this.resetIteration();
+    if (!this.iteration) {
+      return;
+    }
     const range = moment().range(moment(this.iteration.startDate), moment(this.iteration.endDate));
     for (const day of range.by('days')) {
       this.days.push({
@@ -47,11 +53,13 @@ export class IterationTimelineComponent implements OnInit {
 
     this.weeks = this.prepareDataWeeks(this.tempWeeks);
 
-    for (const day of this.days) {
-      for (const meetDay of this.iteration.meets) {
-        if (day.date.isSame(moment(meetDay.attributes.meet_date), 'day')) {
-          day.meet = true;
-          day['metaData'] = meetDay;
+    if (this.iteration.meets) {
+      for (const day of this.days) {
+        for (const meetDay of this.iteration.meets) {
+          if (day.date.isSame(moment(meetDay.attributes.meet_date), 'day')) {
+            day.meet = true;
+            day['metaData'] = meetDay;
+          }
         }
       }
     }
@@ -102,6 +110,12 @@ export class IterationTimelineComponent implements OnInit {
 
   getToday(day): boolean {
      return day.date.isSame(moment(new Date()), 'day');
+  }
+
+  resetIteration(): void {
+    this.weeks = [];
+    this.days = [];
+    this.tempWeeks = {};
   }
 
 }

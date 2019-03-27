@@ -1,4 +1,4 @@
-import {HttpClient, HttpHeaders} from '@angular/common/http';
+import {HttpClient} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import {ApiConfig} from '../../helpers/apiConfig';
 import {ItemNode} from '../../shared/tree/models/item-node.model';

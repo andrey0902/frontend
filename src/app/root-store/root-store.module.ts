@@ -7,12 +7,14 @@ import {CurrentUserStoreModule} from './currentUser/current-user-store.module';
 import {MentorsStoreModule} from './mentors/mentors-store.module';
 import {MentorRequestsStoreModule} from './mentor-requests/mentor-requests-store.module';
 import {ProtegeRequestsStoreModule} from './protege-requests/protege-requests-store.module';
+import {ProfileStoreModule} from './profile/profile-store.module';
 
 const STORES = [
   CurrentUserStoreModule,
   MentorsStoreModule,
   MentorRequestsStoreModule,
-  ProtegeRequestsStoreModule
+  ProtegeRequestsStoreModule,
+  ProfileStoreModule
 ];
 
 @NgModule({
