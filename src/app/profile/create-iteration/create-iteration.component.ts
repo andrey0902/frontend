@@ -1,9 +1,10 @@
-import { Component, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
+import {Component, OnDestroy, OnInit, ViewChild, ViewEncapsulation} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
 import {MatVerticalStepper} from '@angular/material';
 import {CurrentIterationService} from '../services/iteration.service';
-import { LtValidators } from '../../shared/helpers/validator-methods.static';
+import {LtValidators} from '../../shared/helpers/validator-methods.static';
+import {Iteration} from '../../models/iteration.model';
 
 @Component({
   selector: 'lt-create-iteration',
@@ -20,6 +21,14 @@ export class CreateIterationComponent implements OnInit {
   private _protegeId: number;
 
   constructor(private route: ActivatedRoute, private router: Router, private currentIterationService: CurrentIterationService, private fb: FormBuilder,) {
+  }
+
+  public get currentIteration(): Iteration {
+    return this.currentIterationService.currentIteration;
+  }
+
+  public get isExist(): boolean {
+    return this.currentIterationService.isExist;
   }
 
   ngOnInit() {
