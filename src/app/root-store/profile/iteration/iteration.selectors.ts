@@ -1,9 +1,9 @@
 import {createFeatureSelector, createSelector} from '@ngrx/store';
-import {IterationState} from './iteration.reducer';
+import {ProfileState} from '../profile.reducer';
 
-export const IterationFeatureSelector = createFeatureSelector('iteration');
+export const IterationFeatureSelector = createFeatureSelector('profile');
 
-export const iteration = createSelector(
+export const selectIteration = createSelector(
   IterationFeatureSelector,
-  (state: IterationState) => state.iteration
+  (state: ProfileState) => state.iteration.iteration
 );

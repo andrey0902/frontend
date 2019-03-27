@@ -8,17 +8,18 @@
       state="create-iteration"
       [stepControl]="iterationForm">
       <lt-create-iteration-form
-        [disableEdnIteration]="disableEdnIteration"
         [iterationForm]="iterationForm"
         (submitForm)="createIteration()">
       </lt-create-iteration-form>
     </mat-step>
     <mat-step label="Создание ИПР" editable="false" state="create-plan">
       <div class="plan">
-        <lt-iteration-plan *ngIf="currentIterationService.isExist"
-                           class="plan--tree"
-                           (createItem)="treeDataChanged($event)"
-                           [iteration]="currentIterationService.currentIteration"></lt-iteration-plan>
+        <lt-iteration-plan
+          class="plan--tree"
+          *ngIf="currentIteration"
+          (createItem)="treeDataChanged($event)"
+          [iteration]="currentIteration">
+        </lt-iteration-plan>
         <button
           mat-raised-button
           color="accent"

@@ -14,6 +14,7 @@ import {
   GetIterationSuccess
 } from './iteration.actions';
 import {Iteration} from '../../../models/iteration.model';
+import * as moment from 'moment';
 
 @Injectable()
 export class IterationEffectsService {
@@ -40,11 +41,19 @@ export class IterationEffectsService {
   @Effect() createIteration: Observable<IterationActionUnion> = this.actions$.pipe(
     ofType(IterationActionTypes.CREATE_ITERATION_REQUEST),
     switchMap((action: IterationActionUnion) => {
-      return this.iterationService.createIteration(action.payload.userId, action.payload.iteration)
+      const iteration = {
+        start_date: moment(action.payload.iteration.time.startDate).format(),
+        end_date: moment(action.payload.iteration.time.endDate).format(),
+        goal: action.payload.iteration.goal,
+        meet_type_id: action.payload.iteration.meetType,
+        week_day: action.payload.iteration.weekDay,
+        test_project: action.payload.iteration.projectLink
+      };
+      return this.iterationService.createIteration(action.payload.userId, iteration)
         .pipe(
           map(data => {
-            const iteration: Iteration = new Iteration(data);
-            return new CreateIterationSuccess({iteration: iteration});
+            const iter: Iteration = new Iteration(data);
+            return new CreateIterationSuccess({iteration: iter});
           }),
           catchError(err => of(new CreateIterationFail({error: err.error.errors})))
         );

@@ -28,7 +28,7 @@ export class IterationService {
     });
   }
 
-  deleteIteration(protegeId: number, iterationId: number, request): Observable<any> {
+  deleteIteration(protegeId: string, iterationId: number, request): Observable<any> {
     return this.http.delete(`${ApiConfig.protege}/${protegeId}/iterations/${iterationId}`, {params: request});
   }
 

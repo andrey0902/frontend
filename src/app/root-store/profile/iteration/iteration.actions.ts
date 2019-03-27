@@ -1,9 +1,8 @@
 import {Action} from '@ngrx/store';
-import {Iteration} from '../../../models/iteration.model';
 
 export interface IIterationPayload {
-  iteration?: Iteration;
-  userId?: number;
+  iteration?: any;
+  userId?: string;
   reason?: string;
   error?: Error;
 }

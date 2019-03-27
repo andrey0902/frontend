@@ -12,7 +12,6 @@ export class CreateIterationFormComponent implements OnInit {
 
   @Input() public iterationForm: FormGroup;
   @Output() public submitForm = new EventEmitter<any>();
-  @Input() public disableEdnIteration = true;
   meetTypes$: Observable<any>;
   weekDays = [
     { id: 1, title: 'Пн' },

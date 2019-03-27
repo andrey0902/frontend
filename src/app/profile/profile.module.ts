@@ -14,7 +14,7 @@ import {SharedModule} from '../shared/shared.module';
 import {ProgressBarModule} from '../shared/progress-bar/progress-bar.module';
 import {IterationPlanComponent} from './iteration-plan/iteration-plan.component';
 import {IterationProgressComponent} from './iteration-progress/iteration-progress.component';
-import {CurrentIterationService} from './services/iteration.service';
+// import {CurrentIterationService} from './services/iteration.service';
 import {IterationTreeService} from './services/iteration-tree.service';
 import {CreateIterationGuard} from '../core/guards/create-iteration.guard';
 import {LazyLoadImageModule} from 'ng-lazyload-image';
@@ -40,7 +40,7 @@ import {LazyLoadImageModule} from 'ng-lazyload-image';
     LazyLoadImageModule
   ],
   providers: [
-    CurrentIterationService,
+    // CurrentIterationService,
     IterationTreeService,
     CreateIterationGuard
   ]
