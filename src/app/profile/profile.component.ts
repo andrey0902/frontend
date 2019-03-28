@@ -74,8 +74,8 @@ export class ProfileComponent implements OnInit, OnDestroy {
     this.dialogService.openRequestDialog('Примечание', (text) => {
       if (text !== null || text !== undefined) {
         this.route.paramMap.pipe(
+          takeWhile(() => this.componentActive),
           switchMap((params: ParamMap) => this.userService.createMentorRequest(params.get('id'), text)),
-          takeWhile(() => this.componentActive)
         ).subscribe(() => {
           this.store.select(selectCurrentUser).pipe(
             takeWhile(() => this.componentActive)
@@ -90,6 +90,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
     this.dialogService.openRequestDialog('Примечание', (text) => {
       if (text !== null || text !== undefined) {
         this.route.paramMap.pipe(
+          takeWhile(() => this.componentActive),
           switchMap((params: ParamMap) => this.userService.createProtegeRequest(params.get('id'), text))
         ).subscribe(() => {
           this.store.select(selectCurrentUser).pipe(

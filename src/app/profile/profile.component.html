@@ -77,9 +77,9 @@
   </mat-card>
 
   <div class="mentorship-info">
-    <mat-tab-group>
+    <mat-tab-group *ngIf="currentIteration$ | async as currentIteration">
       <mat-tab label="Обзор">
-        <mat-card class="iteration" *ngIf="currentIteration$ | async as currentIteration">
+        <mat-card class="iteration">
           <lt-profile-overview [currentIteration]="currentIteration"
           ></lt-profile-overview>
         </mat-card>

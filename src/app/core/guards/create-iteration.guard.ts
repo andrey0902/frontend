@@ -1,12 +1,10 @@
 import {Injectable} from '@angular/core';
 import {ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot, UrlTree} from '@angular/router';
-import {combineLatest, Observable, of, timer, zip} from 'rxjs';
+import {combineLatest, Observable, of} from 'rxjs';
 import {Store} from '@ngrx/store';
 import {selectCurrentUser} from '../../root-store/currentUser/current-user.selectors';
 import {User} from '../../models/user.model';
-import {catchError, filter, map, switchMap} from 'rxjs/operators';
-import {UserService} from '../services/user.service';
-// import {CurrentIterationService} from '../../profile/services/iteration.service';
+import {filter, map, switchMap} from 'rxjs/operators';
 import {selectUser} from '../../root-store/profile/user/user.selectors';
 import {Iteration} from '../../models/iteration.model';
 import {selectIteration} from '../../root-store/profile/iteration/iteration.selectors';
@@ -21,8 +19,6 @@ export class CreateIterationGuard implements CanActivate {
 
   constructor(
     private store: Store<any>,
-    private userService: UserService,
-    // private currentIterationService: CurrentIterationService,
     private router: Router
   ) {}
 

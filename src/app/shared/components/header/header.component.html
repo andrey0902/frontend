@@ -24,7 +24,7 @@
          [matMenuTriggerFor]="userMenu">
     <mat-menu #userMenu="matMenu" overlapTrigger="false">
       <button mat-menu-item [routerLink]="['/profile', currentUser.id]">Профиль</button>
-      <button *ltUserPermission="currentUser.attributes.roles" mat-menu-item routerLink="mentorship">Таблица ответствености</button>
+      <button mat-menu-item routerLink="mentorship">Таблица ответствености</button>
      <!--TODO: hide item menu in this iteration-->
       <!--<button mat-menu-item [routerLink]="['/plan/own', currentUser.id]">Мой ИПР</button>-->
     </mat-menu>
