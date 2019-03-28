@@ -20,7 +20,7 @@ export class IterationService {
     });
   }
 
-  createIteration(protegeId, payload, iteration) {
+  createIteration(protegeId, iteration) {
     return this.http.post<Iteration>(`${ApiConfig.protege}/${protegeId}/iterations`, iteration, {
       params: {
         include: 'meets'
@@ -28,7 +28,7 @@ export class IterationService {
     });
   }
 
-  deleteIteration(protegeId: number, iterationId: number, request): Observable<any> {
+  deleteIteration(protegeId: string, iterationId: number, request): Observable<any> {
     return this.http.delete(`${ApiConfig.protege}/${protegeId}/iterations/${iterationId}`, {params: request});
   }
 

@@ -14,10 +14,12 @@
     </mat-step>
     <mat-step label="Создание ИПР" editable="false" state="create-plan">
       <div class="plan">
-        <lt-iteration-plan *ngIf="isExist"
-                           class="plan--tree"
-                           (createItem)="treeDataChanged($event)"
-                           [iteration]="currentIteration"></lt-iteration-plan>
+        <lt-iteration-plan
+          class="plan--tree"
+          *ngIf="currentIteration"
+          (createItem)="treeDataChanged($event)"
+          [iteration]="currentIteration">
+        </lt-iteration-plan>
         <button
           mat-raised-button
           color="accent"
