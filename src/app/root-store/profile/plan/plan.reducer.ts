@@ -61,7 +61,6 @@ export function planReducer(state = initialState, action: PlanActionUnion): Plan
     }
 
     case PlanActionTypes.UPDATE_PLAN_TASKS_SUCCESS: {
-      console.log(action.payload.tasks);
       const newPlan: PlanDictionary = Object.assign({}, state.planDictionary);
       action.payload.tasks.forEach((task: IterationTaskModel) => newPlan[task.id].is_completed = task.is_completed);
       return {

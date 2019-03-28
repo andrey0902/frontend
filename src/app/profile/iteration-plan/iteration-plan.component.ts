@@ -7,6 +7,7 @@ import {IterationTreeService} from '../services/iteration-tree.service';
 import {Store} from '@ngrx/store';
 import {CreatePlanTaskRequest, DeletePlanTaskRequest, EditPlanTaskRequest, GetPlanRequest, UpdatePlanTasksRequest} from '../../root-store/profile/plan/plan.actions';
 import {plan} from '../../root-store/profile/plan/plan.selectors';
+import {filter, take} from 'rxjs/operators';
 
 
 @Component({
@@ -17,7 +18,7 @@ import {plan} from '../../root-store/profile/plan/plan.selectors';
 })
 export class IterationPlanComponent implements OnInit {
   @Input() iteration: Iteration;
-  @Input() plan: IterationTaskModel[];
+  @Input() plan: ItemNode[];
 
   @Output() public createItem = new EventEmitter<ItemNode>();
 
@@ -33,25 +34,29 @@ export class IterationPlanComponent implements OnInit {
 
     this.store.select(plan)
       .subscribe((data: IterationTaskModel[]) => {
-        this.plan = TreeHelper.treeStructureGenerator(data);
+        this.plan = TreeHelper.treeStructureGenerator(data) as ItemNode[];
         this.cd.detectChanges();
       });
   }
 
   public deleteTreeItem(task: ItemNode): void {
+    console.log('delete');
     this.store.dispatch(new DeletePlanTaskRequest({userId: this.iteration.user_id, iterationId: this.iteration.id, task: new IterationTaskModel(task)}));
   }
 
   public createTreeItem(task: ItemNode): void {
+    console.log('create');
     this.store.dispatch(new CreatePlanTaskRequest({userId: this.iteration.user_id, iterationId: this.iteration.id, task: new IterationTaskModel(task)}));
   }
 
   public editTreeItem(task: ItemNode): void {
+    console.log('edit');
     this.store.dispatch(new EditPlanTaskRequest({userId: this.iteration.user_id, iterationId: this.iteration.id, task: new IterationTaskModel(task)}));
   }
 
   public updateTreeItems(items: ItemNode[]): void {
-    const tasks = items.map((item: ItemNode) => new IterationTaskModel(item));
+    console.log('update');
+    const tasks: IterationTaskModel[] = items.map((item: ItemNode) => new IterationTaskModel(item));
     this.store.dispatch(new UpdatePlanTasksRequest({userId: this.iteration.user_id, iterationId: this.iteration.id, tasks: tasks}));
   }
 }

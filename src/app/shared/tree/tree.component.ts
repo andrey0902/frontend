@@ -1,11 +1,10 @@
-import {Component, ElementRef, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild} from '@angular/core';
+import {Component, ElementRef, EventEmitter, Input, OnChanges, Output, SimpleChanges, ViewChild} from '@angular/core';
 import {FlatTreeControl} from '@angular/cdk/tree';
 import {MatTreeFlatDataSource, MatTreeFlattener} from '@angular/material';
 import {SelectionModel} from '@angular/cdk/collections';
 import {InsertionType, TreeDatabaseService} from './services/tree-database.service';
 import {ItemFlatNode, ItemNode} from './models/item-node.model';
 import {Observable, of} from 'rxjs';
-import {DeleteProtege} from '../../root-store/mentors/mentors.actions';
 import {DialogService} from '../dialog/services/dialog.service';
 
 @Component({
@@ -15,7 +14,7 @@ import {DialogService} from '../dialog/services/dialog.service';
   providers: [TreeDatabaseService]
 })
 
-export class TreeComponent implements OnChanges, OnInit {
+export class TreeComponent implements OnChanges {
   @Input() private data: ItemNode[];
   @Input() public canEdit = true;
   @Input() public type: new (...arg: any[]) => ItemNode;
@@ -59,17 +58,14 @@ export class TreeComponent implements OnChanges, OnInit {
       .subscribe(data => {
         this.dataSource.data = [];
         this.dataSource.data = data;
+        this.treeControl.expandAll();
       });
-  }
-
-  ngOnInit(): void {
-    this.treeControl.expandAll();
   }
 
   ngOnChanges(changes: SimpleChanges): void {
 
     if (changes.data && changes.data.currentValue) {
-      this.database.initialize(changes.data.currentValue);
+      this.database.data = changes.data.currentValue;
     }
 
     if (changes.type && changes.type.currentValue) {
@@ -83,7 +79,7 @@ export class TreeComponent implements OnChanges, OnInit {
 
   isValidToAdd = (flatNode: ItemFlatNode) => {
     const node = this.flatNodeMap.get(flatNode);
-    const nestingLevel = this.database.getParentsFromNodes(node).length + 1;
+    const nestingLevel = this.getLevel(flatNode) + 1;
     return nestingLevel < 3 && node.children.length < 100;
   };
 
@@ -108,7 +104,8 @@ export class TreeComponent implements OnChanges, OnInit {
     flatNode.text = node.text;
     flatNode.showAsInput = node.showAsInput;
     flatNode.level = level;
-    flatNode.expandable = (node.children && node.children.length > 0);
+    flatNode.expandable = node.children.length > 0;
+    flatNode.id = node.id;
     if (node.is_completed) {
       this.checklistSelection.select(flatNode);
     }
@@ -172,8 +169,8 @@ export class TreeComponent implements OnChanges, OnInit {
     data.text = nodeText;
 
     if (node.showAsInput === 'add') {
-      this.createItem.emit(data);
       this.updateItemCheck(data);
+      this.createItem.emit(data);
     }
 
     if (node.showAsInput === 'edit') {
@@ -195,9 +192,11 @@ export class TreeComponent implements OnChanges, OnInit {
 
     if (node.showAsInput !== 'add' && node.showAsInput !== 'edit') {
       const htmlContent = `<p>Вы уверены, что хотите удалить пункт <b>${node.text}</b> ?</p>`;
-      this.dialogService.openConfirmDialog({ htmlContent }, (confirm) => {
+      this.dialogService.openConfirmDialog({htmlContent}, (confirm) => {
         if (confirm) {
           this.database.deleteNode(data);
+          this.database.update();
+          this.updateItemCheck(this.database.getParentOfNode(data), false);
           this.deleteItem.emit(data);
         }
       });
@@ -214,10 +213,12 @@ export class TreeComponent implements OnChanges, OnInit {
     }
   }
 
-  updateItemCheck(node: ItemNode) {
-    const changesCheckedItems = this.getChangedCheckedItems(node);
-    if (changesCheckedItems.length > 0) {
-      this.updateItem.emit(changesCheckedItems);
+  updateItemCheck(node: ItemNode, checkChildren: boolean = true) {
+    if (node) {
+      const changesCheckedItems = this.getChangedCheckedItems(node, checkChildren);
+      if (changesCheckedItems.length > 0) {
+        this.updateItem.emit(changesCheckedItems);
+      }
     }
   }
 
@@ -257,13 +258,10 @@ export class TreeComponent implements OnChanges, OnInit {
 
   handleDrop(event, flatNode: ItemFlatNode) {
     event.preventDefault();
-
     const node: ItemNode = this.flatNodeMap.get(flatNode);
-    const nestingLevel = this.database.getParentsFromNodes(node).length + 1;
-    const parentChildren = node.parentId ? this.database.getParentFromNodes(node).children.length : 0;
-    if (flatNode !== this.dragNode && nestingLevel < 3 && parentChildren < 100) {
+    if (flatNode !== this.dragNode) {
       const dragNode = this.flatNodeMap.get(this.dragNode);
-      const dragNodeParent = this.database.getParentFromNodes(dragNode);
+      const dragNodeParent = this.database.getParentOfNode(dragNode);
       const {order: oldOrder, parentId: oldParentId} = dragNode;
       let newItem: ItemNode;
 
@@ -280,8 +278,8 @@ export class TreeComponent implements OnChanges, OnInit {
         this.treeControl.expandDescendants(this.nestedNodeMap.get(newItem));
       }
 
-      if (dragNodeParent && dragNodeParent.children && dragNodeParent.children.length > 0) {
-        this.updateItemCheck(dragNodeParent.children[0]);
+      if (dragNodeParent) {
+        this.updateItemCheck(dragNodeParent, false);
       }
     }
 
@@ -304,8 +302,12 @@ export class TreeComponent implements OnChanges, OnInit {
     const descendants: ItemNode[] = flatDescendants.map((descendant: ItemFlatNode) => this.flatNodeMap.get(descendant));
 
     // check all children and save changes
+    console.log(startFlatNode);
+    console.log(flatDescendants);
+    console.log(descendants);
+
     if (descendants.length > 0 && checkChildren) {
-      descendants.forEach((descendant: ItemNode) => {
+      descendants.forEach((descendant) => {
         if (descendant.is_completed !== nodeIsCompleted) {
           descendant.is_completed = nodeIsCompleted;
           changedItems.push(descendant);
@@ -325,7 +327,7 @@ export class TreeComponent implements OnChanges, OnInit {
     }
 
     // check parent
-    const parentNode = this.database.getParentFromNodes(startNode);
+    const parentNode = this.database.getParentOfNode(startNode);
     if (parentNode) {
       changedItems.push(...this.getChangedCheckedItems(parentNode, false));
     }

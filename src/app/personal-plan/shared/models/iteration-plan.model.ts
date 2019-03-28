@@ -16,19 +16,15 @@ export class IterationTaskModel extends ItemNode {
   constructor(config: any = {}) {
     super();
 
-    this.id = config.id || null;
+    this.id = +config.id || null;
     this.order = config.order || 0;
     this.text = config.text || '';
     this.type = config.type || '';
-    this.children = config.children && config.children.length > 0 ? config.children.map((child: IterationTaskModel) => child.clone()) : [];
+    this.children = config.children && config.children.length > 0 ? config.children.map((child: IterationTaskModel) => new IterationTaskModel(child)) : [];
     this.is_completed = config.is_completed || false;
     this.isEditable = config.isEditable || null;
     this.isStatus = config.isStatus || null;
     this.parentId = config.parentId;
-  }
-
-  public clone() {
-    return new IterationTaskModel(this);
   }
 
   public request() {
@@ -63,6 +59,7 @@ export class TreeHelper {
         task.parentId ? tasksDictionary[task.parentId].children.push(task) : tasksTree.push(task);
       });
     }
+    tasksTree.sort((a, b) => a.order - b.order);
     return tasksTree;
   }
 
@@ -73,15 +70,11 @@ export class TreeHelper {
     return children;
   }
 
-  public static getAllNodeIds(task: IterationTaskModel) {
+  public static getAllNodeIds(task: ItemNode) {
     const nodeIds: number[] = [task.id];
     if (task.children.length > 0) {
       task.children.forEach((child: IterationTaskModel) => nodeIds.push(...TreeHelper.getAllNodeIds(child)));
     }
     return nodeIds;
-  }
-
-  public static getNodeByIdFromArray(taskId: number, tasks: IterationTaskModel[]) {
-    return
   }
 }
