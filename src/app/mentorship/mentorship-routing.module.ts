@@ -1,13 +1,14 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import {MentorshipComponent} from './mentorship.component';
+import {IsAdminGuard} from '../core/guards/is-admin.guard';
 
 const routes: Routes = [
   { path: '', component: MentorshipComponent, children: [
     { path: '', redirectTo: 'mentor-protege', pathMatch: 'full'},
     { path: 'mentor-protege',  loadChildren: './mentor-protege/mentor-protege.module#MentorProtegeModule' },
-    { path: 'need-a-mentor',  loadChildren: './need-a-mentor/need-a-mentor.module#NeedAMentorModule' },
-    { path: 'want-to-be-mentor',  loadChildren: './want-to-be-mentor/want-to-be-mentor.module#WantToBeMentorModule' }
+    { path: 'need-a-mentor',  loadChildren: './need-a-mentor/need-a-mentor.module#NeedAMentorModule', canLoad: [IsAdminGuard] },
+    { path: 'want-to-be-mentor',  loadChildren: './want-to-be-mentor/want-to-be-mentor.module#WantToBeMentorModule', canLoad: [IsAdminGuard] }
   ]}
 ];
 
