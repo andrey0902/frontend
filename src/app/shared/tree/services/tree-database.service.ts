@@ -42,55 +42,49 @@ export class TreeDatabaseService {
     if (!isNew) {
       const oldParent = this.getParentOfNode(item);
       const oldArr = oldParent ? oldParent.children : this.data;
-      const oldIndex = oldArr.indexOf(item);
       this.deleteNode(item, oldArr);
-      this._recalculateOrdering(oldArr, oldIndex, item.order);
+      this._recalculateOrdering(oldArr);
     }
 
     if (parent === null) {
       item.parentId = null;
-      item.order = this.data.length;
       arr = this.data;
     } else if (parent) {
-      if (!parent.children) {
-        parent.children = [];
-      }
       arr = parent.children;
       item.parentId = parent.id;
     }
 
-    item.order = 0;
     item.isNew = isNew;
 
     arr.unshift(item);
-    this._recalculateOrdering(arr, 1, 1);
+    this._recalculateOrdering(arr);
     return item;
   }
 
   insertItemNear(nodeAnchor: ItemNode, insertNode: ItemNode, typeInsertion: InsertionType): ItemNode {
 
-     const oldParentNode = this.getParentOfNode(insertNode);
-     const parentNode = this.getParentOfNode(nodeAnchor);
-     const arr = parentNode != null ? parentNode.children : this.data;
-     const oldArr = oldParentNode != null ? oldParentNode.children : this.data;
-     const oldIndex = oldArr.indexOf(insertNode);
+    const oldParentNode = this.getParentOfNode(insertNode);
+    const parentNode = this.getParentOfNode(nodeAnchor);
+    const arr = parentNode != null ? parentNode.children : this.data;
+    const oldArr = oldParentNode != null ? oldParentNode.children : this.data;
+    const oldIndex = oldArr.indexOf(insertNode);
 
-     this.deleteNode(insertNode, oldArr);
-     this._recalculateOrdering(oldArr, oldIndex, insertNode.order);
+    this.deleteNode(insertNode, oldArr);
+    this._recalculateOrdering(oldArr);
 
-     let newOrder: number = nodeAnchor.order;
-     let index: number = arr.indexOf(nodeAnchor);
+    let newOrder: number = nodeAnchor.order;
+    let index: number = arr.indexOf(nodeAnchor);
 
-     if (typeInsertion === InsertionType.BELOW) {
-       index++;
-       newOrder++;
-     }
+    if (typeInsertion === InsertionType.BELOW) {
+      index++;
+      newOrder++;
+    }
 
-     insertNode.parentId = parentNode ? parentNode.id : null;
-     insertNode.order = newOrder;
-     arr.splice(index, 0, insertNode);
-     this._recalculateOrdering(arr, index + 1, insertNode.order + 1);
-     return insertNode;
+    insertNode.parentId = parentNode ? parentNode.id : null;
+    insertNode.order = newOrder;
+    arr.splice(index, 0, insertNode);
+    this._recalculateOrdering(arr);
+    return insertNode;
   }
 
   getParentOfNode(node: ItemNode): ItemNode {
@@ -126,17 +120,11 @@ export class TreeDatabaseService {
     const index = deleteFrom.indexOf(nodeToDelete, 0);
     if (index > -1) {
       deleteFrom.splice(index, 1);
+      this._recalculateOrdering(deleteFrom);
     }
   }
 
-  private _recalculateOrdering(arr: ItemNode[], beginIndex: number, startOrder = 0, endIndex?: number): ItemNode[] {
-    let order = startOrder;
-    const lastIndex = endIndex || arr.length - 1;
-    for (let i = beginIndex; i <= lastIndex; i++) {
-      const item = arr[i];
-      item.order = order;
-      order++;
-    }
-    return arr;
+  private _recalculateOrdering(arr: ItemNode[]): void {
+    arr.forEach((item: ItemNode, index: number) => item.order = index);
   }
 }

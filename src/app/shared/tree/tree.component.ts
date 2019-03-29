@@ -1,4 +1,4 @@
-import {Component, ElementRef, EventEmitter, Input, OnChanges, Output, SimpleChanges, ViewChild} from '@angular/core';
+import {Component, ElementRef, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild} from '@angular/core';
 import {FlatTreeControl} from '@angular/cdk/tree';
 import {MatTreeFlatDataSource, MatTreeFlattener} from '@angular/material';
 import {SelectionModel} from '@angular/cdk/collections';
@@ -14,7 +14,7 @@ import {DialogService} from '../dialog/services/dialog.service';
   providers: [TreeDatabaseService]
 })
 
-export class TreeComponent implements OnChanges {
+export class TreeComponent implements OnChanges, OnInit {
   @Input() private data: ItemNode[];
   @Input() public canEdit = true;
   @Input() public type: new (...arg: any[]) => ItemNode;
@@ -58,16 +58,15 @@ export class TreeComponent implements OnChanges {
       .subscribe(data => {
         this.dataSource.data = [];
         this.dataSource.data = data;
-        this.treeControl.expandAll();
       });
   }
 
+  ngOnInit(): void {
+    this.database.data = this.data.map((item) => new ItemNode(item));
+    this.treeControl.expandAll();
+  }
+
   ngOnChanges(changes: SimpleChanges): void {
-
-    if (changes.data && changes.data.currentValue) {
-      this.database.data = changes.data.currentValue;
-    }
-
     if (changes.type && changes.type.currentValue) {
       this.database.type = changes.type.currentValue;
     }
@@ -105,7 +104,6 @@ export class TreeComponent implements OnChanges {
     flatNode.showAsInput = node.showAsInput;
     flatNode.level = level;
     flatNode.expandable = node.children.length > 0;
-    flatNode.id = node.id;
     if (node.is_completed) {
       this.checklistSelection.select(flatNode);
     }
@@ -143,6 +141,7 @@ export class TreeComponent implements OnChanges {
       data.is_completed = false;
       data.text = nodeText;
       this.database.insertItem(null, data, true);
+      this.database.update();
       this.createItem.emit(data);
     }
   }
@@ -157,6 +156,7 @@ export class TreeComponent implements OnChanges {
 
     this.database.insertItem(parentNode, data, true);
     this.database.update();
+
     if (!!parentNode.children) {
       this.treeControl.expand(node);
     }
@@ -167,6 +167,7 @@ export class TreeComponent implements OnChanges {
     const data = this.flatNodeMap.get(node);
     data.showAsInput = false;
     data.text = nodeText;
+    this.database.update();
 
     if (node.showAsInput === 'add') {
       this.updateItemCheck(data);
@@ -197,6 +198,7 @@ export class TreeComponent implements OnChanges {
           this.database.deleteNode(data);
           this.database.update();
           this.updateItemCheck(this.database.getParentOfNode(data), false);
+          console.log(data);
           this.deleteItem.emit(data);
         }
       });
@@ -273,6 +275,8 @@ export class TreeComponent implements OnChanges {
         newItem = this.database.copyPasteItem(dragNode, node);
       }
 
+      this.database.update();
+
       if (oldOrder !== newItem.order || oldParentId !== newItem.parentId) {
         this.editItem.emit(newItem);
         this.treeControl.expandDescendants(this.nestedNodeMap.get(newItem));
@@ -302,9 +306,6 @@ export class TreeComponent implements OnChanges {
     const descendants: ItemNode[] = flatDescendants.map((descendant: ItemFlatNode) => this.flatNodeMap.get(descendant));
 
     // check all children and save changes
-    console.log(startFlatNode);
-    console.log(flatDescendants);
-    console.log(descendants);
 
     if (descendants.length > 0 && checkChildren) {
       descendants.forEach((descendant) => {

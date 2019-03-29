@@ -7,7 +7,7 @@ import {IterationTreeService} from '../services/iteration-tree.service';
 import {Store} from '@ngrx/store';
 import {CreatePlanTaskRequest, DeletePlanTaskRequest, EditPlanTaskRequest, GetPlanRequest, UpdatePlanTasksRequest} from '../../root-store/profile/plan/plan.actions';
 import {plan} from '../../root-store/profile/plan/plan.selectors';
-import {filter, take} from 'rxjs/operators';
+import {filter, first, take} from 'rxjs/operators';
 
 
 @Component({
@@ -33,6 +33,9 @@ export class IterationPlanComponent implements OnInit {
     this.store.dispatch(new GetPlanRequest({iterationId: this.iteration.id, userId: this.iteration.user_id}));
 
     this.store.select(plan)
+      .pipe(
+        first((data) => !!data && data.length > 0)
+      )
       .subscribe((data: IterationTaskModel[]) => {
         this.plan = TreeHelper.treeStructureGenerator(data) as ItemNode[];
         this.cd.detectChanges();

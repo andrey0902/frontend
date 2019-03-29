@@ -14,7 +14,7 @@ export class IterationTaskModel extends ItemNode {
   public isStatus = null;
 
   constructor(config: any = {}) {
-    super();
+    super(config);
 
     this.id = +config.id || null;
     this.order = config.order || 0;

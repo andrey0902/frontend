@@ -13,7 +13,7 @@
                   (dragstart)="handleDragStart($event, node);"
                   (dragover)="handleDragOver($event, node);"
                   (drop)="handleDrop($event, node);"
-                  (dragend)="handleDragEnd($event);">{{node.text}}</mat-checkbox>
+                  (dragend)="handleDragEnd($event);">{{node.text}} --- {{flatNodeMap.get(node).order}}</mat-checkbox>
     <ng-container *ngTemplateOutlet="nodeMenu; context: {node: node}"></ng-container>
   </mat-tree-node>
 
@@ -43,7 +43,7 @@
                   (dragend)="handleDragEnd($event);"
                   [checked]="checklistSelection.isSelected(node)"
                   [indeterminate]="descendantsPartiallySelected(node)"
-                  (change)="todoItemSelectionToggle(node)">{{node.text}}</mat-checkbox>
+                  (change)="todoItemSelectionToggle(node)">{{node.text}} --- {{flatNodeMap.get(node).order}}</mat-checkbox>
     <ng-container *ngTemplateOutlet="nodeMenu; context: {node: node}" class="buttons"></ng-container>
   </mat-tree-node>
 </mat-tree>

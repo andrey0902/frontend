@@ -17,7 +17,7 @@ export class InfoPlanModel extends ItemNode {
   public isStatus = null;
 
   constructor(desire: any = {}) {
-    super();
+    super(desire);
     this.id = desire.id;
     this.order = desire.order;
     this.status = desire.status;
