@@ -1,3 +1,4 @@
+<!--
 <div class="container vertical-center">
   <div class="nav-wrapper">
     <a class="app-logo" [href]="linkToPortal">
@@ -25,8 +26,22 @@
     <mat-menu #userMenu="matMenu" overlapTrigger="false">
       <button mat-menu-item [routerLink]="['/profile', currentUser.id]">Профиль</button>
       <button mat-menu-item routerLink="mentorship">Таблица ответствености</button>
-     <!--TODO: hide item menu in this iteration-->
-      <!--<button mat-menu-item [routerLink]="['/plan/own', currentUser.id]">Мой ИПР</button>-->
+     &lt;!&ndash;TODO: hide item menu in this iteration&ndash;&gt;
+      &lt;!&ndash;<button mat-menu-item [routerLink]="['/plan/own', currentUser.id]">Мой ИПР</button>&ndash;&gt;
     </mat-menu>
   </div>
 </div>
+-->
+<header>
+      <div class="logo">
+        <a>
+          <img class="img-responsive" src="./assets/img/logo-min.png" alt="Light IT" />
+        </a>
+      </div>
+      <div class="header-user">
+        <lt-nav [user]="currentUser$ | async"
+                [PERMISSION_GROUPS]="PERMISSION_GROUPS"
+                (logoutEvent)="logout()"
+        ></lt-nav>
+      </div>
+</header>

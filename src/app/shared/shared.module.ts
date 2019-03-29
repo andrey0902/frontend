@@ -4,6 +4,7 @@ import { TreeModule } from './tree/tree.module';
 import {ProgressBarModule} from './progress-bar/progress-bar.module';
 import {DialogModule} from './dialog/dialog.module';
 import {ComponentsModule} from './components/components.module';
+import {HeaderModule} from './header/header.module';
 
 @NgModule({
   imports: [
@@ -11,13 +12,15 @@ import {ComponentsModule} from './components/components.module';
     CommonModule,
     DialogModule,
     ProgressBarModule,
-    ComponentsModule
+    ComponentsModule,
+    HeaderModule
   ],
   exports: [
     TreeModule,
     ProgressBarModule,
     DialogModule,
-    ComponentsModule
+    ComponentsModule,
+    HeaderModule
   ]
 })
 export class SharedModule {

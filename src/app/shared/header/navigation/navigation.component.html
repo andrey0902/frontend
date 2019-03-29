@@ -1,0 +1,104 @@
+<div class="menu">
+  <div class="navigation" *ltCanView="permissionForView">
+    <ng-container *ltCanView="{ ban_groups: [PERMISSION_GROUPS?.SECURITY] }">
+     <button class="dropdown-button" id="company" (mouseenter)="select.open()">
+       О компании
+       <mat-select class="select" #select>
+         <mat-option><a>Цель и миссия</a></mat-option>
+         <mat-option><a>Информация для новичка</a></mat-option>
+         <mat-option><a>Кодекс разработчика</a></mat-option>
+         <mat-option><a>Правила</a></mat-option>
+         <mat-option><a>FAQ</a></mat-option>
+       </mat-select>
+     </button>
+    </ng-container>
+
+    <a class="dropdown-button" id="staff"> Сотрудники </a>
+<!--    <mz-dropdown
+      #menuEmployees
+      [id]="'dropdownStaff'"
+      [dropdownButtonId]="'staff'"
+      [hover]="isHover"
+      [stopPropagation]="true">
+      <mz-dropdown-item><a routerLink="/employees" tourAnchor="menu_step3">Сотрудники</a></mz-dropdown-item>
+      <mz-dropdown-item><a routerLink="/birthdays">Дни рождения</a></mz-dropdown-item>&lt;!&ndash;tourAnchor="menu_step4"&ndash;&gt;
+      <mz-dropdown-item *ltCanView="{ ban_groups: [PERMISSION_GROUPS?.SECURITY] }">
+        <a routerLink="/locator">
+          Где кто
+        </a>
+      </mz-dropdown-item>
+    </mz-dropdown>-->
+
+    <ng-container *ltCanView="{ ban_groups: [PERMISSION_GROUPS?.SECURITY] }">
+      <a class="dropdown-button" id="mentorship"> Портал </a>
+    </ng-container>
+
+
+    <ng-container *ltCanView="{ ban_groups: [PERMISSION_GROUPS?.SECURITY] }">
+      <a class="dropdown-button" id="life"> Жизнь Light IT</a>
+<!--      <mz-dropdown
+        #menuDropdownLife
+        [id]="'dropdownLife'"
+        [dropdownButtonId]="'life'"
+        [hover]="isHover"
+        [stopPropagation]="true">
+        <mz-dropdown-item><a routerLink="/gallery">Альбомы</a></mz-dropdown-item>
+        <mz-dropdown-item><a routerLink="/meetups/all" tourAnchor="menu_step6">Доклады</a></mz-dropdown-item>
+        <mz-dropdown-item><a href="http://wiki.light-it.loc/" target="_blank">Наша Wiki</a></mz-dropdown-item>
+        <mz-dropdown-item><a routerLink="/testing-devices">Тестовые устройства</a></mz-dropdown-item>
+      </mz-dropdown>-->
+    </ng-container>
+
+  </div>
+  <div class="user-block">
+<!--    <lt-trust-letter-lbl *ltCanView="{ ban_groups: [PERMISSION_GROUPS?.SECURITY, PERMISSION_GROUPS?.NOT_APPROVED] }">
+    </lt-trust-letter-lbl>-->
+
+   <!-- <a class="dropdown-button image-wrapper"
+       id="user-nav-menu"
+       routerLink="/edit-profile"
+       [style.background-image]="'url(' + user?.photo_thumbnail + ')'"></a>
+
+    <mz-dropdown
+      #dropdownUserNavMenu
+      [id]="'dropdownUserNavMenu'"
+      [dropdownButtonId]="'user-nav-menu'"
+      [constrainWidth]="false"
+      [hover]="isHover"
+      [stopPropagation]="true">
+
+      <mz-dropdown-item><a routerLink="/edit-profile">Мой профиль</a></mz-dropdown-item>
+
+      <ng-container *ltCanView="permissionForView">
+
+        <mz-dropdown-item *ltCanView="{ ban_groups: [PERMISSION_GROUPS?.SECURITY] }">
+          <a [routerLink]="'/plans/own/' + user?.id">Мой ИПР</a>
+        </mz-dropdown-item>
+        <mz-dropdown-item *ltCanView="{ ban_groups: [PERMISSION_GROUPS?.SECURITY] }">
+          <a routerLink="/vacations" tourAnchor="menu_step8"> Мои отпуска</a>
+        </mz-dropdown-item>
+
+        <ng-container *ngIf="isVisibleSalary">
+          <mz-dropdown-item *ltCanView="[ PERMISSION_GROUPS?.ADMIN_MONEY ]">
+            <a routerLink="/salary">Управление ЗП</a>
+          </mz-dropdown-item>
+        </ng-container>
+
+        <mz-dropdown-item *ltCanView="[ PERMISSION_GROUPS?.ADMIN_PEOPLES ]">
+          <a routerLink="/admin-users-panel"> Управление пользователями </a>
+        </mz-dropdown-item>
+
+        <mz-dropdown-item
+          *ltCanView="[ PERMISSION_GROUPS.VACATIONS_FOR_MANAGER,
+                        PERMISSION_GROUPS.VACATIONS_FOR_REVIEWERS ]">
+          <a routerLink="/admin-vacations-panel"> Админ панель отпусков </a>
+        </mz-dropdown-item>
+
+      </ng-container>
+
+      <mz-dropdown-divider></mz-dropdown-divider>
+      <mz-dropdown-item><a (click)="logOut()">Выйти</a></mz-dropdown-item>
+    </mz-dropdown>
+-->
+  </div>
+</div>
