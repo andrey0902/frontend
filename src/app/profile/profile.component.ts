@@ -72,7 +72,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
   public wantBeMentor(): void {
     this.dialogService.openRequestDialog('Примечание', (text) => {
-      if (text !== null || text !== undefined) {
+      if (text !== null && text !== undefined) {
         this.route.paramMap.pipe(
           takeWhile(() => this.componentActive),
           switchMap((params: ParamMap) => this.userService.createMentorRequest(params.get('id'), text)),
@@ -88,7 +88,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
   public needMentor(): void {
     this.dialogService.openRequestDialog('Примечание', (text) => {
-      if (text !== null || text !== undefined) {
+      if (text !== null && text !== undefined) {
         this.route.paramMap.pipe(
           takeWhile(() => this.componentActive),
           switchMap((params: ParamMap) => this.userService.createProtegeRequest(params.get('id'), text))
