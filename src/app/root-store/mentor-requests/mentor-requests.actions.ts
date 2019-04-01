@@ -1,5 +1,4 @@
 import {Action} from '@ngrx/store';
-import {User} from '../../models/user.model';
 import {MentorRequestMap} from '../../models/mentor-request';
 
 export enum MentorRequestsActionTypes {

@@ -1,5 +1,8 @@
 <div class="container">
   <h2 class="text-center page-caption">Таблица ответственности менторов</h2>
-  <lt-nav-tabs [navLinks]="navLinks"> </lt-nav-tabs>
+  <lt-nav-tabs
+    [navLinks]="navLinks"
+    *ngIf="isAdmin">
+  </lt-nav-tabs>
   <router-outlet></router-outlet>
 </div>
