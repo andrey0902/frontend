@@ -32,6 +32,5 @@ export class ProfileOverviewComponent implements OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    console.log(changes);
   }
 }
