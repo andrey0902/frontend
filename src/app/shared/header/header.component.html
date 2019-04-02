@@ -1,7 +1,7 @@
 <header>
   <div class="header--container">
     <div class="logo">
-      <a>
+      <a [href]="portalSitePath">
         <img class="img-responsive" src="./assets/img/logo-min.png" alt="Light IT"/>
       </a>
     </div>
@@ -10,6 +10,7 @@
             [PERMISSION_GROUPS]="PERMISSION_GROUPS"
             [nav_links]="nav_links"
             [countMessages]="countMessages"
+            (logouting)="logout()"
     ></lt-nav>
   </div>
 </header>
