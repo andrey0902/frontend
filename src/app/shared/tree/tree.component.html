@@ -1,16 +1,16 @@
-<lt-create-tree-item *ngIf="canEdit" label="Добавить задачу" (createItem)="addItemToRoot($event)" class="create-tree-item" [main] = 'true'></lt-create-tree-item>
+<lt-create-tree-item *ngIf="canEdit && !disable" label="Добавить задачу" (createItem)="addItemToRoot($event)" class="create-tree-item" [main] = 'true'></lt-create-tree-item>
 <mat-tree [dataSource]="dataSource" [treeControl]="treeControl">
-  <mat-tree-node *matTreeNodeDef="let node" matTreeNodePadding>
- <!--   <button mat-icon-button disabled></button>-->
+  <mat-tree-node *matTreeNodeDef="let node" matTreeNodePadding [disabled]="disable">
     <mat-checkbox class="checklist-leaf-node padding"
                   [ngClass]="{'drop-above': dragNodeExpandOverArea === 'above' && dragNodeExpandOverNode === node,
                               'drop-below': dragNodeExpandOverArea === 'below' && dragNodeExpandOverNode === node,
                               'drop-center': dragNodeExpandOverArea === 'center' && dragNodeExpandOverNode === node
                              }"
                   [checked]="checklistSelection.isSelected(node)"
+                  [disabled]="disable"
                   (change)="todoItemSelectionToggle(node);"
                   draggable="true"
-                  (dragstart)="handleDragStart($event, node);"
+                  (dragstart)="!disable && handleDragStart($event, node);"
                   (dragover)="handleDragOver($event, node);"
                   (drop)="handleDrop($event, node);"
                   (dragend)="handleDragEnd($event);">{{node.text}}</mat-checkbox>
@@ -18,7 +18,6 @@
   </mat-tree-node>
 
   <mat-tree-node *matTreeNodeDef="let node; when: showAsInput" matTreeNodePadding>
-   <!-- <button mat-icon-button disabled></button>-->
     <lt-create-tree-item *ngIf="canEdit"
                          [value] = "node.text"
                          (createItem)="addItem($event, node)"
@@ -26,7 +25,7 @@
                          class="create-tree-item padding"></lt-create-tree-item>
   </mat-tree-node>
 
-  <mat-tree-node *matTreeNodeDef="let node; when: hasChild" matTreeNodePadding>
+  <mat-tree-node *matTreeNodeDef="let node; when: hasChild" matTreeNodePadding [disabled]="disable">
     <button mat-icon-button matTreeNodeToggle
             [attr.aria-label]="'toggle ' + node.text">
       <mat-icon class="mat-icon-rtl-mirror">
@@ -37,14 +36,16 @@
                               'drop-below': dragNodeExpandOverArea === 'below' && dragNodeExpandOverNode === node,
                               'drop-center': dragNodeExpandOverArea === 'center' && dragNodeExpandOverNode === node}"
                   draggable="true"
-                  (dragstart)="handleDragStart($event, node);"
+                  (dragstart)="!disable && handleDragStart($event, node);"
                   (dragover)="handleDragOver($event, node);"
                   (drop)="handleDrop($event, node);"
                   (dragend)="handleDragEnd($event);"
                   [checked]="checklistSelection.isSelected(node)"
+                  [disabled]="disable"
                   [indeterminate]="descendantsPartiallySelected(node)"
                   (change)="todoItemSelectionToggle(node)">{{node.text}}</mat-checkbox>
-    <ng-container *ngTemplateOutlet="nodeMenu; context: {node: node}" class="buttons"></ng-container>
+      <ng-container *ngTemplateOutlet="nodeMenu; context: {node: node}" class="buttons"></ng-container>
+
   </mat-tree-node>
 </mat-tree>
 
@@ -52,7 +53,7 @@
 <span #emptyItem></span>
 
 <ng-template #nodeMenu let-node = "node">
-  <div class="buttons">
+  <div class="buttons" *ngIf="!disable">
   <button mat-icon-button (click)="redactItem(node)"><mat-icon>edit</mat-icon></button>
   <button mat-icon-button (click)="removeItem(node)"><mat-icon>close</mat-icon></button>
   <button *ngIf="isValidToAdd(node)" mat-icon-button (click)="addNewItem(node)"><mat-icon>add</mat-icon></button>

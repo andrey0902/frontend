@@ -12,7 +12,7 @@ import {IProgress} from '../../personal-plan/shared/models/progress.model';
 })
 export class ProfileOverviewComponent implements OnChanges {
   @Input() currentIteration: Iteration;
-
+  @Input() disablePlan = false;
   progress: IProgress = null;
   objectValues = Object.values;
 

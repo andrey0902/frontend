@@ -37,6 +37,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
   showRequestButtons = false;
   showIterationBtn = false;
   componentActive = true;
+  disablePlan = true;
 
   ngOnInit(): void {
     this.currentUser$ = this.store.select(selectCurrentUser);
@@ -146,6 +147,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
     }
     if (selectedUser.attributes.mentor && selectedUser.attributes.mentor.id === currentUser.id) {
       this.showIterationBtn = true;
+      this.disablePlan = false;
       return;
     }
     this.showRequestButtons = false;

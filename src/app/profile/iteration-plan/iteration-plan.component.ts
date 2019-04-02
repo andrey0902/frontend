@@ -15,6 +15,7 @@ import {IterationTreeService} from '../services/iteration-tree.service';
 export class IterationPlanComponent implements OnInit {
   @Input() iteration: Iteration;
   @Input() plan: IterationTaskModel[];
+  @Input() disablePlan = false
 
   @Output() public dataChanged = new EventEmitter<ItemNode[]>();
   @Output() public createItem = new EventEmitter<ItemNode>();

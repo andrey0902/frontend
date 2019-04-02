@@ -1,5 +1,6 @@
   <div class="tree">
     <lt-tree *ngIf="plan"
+             [disable]="disablePlan"
              [data]="plan"
              [type]="itemConstructor"
              (deleteItem)="deleteTreeItem($event)"
