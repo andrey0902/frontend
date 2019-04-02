@@ -1,46 +1,5 @@
 @import '../../../scss/variables';
 @import '../../../scss/helpers';
-/*
-:host {
-  position: fixed;
-  top: 0;
-  left: 0;
-  display: block;
-  z-index: 999;
-  width: 100%;
-  height: $header-height;
-  background-color: $primary-color;
-  color: white;
-  box-shadow: 0 3px 3px -2px rgba(0,0,0,.2), 0 3px 4px 0 rgba(0,0,0,.14), 0 1px 8px 0 rgba(0,0,0,.12);
-}
-
-.nav-wrapper {
-  flex-grow: 1;
-  @extend .vertical-center;
-  margin: 0 auto;
-  width: 90%;
-  max-width: 1280px;
-}
-
-.nav-item {
-  text-transform: uppercase;
-  font-family: "Google Sans", Roboto, Arial, sans-serif;
-  cursor: pointer;
-}
-
-.app-logo {
-  width: 170px;
-  height: 50px;
-  cursor: pointer;
-  justify-self: flex-start;
-  box-sizing: border-box;
-}
-
-.mat-menu-item {
-  font-family: "Google Sans", Roboto, Arial, sans-serif;
-  font-size: .95em;
-}
-*/
 
 @keyframes fadein {
   from { transform: translateY(-100%); }
