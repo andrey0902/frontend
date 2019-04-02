@@ -29,7 +29,7 @@ export class MentorProtegeComponent implements OnInit, OnDestroy {
 
   isAdmin = false;
   componentActive = true;
-  mentorshipList$: Observable<UsersMap>;
+  mentorshipList$: Observable<User[]>;
   objectValues = Object.values;
 
   ngOnInit() {
