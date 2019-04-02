@@ -1,0 +1,146 @@
+<div class="menu">
+  <div class="navigation" *ltCanView="permissionForView">
+    <ng-container *ltCanView="{ ban_groups: [PERMISSION_GROUPS?.SECURITY] }">
+      <button class="dropdown-button">
+        О компании
+        <mat-select class="select" panelClass="customSelect">
+          <mat-option>
+            <div>Цель и миссия</div>
+            <a [href]="nav_links.goal" class="link"></a>
+          </mat-option>
+          <mat-option>
+            <div>Информация для новичка</div>
+            <a [href]="nav_links.info" class="link"></a>
+          </mat-option>
+          <mat-option>
+            <div>Кодекс разработчика</div>
+            <a [href]="nav_links.codex" class="link"></a>
+          </mat-option>
+          <mat-option>
+            <div>Правила</div>
+            <a [href]="nav_links.rules" class="link"></a>
+          </mat-option>
+          <mat-option>
+            <div>FAQ</div>
+            <a [href]="nav_links.faq" class="link"></a>
+          </mat-option>
+        </mat-select>
+      </button>
+    </ng-container>
+
+    <ng-container>
+      <button class="dropdown-button">
+        Сотрудники
+        <mat-select class="select" panelClass="customSelect">
+          <mat-option>
+            <div>Сотрудники</div>
+            <a [href]="nav_links.employees" class="link"></a>
+          </mat-option>
+          <mat-option>
+            <div>Дни рождения</div>
+            <a [href]="nav_links.birthdays" class="link"></a>
+          </mat-option>
+          <mat-option *ltCanView="{ ban_groups: [PERMISSION_GROUPS?.SECURITY] }">
+            <div>Где кто</div>
+            <a [href]="nav_links.places" class="link"></a>
+          </mat-option>
+        </mat-select>
+      </button>
+    </ng-container>
+
+    <ng-container *ltCanView="{ ban_groups: [PERMISSION_GROUPS?.SECURITY] }">
+      <button class="dropdown-button">
+        Менторство
+        <mat-select class="select" panelClass="customSelect">
+          <mat-option>
+            <div>Личный кабинет</div>
+            <a [routerLink]="['/profile', user?.id]" class="link"></a>
+          </mat-option>
+          <mat-option>
+            <div>Таблица ответственности</div>
+            <a [routerLink]="'mentorship'" class="link"></a>
+          </mat-option>
+          // TODO: It needs new data for full portal-validation:  user.has_available_idp, user.has_shared_idp
+          <!-- <mz-dropdown-item class="access-ipr" *ngIf="user?.mentor_status === 'ментор' && user?.has_available_idp || user?.has_shared_idp">  -- from portal -->
+          <mat-option *ngIf="user.attributes.isMentor">
+            <div>Доступные ИПР</div>
+            <a [href]="nav_links.available_ipr" class="link"></a>
+          </mat-option>
+          <mat-option>
+            <div>Руководство ментора</div>
+            <a [href]="nav_links.manual" target="_blank" class="link"></a>
+          </mat-option>
+        </mat-select>
+      </button>
+    </ng-container>
+
+
+    <ng-container *ltCanView="{ ban_groups: [PERMISSION_GROUPS?.SECURITY] }">
+      <button class="dropdown-button">
+        Жизнь Light IT
+        <mat-select class="select" panelClass="customSelect">
+          <mat-option>
+            <div>Альбомы</div>
+            <a [href]="nav_links.albums" class="link"></a>
+          </mat-option>
+          <mat-option>
+            <div>Доклады</div>
+            <a [href]="nav_links.reports" class="link"></a>
+          </mat-option>
+          <mat-option>
+            <div>Наша Wiki</div>
+            <a [href]="nav_links.wiki" target="_blank" class="link"></a>
+          </mat-option>
+          <mat-option>
+            <div>Тестовые устройства</div>
+            <a [href]="nav_links.devices" class="link"></a>
+          </mat-option>
+        </mat-select>
+      </button>
+    </ng-container>
+  </div>
+
+
+  <div class="user-block">
+    <div class="trustbox">
+       <lt-trustbox
+         [PERMISSION_GROUPS]="PERMISSION_GROUPS"
+         [nav_links]="nav_links"
+         [countMessages]="countMessages"
+       ></lt-trustbox>
+    </div>
+
+    <button class="dropdown-button image-wrapper"
+            [style.background-image]="'url(' + user?.attributes.photoThumbnail + ')'">
+      <mat-select class="select" panelClass="customSelect">
+        <mat-option>
+          <div>Мой профиль</div>
+          <a [href]="nav_links.profile" class="link"></a>
+        </mat-option>
+        <ng-container *ltCanView="permissionForView">
+          <mat-option *ltCanView="{ ban_groups: [PERMISSION_GROUPS?.SECURITY] }">
+            <div>Мои задачи</div>
+            <a [href]="nav_links.my_tasks + '/' + user.attributes.portalId" class="link"></a>
+          </mat-option>
+          <mat-option *ltCanView="{ ban_groups: [PERMISSION_GROUPS?.SECURITY] }">
+            <div>Мои отпуска</div>
+            <a [href]="nav_links.my_vacations" class="link"></a>
+          </mat-option>
+          <mat-option *ltCanView="[ PERMISSION_GROUPS?.ADMIN_MONEY ]">
+            <div>Управление ЗП</div>
+            <a [href]="nav_links.wage" class="link"></a>
+          </mat-option>
+          <mat-option *ltCanView="[ PERMISSION_GROUPS?.ADMIN_PEOPLES ]">
+            <div>Управление пользователями</div>
+            <a [href]="nav_links.users" class="link"></a>
+          </mat-option>
+          <mat-option *ltCanView="[ PERMISSION_GROUPS.VACATIONS_FOR_MANAGER, PERMISSION_GROUPS.VACATIONS_FOR_REVIEWERS ]">
+            <div>Админ панель отпусков</div>
+            <a [href]="nav_links.vacations" class="link"></a>
+          </mat-option>
+        </ng-container>
+        <mat-option><a>Выйти</a></mat-option>
+      </mat-select>
+    </button>
+  </div>
+</div>

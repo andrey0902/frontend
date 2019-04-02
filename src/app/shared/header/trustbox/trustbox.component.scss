@@ -1,0 +1,38 @@
+.trustbox-toggler {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  width: 9.6em;
+  font-size: 0.8em;
+  justify-content: center;
+  padding-top: .4em;
+  cursor: pointer;
+  color : #fff;
+  margin-right: 1em;
+  transition-duration: .35s;
+  text-decoration: unset;
+
+  &:hover {
+    color: #fff;
+  }
+}
+
+.trustbox-toggler-counter {
+  border-radius: .3em;
+  border: 1.8px solid #fff;
+  background: #fff;
+  font-size: .8em;
+  display: block;
+  color: #32aaf5;
+  right: 3em;
+  bottom: 2.8em;
+  position: absolute;
+  font-weight: 600;
+  padding: 0 .35em;
+  font-family: Roboto,Arial,sans-serif;
+  line-height: 1.5;
+}
+
+.trustbox-label {
+  padding-top: 5px;
+}

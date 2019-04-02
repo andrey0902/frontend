@@ -1,20 +1,20 @@
 import { Injectable } from '@angular/core';
-import { CookieService } from 'ngx-cookie-service';
 import {environment} from '../../../environments/environment';
+import {CookieStorageService} from './cookie-storage.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
 
-  constructor(private cookieService: CookieService) {
+  constructor(private cookieService: CookieStorageService) {
 
     // TODO: Remove this in the future. This is a temporary solution
-    // this.cookieService.set( 'ltp.token', '3a50cace68d3902716b0627cc2bfb8d0f3673801' );
+    // this.cookieService.token = 'e2d5b4a174612eeb0864ec7fe540b966bfe3667a';
   }
 
   getAuthToken() {
-    const authToken = this.cookieService.get('ltp.token');
+    const authToken = this.cookieService.token;
     if (!authToken) {
       window.location.href = environment.redirectPath;
     }

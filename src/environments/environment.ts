@@ -5,8 +5,10 @@
 export const environment = {
   production: false,
   API_PATH: 'https://mentors.dev-lt-portal.tk/api',
+  PORTAL_PATH: 'https://dev-lt-portal.tk:50443/api',
   redirectPath: 'https://dev-lt-portal.tk:50443/#/login',
-  redirectProfile: 'https://dev-lt-portal.tk:50443/#/profile/'
+  redirectProfile: 'https://dev-lt-portal.tk:50443/#/profile/',
+  portalSitePath: 'https://dev-lt-portal.tk:50443/#/'
 };
 
 /*
