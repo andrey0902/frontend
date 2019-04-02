@@ -50,7 +50,7 @@ export class Attributes {
   }
 
   get fullName() {
-    return `${this.firstName} ${this.lastName}`;
+    return `${this.lastName} ${this.firstName}`;
   }
 
   patch(payload) {
