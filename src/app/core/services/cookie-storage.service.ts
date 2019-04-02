@@ -14,11 +14,12 @@ export class CookieStorageService {
   }
 
   public set token(token: string) {
-    this.cookie.set( 'ltp.token', token);
+    this.cookie.set('ltp.token', token);
   }
 
 
   public get permissions() {
-    return JSON.parse(this.cookie.get('ltp.permissions'));
+    const permissions = this.cookie.get('ltp.permissions');
+    return permissions ? JSON.parse(permissions) : ["read_trust_box"];
   }
 }

@@ -1,0 +1,14 @@
+.customSelect{
+  border-radius: 0 !important;
+  max-height: unset !important;
+
+  mat-option {
+    max-width: 172px;
+    white-space: normal;
+    line-height: 22px !important;
+    padding: 14px 16px !important;
+    box-sizing: border-box;
+    height: auto !important;
+    position: relative;
+  }
+}

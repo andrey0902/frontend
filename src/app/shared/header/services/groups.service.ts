@@ -1,3 +1,5 @@
+import {CookieService} from 'ngx-cookie-service';
+
 export class GroupsService {
 
   public static PERMISSION_GROUPS = {
@@ -20,11 +22,11 @@ export class GroupsService {
     SECURITY: 'security'
   };
 
-  public static checkGroup(permissions, groupsForCheck: any[]): boolean {
+  public static checkGroup(groupsForCheck: any[], groups): boolean {
     let permit = false;
 
-    if (permissions) {
-      for (const currGroup of permissions) {
+    if (groups) {
+      for (const currGroup of groups) {
         if (groupsForCheck.indexOf(currGroup) !== -1) {
           permit = true;
         }
@@ -34,4 +36,30 @@ export class GroupsService {
     return permit;
   }
 
+  public static get_nav_links(path: string) {
+    return {
+      goal: `${path}about-company/mission`,
+      info: `${path}about-company/inform`,
+      codex: `${path}about-company/dev-codex`,
+      rules: `${path}about-company/rules`,
+      faq: `${path}about-company/FAQ`,
+      employees: `${path}employees`,
+      birthdays: `${path}birthdays`,
+      places: `${path}locator`,
+      available_ipr: `${path}plans/available`,
+      manual: 'https://drive.google.com/file/d/183bGWXUgQrt-z8VX_wLKZXCdthGMAT0y/view',
+      albums: `${path}gallery`,
+      reports: `${path}meetups/all`,
+      wiki: 'http://wiki.light-it.loc/',
+      devices: `${path}testing-devices`,
+      admin_letter: `${path}admin-trustbox`,
+      letter: `${path}trustbox`,
+      profile: `${path}edit-profile`,
+      my_tasks: `${path}plans/own`,
+      my_vacations: `${path}vacations`,
+      wage: `${path}salary`,
+      users: `${path}admin-users-panel`,
+      vacations: `${path}admin-vacations-panel`
+    };
+  }
 }

@@ -4,20 +4,28 @@ import {NavigationComponent} from './navigation/navigation.component';
 import {HeaderComponent} from './header.component';
 import {CanViewDirective} from './directives/can-view.directive';
 import {MatSelectModule} from '@angular/material';
+import {TrustboxService} from './services/trustbox.service';
+import {RouterModule} from '@angular/router';
+import { TrustboxComponent } from './trustbox/trustbox.component';
 
 
 @NgModule({
   declarations: [
     HeaderComponent,
     NavigationComponent,
-    CanViewDirective
+    CanViewDirective,
+    TrustboxComponent
   ],
   exports: [
     HeaderComponent
   ],
   imports: [
     CommonModule,
-    MatSelectModule
+    MatSelectModule,
+    RouterModule
+  ],
+  providers: [
+    TrustboxService
   ]
 })
 export class HeaderModule {

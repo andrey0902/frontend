@@ -1,39 +1,63 @@
 @import '../../../../scss/variables';
 
-.menu {
-  display: flex;
-  margin-top: 8px;
-  width: 100%;
-
-  .navigation {
-    justify-self: flex-start;
-    margin-top: 8px;
-    display: flex;
-  }
+:host {
+ flex: 1;
 }
 
-.mobile-menu {
-  float: right;
-  color: #fff;
-  border: 0;
+.menu {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 8px;
+  width: 100%;
+}
+
+.navigation {
+  justify-self: flex-start;
+  margin-top: 8px;
+  display: flex;
+}
+
+.dropdown-button {
+  color: $clear-color;
+  box-shadow: none;
   background-color: transparent;
-  font-size: 32px;
-  padding: 0;
-  margin-top: 5px;
-  margin-left: 20px;
-  outline: none;
+  cursor: pointer;
+  transition: background-color .2s;
+  font-size: 1rem;
+  outline: 0;
+  border: none;
+  border-radius: 2px;
+  display: inline-block;
+  height: 36px;
+  line-height: 36px;
+  padding: 0 2rem;
+  text-transform: uppercase;
+  vertical-align: middle;
+  text-decoration: none;
+  position: relative;
+  overflow: hidden;
+
+  .select {
+    position: absolute;
+    width: 172px;
+    right: 50%;
+    transform: translateX(50%);
+    top: 0;
+  }
+
+  ::ng-deep .mat-select .mat-select-arrow-wrapper {
+    opacity: 0;
+  }
 }
 
 .user-block {
   position: relative;
   float: right;
+  display: flex;
 
-  .dropdown-content li > a {
-  //  color: $primary-color-dark!important;
-  }
-
-  .dropdown-content {
-    width: 150px!important;
+  .dropdown-button .select {
+    right: 0;
+    transform: unset;
   }
 
   .image-wrapper {
@@ -44,83 +68,18 @@
     background-size: cover;
     background-position: 50% 50%;
     background-repeat: no-repeat;
-  }
-
-  .header-user-pic {
-    &:hover {
-      cursor: pointer;
-    }
-  }
-
-  ul.header-user-menu {
-    display: none;
-    padding: 0;
-    margin: 0;
-    width: auto;
-    overflow: hidden;
-    position: absolute;
-    list-style: none;
-    white-space: nowrap;
-    background-color: #fff;
-    right: 50%;
-    top: 35px;
-   // @include shadow;
-
-    &.show {
-      display: block;
-    }
-
-    li {
-      display: inline-block;
-      width: 100%;
-      padding: 10px 15px;
-      float: left;
-
-      a {
-    //    color: $primary-color-dark;
-        text-decoration: none;
-      }
-
-      &:hover {
-    //    background-color: $primary-color-light;
-      }
-    }
+    padding: unset;
+    cursor: pointer;
   }
 }
 
+.link {
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  top:0;
+  left:0;
+  z-index: 10;
+  opacity: 0;
+}
 
-
-
-
-  .dropdown-button {
-    color: $clear-color;
-    box-shadow: none;
-    background-color: transparent;
-    cursor: pointer;
-    transition: background-color .2s;
-    font-size: 1rem;
-    outline: 0;
-    border: none;
-    border-radius: 2px;
-    display: inline-block;
-    height: 36px;
-    line-height: 36px;
-    padding: 0 2rem;
-    text-transform: uppercase;
-    vertical-align: middle;
-    text-decoration: none;
-    position: relative;
-  }
-
- .select{
-/*    position: absolute;
-    opacity: 0;
-    left:0;
-    top:0;
-    width: 100%;
-    max-width: 170px;*/
-  }
-
-  /*&:hover .select {
-    opacity: 1;
-  }*/
