@@ -1,4 +1,4 @@
-import {Injectable} from '@angular/core';
+import { Injectable } from '@angular/core';
 import {environment} from '../../../environments/environment';
 import {CookieStorageService} from './cookie-storage.service';
 import {HttpClient} from '@angular/common/http';
@@ -13,7 +13,7 @@ export class AuthService {
   constructor(private cookieService: CookieStorageService, private http: HttpClient) {
 
     // TODO: Remove this in the future. This is a temporary solution
-    // this.cookieService.token = '21b61cef163cb62381216327ec6846ee925dabce';
+    // this.cookieService.token = 'fc5c1e79e8fcdc81bcd2fc48300a89124aa1829f';
   }
 
   getAuthToken() {

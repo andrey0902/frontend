@@ -3,6 +3,7 @@ import { Iteration } from '../../models/iteration.model';
 import { ItemNode } from '../../shared/tree/models/item-node.model';
 import {IterationTaskModel} from '../../personal-plan/shared/models/iteration-plan.model';
 import {IProgress} from '../../personal-plan/shared/models/progress.model';
+import {Rights} from '../profile.component';
 
 @Component({
   selector: 'lt-profile-overview',
@@ -12,7 +13,7 @@ import {IProgress} from '../../personal-plan/shared/models/progress.model';
 })
 export class ProfileOverviewComponent implements OnChanges {
   @Input() currentIteration: Iteration;
-
+  @Input() userRights: Rights;
   progress: IProgress = null;
   objectValues = Object.values;
 

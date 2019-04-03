@@ -1,10 +1,11 @@
-import {ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges} from '@angular/core';
 import {IterationTaskModel} from '../../personal-plan/shared/models/iteration-plan.model';
 import {ItemNode} from '../../shared/tree/models/item-node.model';
 import {InfoPlanModel} from '../../personal-plan/shared/models/info-plan.model';
 import {combineLatest, Observable} from 'rxjs';
 import {Iteration} from '../../models/iteration.model';
 import {IterationTreeService} from '../services/iteration-tree.service';
+import {Rights} from '../profile.component';
 
 @Component({
   selector: 'lt-iteration-plan',
@@ -12,9 +13,10 @@ import {IterationTreeService} from '../services/iteration-tree.service';
   styleUrls: ['./iteration-plan.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class IterationPlanComponent implements OnInit {
+export class IterationPlanComponent implements OnInit, OnChanges {
   @Input() iteration: Iteration;
   @Input() plan: IterationTaskModel[];
+  @Input() userRights: Rights;
 
   @Output() public dataChanged = new EventEmitter<ItemNode[]>();
   @Output() public createItem = new EventEmitter<ItemNode>();
@@ -25,11 +27,16 @@ export class IterationPlanComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.treeService.getTree(this.iteration.id, this.iteration.user_id)
-      .subscribe((plan: IterationTaskModel[]) => {
-        this.plan = IterationTaskModel.treeStructureGenerator(plan);
-        this.cd.detectChanges();
-      });
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes.iteration) {
+      this.treeService.getTree(this.iteration.id, this.iteration.user_id)
+        .subscribe((plan: IterationTaskModel[]) => {
+          this.plan = IterationTaskModel.treeStructureGenerator(plan);
+          this.cd.detectChanges();
+        });
+    }
   }
 
   public deleteTreeItem(item: ItemNode): void {
