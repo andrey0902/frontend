@@ -14,6 +14,8 @@ import {selectIteration} from '../root-store/profile/iteration/iteration.selecto
 import {Iteration} from '../models/iteration.model';
 import {DeleteIterationRequest, GetIterationRequest} from '../root-store/profile/iteration/iteration.actions';
 
+export type Rights = 'mentor' | 'current' | 'alien';
+
 @Component({
   selector: 'lt-profile',
   templateUrl: './profile.component.html',
@@ -37,7 +39,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
   showRequestButtons = false;
   showIterationBtn = false;
   componentActive = true;
-  disablePlan = true;
+  userRights: Rights = 'alien';
 
   ngOnInit(): void {
     this.currentUser$ = this.store.select(selectCurrentUser);
@@ -143,11 +145,12 @@ export class ProfileComponent implements OnInit, OnDestroy {
   private showButtons(selectedUser, currentUser) {
     if (selectedUser.id === currentUser.id) {
       this.showRequestButtons = true;
+      this.userRights = 'current';
       return;
     }
     if (selectedUser.attributes.mentor && selectedUser.attributes.mentor.id === currentUser.id) {
       this.showIterationBtn = true;
-      this.disablePlan = false;
+      this.userRights = 'mentor';
       return;
     }
     this.showRequestButtons = false;

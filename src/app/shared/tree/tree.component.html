@@ -7,7 +7,7 @@
                               'drop-center': dragNodeExpandOverArea === 'center' && dragNodeExpandOverNode === node
                              }"
                   [checked]="checklistSelection.isSelected(node)"
-                  [disabled]="disable"
+                  [disabled]="checkboxDisable"
                   (change)="todoItemSelectionToggle(node);"
                   draggable="true"
                   (dragstart)="!disable && handleDragStart($event, node);"
@@ -41,7 +41,7 @@
                   (drop)="handleDrop($event, node);"
                   (dragend)="handleDragEnd($event);"
                   [checked]="checklistSelection.isSelected(node)"
-                  [disabled]="disable"
+                  [disabled]="checkboxDisable"
                   [indeterminate]="descendantsPartiallySelected(node)"
                   (change)="todoItemSelectionToggle(node)">{{node.text}}</mat-checkbox>
       <ng-container *ngTemplateOutlet="nodeMenu; context: {node: node}" class="buttons"></ng-container>

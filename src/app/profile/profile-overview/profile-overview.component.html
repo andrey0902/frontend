@@ -9,6 +9,6 @@
 </div>
 <lt-iteration-progress [progress]="progress"></lt-iteration-progress>
 <div class="plan">
-<lt-iteration-plan [iteration]="currentIteration" [disablePlan]="disablePlan" (dataChanged)="treeDataChanged($event)"></lt-iteration-plan>
+<lt-iteration-plan [iteration]="currentIteration" [userRights]="userRights" (dataChanged)="treeDataChanged($event)"></lt-iteration-plan>
 </div>
 

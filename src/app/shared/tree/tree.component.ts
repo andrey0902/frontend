@@ -20,6 +20,7 @@ export class TreeComponent implements OnChanges, OnInit {
   @Input() public canEdit = true;
   @Input() public type: new (...arg: any[]) => ItemNode;
   @Input() public disable = false;
+  @Input() public checkboxDisable = false;
 
   @Output() public updateItem = new EventEmitter<ItemNode[]>();
   @Output() public deleteItem = new EventEmitter<ItemNode>();

@@ -5,6 +5,7 @@ import {InfoPlanModel} from '../../personal-plan/shared/models/info-plan.model';
 import {combineLatest, Observable} from 'rxjs';
 import {Iteration} from '../../models/iteration.model';
 import {IterationTreeService} from '../services/iteration-tree.service';
+import {Rights} from '../profile.component';
 
 @Component({
   selector: 'lt-iteration-plan',
@@ -15,7 +16,7 @@ import {IterationTreeService} from '../services/iteration-tree.service';
 export class IterationPlanComponent implements OnInit {
   @Input() iteration: Iteration;
   @Input() plan: IterationTaskModel[];
-  @Input() disablePlan = false
+  @Input() userRights: Rights;
 
   @Output() public dataChanged = new EventEmitter<ItemNode[]>();
   @Output() public createItem = new EventEmitter<ItemNode>();
