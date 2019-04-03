@@ -13,6 +13,7 @@
   position: relative;
   text-decoration: none;
   cursor: pointer;
+  display: block;
 
   &:hover {
     background: rgba(0,0,0,.04);
@@ -27,17 +28,25 @@
 
 /* Dropdown content (hidden by default) */
 .dropdown-content {
-  display: none;
-  opacity: 0;
-  flex-direction: column;
-  height: 0;
+  // display: none;
+  //opacity: .5;
+  max-height: 0;
   position: absolute;
   top: 0;
   left: 0;
   background-color: #ffffff;
   min-width: 160px;
   box-shadow: 0 2px 4px -1px rgba(0,0,0,.2), 0 4px 5px 0 rgba(0,0,0,.14), 0 1px 10px 0 rgba(0,0,0,.12);
+  transition: max-height .1s ease-out;
+  overflow: hidden;
   z-index: 1;
+}
+
+/* Show the dropdown menu on hover */
+.dropdown:hover .dropdown-content {
+  max-height: 600px;
+  transition: max-height .3s ease-in;
+  opacity: 1;
 }
 
 
@@ -56,14 +65,7 @@
   background-color: #ddd;
 }
 
-/* Show the dropdown menu on hover */
-.dropdown:hover .dropdown-content {
-  height: auto;
-  opacity: 1;
-  display: flex;
-  flex-direction: column;
-  transition: 0s;
-}
+
 
 
 
