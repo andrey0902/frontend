@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges} from '@angular/core';
 import {IterationTaskModel} from '../../personal-plan/shared/models/iteration-plan.model';
 import {ItemNode} from '../../shared/tree/models/item-node.model';
 import {InfoPlanModel} from '../../personal-plan/shared/models/info-plan.model';
@@ -13,7 +13,7 @@ import {Rights} from '../profile.component';
   styleUrls: ['./iteration-plan.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class IterationPlanComponent implements OnInit {
+export class IterationPlanComponent implements OnInit, OnChanges {
   @Input() iteration: Iteration;
   @Input() plan: IterationTaskModel[];
   @Input() userRights: Rights;
@@ -27,11 +27,16 @@ export class IterationPlanComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.treeService.getTree(this.iteration.id, this.iteration.user_id)
-      .subscribe((plan: IterationTaskModel[]) => {
-        this.plan = IterationTaskModel.treeStructureGenerator(plan);
-        this.cd.detectChanges();
-      });
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes.iteration) {
+      this.treeService.getTree(this.iteration.id, this.iteration.user_id)
+        .subscribe((plan: IterationTaskModel[]) => {
+          this.plan = IterationTaskModel.treeStructureGenerator(plan);
+          this.cd.detectChanges();
+        });
+    }
   }
 
   public deleteTreeItem(item: ItemNode): void {

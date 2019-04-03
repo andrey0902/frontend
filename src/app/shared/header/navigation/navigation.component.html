@@ -60,7 +60,7 @@
             <div>Таблица ответственности</div>
             <a [routerLink]="'mentorship'" class="link"></a>
           </mat-option>
-          // TODO: It needs new data for full portal-validation:  user.has_available_idp, user.has_shared_idp
+          <!-- TODO: It needs new data for full portal-validation:  user.has_available_idp, user.has_shared_idp -->
           <!-- <mz-dropdown-item class="access-ipr" *ngIf="user?.mentor_status === 'ментор' && user?.has_available_idp || user?.has_shared_idp">  -- from portal -->
           <mat-option *ngIf="user.attributes.isMentor">
             <div>Доступные ИПР</div>
@@ -139,7 +139,10 @@
             <a [href]="nav_links.vacations" class="link"></a>
           </mat-option>
         </ng-container>
-        <mat-option><a>Выйти</a></mat-option>
+        <mat-option>
+          <div>Выйти</div>
+          <a class="link" (click)="logout()"></a>
+        </mat-option>
       </mat-select>
     </button>
   </div>

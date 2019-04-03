@@ -23,14 +23,14 @@
   background-color: transparent;
   cursor: pointer;
   transition: background-color .2s;
-  font-size: 1rem;
+  font-size: 15px;
   outline: 0;
   border: none;
   border-radius: 2px;
   display: inline-block;
   height: 36px;
   line-height: 36px;
-  padding: 0 2rem;
+  padding: 0 30px;
   text-transform: uppercase;
   vertical-align: middle;
   text-decoration: none;
@@ -54,6 +54,7 @@
   position: relative;
   float: right;
   display: flex;
+  align-items: center;
 
   .dropdown-button .select {
     right: 0;
@@ -70,6 +71,7 @@
     background-repeat: no-repeat;
     padding: unset;
     cursor: pointer;
+    line-height: 22.5px;
   }
 }
 

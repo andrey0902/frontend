@@ -1,4 +1,4 @@
-import {ChangeDetectorRef, Component, OnDestroy, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit} from '@angular/core';
 import {User} from '../models/user.model';
 import {ActivatedRoute, ParamMap} from '@angular/router';
 import {combineLatest, Observable, of} from 'rxjs';
@@ -19,7 +19,8 @@ export type Rights = 'mentor' | 'current' | 'alien';
 @Component({
   selector: 'lt-profile',
   templateUrl: './profile.component.html',
-  styleUrls: ['./profile.component.scss']
+  styleUrls: ['./profile.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ProfileComponent implements OnInit, OnDestroy {
   constructor(
@@ -28,13 +29,14 @@ export class ProfileComponent implements OnInit, OnDestroy {
     private store: Store<any>,
     private dialogService: DialogService,
     private cd: ChangeDetectorRef
-  ) {}
+  ) {
+  }
 
   user: User;
+  iterationExists: Iteration;
   currentUser$: Observable<User>;
   selectedUser$: Observable<User>;
   currentIteration$: Observable<Iteration>;
-  iterationExists: Iteration;
   objectValues = Object.values;
   showRequestButtons = false;
   showIterationBtn = false;
@@ -44,18 +46,20 @@ export class ProfileComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.currentUser$ = this.store.select(selectCurrentUser);
     this.selectedUser$ = this.store.select(selectUser);
-    this.currentIteration$ = this.store.select(selectIteration).pipe(
-      tap(iteration => {
-        this.iterationExists = iteration;
-        this.cd.detectChanges();
-      })
-    );
+    this.currentIteration$ = this.store.select(selectIteration);
+
+    this.currentIteration$.pipe(
+      takeWhile(() => this.componentActive)
+    ).subscribe((iteration) => {
+      this.iterationExists = iteration;
+      this.cd.detectChanges();
+    });
 
     this.route.paramMap.pipe(
       takeWhile(() => this.componentActive),
     ).subscribe(params => {
       const userId = params.get('id');
-      this.store.dispatch(new GetIterationRequest({ userId }));
+      this.store.dispatch(new GetIterationRequest({userId}));
     });
 
     this.checkUserExist();
@@ -118,11 +122,14 @@ export class ProfileComponent implements OnInit, OnDestroy {
           return of(user);
         }
       })
-    ).subscribe(user => this.user = user);
+    ).subscribe(user => {
+      this.user = user;
+      this.cd.detectChanges();
+    });
   }
 
-  private initUser (id) {
-    this.store.dispatch(new GetUserRequest({ userId: id } ));
+  private initUser(id) {
+    this.store.dispatch(new GetUserRequest({userId: id}));
 
     return combineLatest(
       this.selectedUser$.pipe(filter(user => !!user)),

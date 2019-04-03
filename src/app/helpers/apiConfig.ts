@@ -7,4 +7,5 @@ export class ApiConfig {
   public static mentors = `${ApiConfig.base}/mentors`;
   public static protege = `${ApiConfig.base}/protege`;
   public static trustboxMessages = `${ApiConfig.portalBase}/trust_box/messages/`;
+  public static logout = `${ApiConfig.portalBase}/auth/logout/`;
 }
