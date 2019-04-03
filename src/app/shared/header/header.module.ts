@@ -7,6 +7,7 @@ import {MatSelectModule} from '@angular/material';
 import {TrustboxService} from './services/trustbox.service';
 import {RouterModule} from '@angular/router';
 import { TrustboxComponent } from './trustbox/trustbox.component';
+import { DropdownMenuModule } from '../components/dropdown-menu/dropdown-menu.module';
 
 
 @NgModule({
@@ -22,7 +23,8 @@ import { TrustboxComponent } from './trustbox/trustbox.component';
   imports: [
     CommonModule,
     MatSelectModule,
-    RouterModule
+    RouterModule,
+    DropdownMenuModule,
   ],
   providers: [
     TrustboxService
