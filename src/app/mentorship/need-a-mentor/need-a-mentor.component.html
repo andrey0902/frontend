@@ -1,28 +1,36 @@
-<div class="user-item" *ngFor="let request of objectValues(requests$ | async)">
-  <lt-user
-    class="same-width"
-    [user]="request.attributes.user.attributes"
-    [routerLink]="['/profile', request.attributes.user.id]">
-  </lt-user>
-  <div class="request-note" *ngIf="request.attributes.text; else emptyText">
-    <p>Примечание:</p>
-    <p>{{request.attributes.text}}</p>
-  </div>
-  <ng-template #emptyText>
-    <div class="empty-text">
-      <p>( примечание отсутствует )</p>
+<ng-container *ngIf="requests$ | async as requests">
+  <ng-container *ngIf="checkIsEmpty(requests); else notUsers" >
+    <div class="user-item" *ngFor="let request of objectValues(requests)">
+      <lt-user
+        class="same-width"
+        [user]="request.attributes.user.attributes"
+        [routerLink]="['/profile', request.attributes.user.id]">
+      </lt-user>
+      <div class="request-note" *ngIf="request.attributes.text; else emptyText">
+        <p>Примечание:</p>
+        <p>{{request.attributes.text}}</p>
+      </div>
+      <ng-template #emptyText>
+        <div class="empty-text">
+          <p>( примечание отсутствует )</p>
+        </div>
+      </ng-template>
+      <div class="actions">
+        <lt-action-btn
+          [tooltip]="'Назначить ментора'"
+          [icon]="'person_add'"
+          (action)="assignMentor(request)">
+        </lt-action-btn>
+        <lt-action-btn
+          [tooltip]="'Очистить статус'"
+          [icon]="'delete_forever'"
+          (action)="clearStatus(request)">
+        </lt-action-btn>
+      </div>
     </div>
-  </ng-template>
-  <div class="actions">
-    <lt-action-btn
-      [tooltip]="'Назначить ментора'"
-      [icon]="'person_add'"
-      (action)="assignMentor(request)">
-    </lt-action-btn>
-    <lt-action-btn
-      [tooltip]="'Очистить статус'"
-      [icon]="'delete_forever'"
-      (action)="clearStatus(request)">
-    </lt-action-btn>
-  </div>
-</div>
+  </ng-container>
+</ng-container>
+
+<ng-template #notUsers>
+  <h4 class="text-center">Нет нуждающихся в менторе</h4>
+</ng-template>
