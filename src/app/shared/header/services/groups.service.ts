@@ -59,7 +59,8 @@ export class GroupsService {
       my_vacations: `${path}vacations`,
       wage: `${path}salary`,
       users: `${path}admin-users-panel`,
-      vacations: `${path}admin-vacations-panel`
+      vacations: `${path}admin-vacations-panel`,
+      all_ipr: `${path}plans/all-list`
     };
   }
 }
