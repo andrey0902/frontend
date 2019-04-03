@@ -151,7 +151,6 @@ export class ProfileComponent implements OnInit, OnDestroy {
   }
 
   private showButtons(selectedUser, currentUser) {
-    console.log(currentUser);
     if (currentUser.attributes.roles.includes('admin')) {
       this.isAdmin = true;
     }
