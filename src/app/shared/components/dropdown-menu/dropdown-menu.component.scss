@@ -28,8 +28,6 @@
 
 /* Dropdown content (hidden by default) */
 .dropdown-content {
-  // display: none;
-  //opacity: .5;
   max-height: 0;
   position: absolute;
   top: 0;
@@ -65,30 +63,23 @@
   background-color: #ddd;
 }
 
-
-
-
-
-
 .dropdown-button {
   color: $clear-color;
   box-shadow: none;
   background-color: transparent;
   cursor: pointer;
   transition: background-color .2s;
-  font-size: 1rem;
+  font-size: 15px;
   outline: 0;
   border: none;
   border-radius: 2px;
   display: inline-block;
-  height: 36px;
   line-height: 36px;
-  padding: 0 2rem;
+  padding: 0 30px;
   text-transform: uppercase;
   vertical-align: middle;
   text-decoration: none;
   position: relative;
-  //overflow: hidden;
 
   .select {
     position: absolute;

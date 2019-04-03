@@ -2,13 +2,13 @@
   position: relative;
   display: flex;
   flex-wrap: wrap;
-  width: 9.6em;
-  font-size: 0.8em;
+  width: 115px;
+  font-size: 12px;
   justify-content: center;
-  padding-top: .4em;
+  padding-top: 4.8px;
   cursor: pointer;
   color : #fff;
-  margin-right: 1em;
+  margin-right: 3px;
   transition-duration: .35s;
   text-decoration: unset;
 
@@ -24,15 +24,14 @@
   font-size: .8em;
   display: block;
   color: #32aaf5;
-  right: 3em;
-  bottom: 2.8em;
+  right: 2.7em;
+  bottom: 3.4em;
   position: absolute;
   font-weight: 600;
   padding: 0 .35em;
-  font-family: Roboto,Arial,sans-serif;
-  line-height: 1.5;
 }
 
 .trustbox-label {
   padding-top: 5px;
+  line-height: 18px;
 }

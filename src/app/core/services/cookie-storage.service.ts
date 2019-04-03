@@ -17,9 +17,13 @@ export class CookieStorageService {
     this.cookie.set('ltp.token', token);
   }
 
-
   public get permissions() {
     const permissions = this.cookie.get('ltp.permissions');
-    return permissions ? JSON.parse(permissions) : ["read_trust_box"];
+    return permissions ? JSON.parse(permissions) : [];
+  }
+
+  public clear() {
+    this.cookie.delete('ltp.permissions');
+    this.cookie.delete('ltp.token');
   }
 }

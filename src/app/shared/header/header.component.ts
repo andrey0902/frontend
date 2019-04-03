@@ -4,13 +4,15 @@ import {User} from '../../models/user.model';
 import {Store} from '@ngrx/store';
 import {selectCurrentUser} from '../../root-store/currentUser/current-user.selectors';
 import {LoadUser} from '../../root-store/currentUser/current-user.actions';
-import {Observable, timer} from 'rxjs';
+import {timer} from 'rxjs';
 import {environment} from '../../../environments/environment';
 import {CookieStorageService} from '../../core/services/cookie-storage.service';
 import {GroupsService} from './services/groups.service';
 import {TrustboxService} from './services/trustbox.service';
 import {switchMap} from 'rxjs/operators';
 import {takeWhile} from 'rxjs/internal/operators/takeWhile';
+import {Router} from '@angular/router';
+import {AuthService} from '../../core/services/auth.service';
 
 @Component({
   selector: 'lt-header',
@@ -22,13 +24,16 @@ export class HeaderComponent implements OnInit, OnDestroy {
   PERMISSION_GROUPS: any;
   nav_links: any;
   countMessages: number;
+  portalSitePath: string;
   loaded = true;
 
   constructor(
+    private authService: AuthService,
     private userService: UserService,
     private cookieService: CookieStorageService,
     private trustboxService: TrustboxService,
     private cd: ChangeDetectorRef,
+    private router: Router,
     private store: Store<any>
   ) {
   }
@@ -43,7 +48,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
     this.store.dispatch(new LoadUser());
     this.PERMISSION_GROUPS = GroupsService.PERMISSION_GROUPS;
-    this.nav_links = GroupsService.get_nav_links(environment.portalSitePath);
+    this.portalSitePath = environment.portalSitePath;
+    this.nav_links = GroupsService.get_nav_links(this.portalSitePath);
     this.getUnreadMessages();
   }
 
@@ -54,12 +60,16 @@ export class HeaderComponent implements OnInit, OnDestroy {
         switchMap(() => this.trustboxService.getUnreadCountMessage())
       ).subscribe((count) => {
         if (this.countMessages !== count) {
-          console.log(count);
           this.countMessages = count;
           this.cd.detectChanges();
         }
       });
     }
+  }
+
+  logout() {
+    this.authService.logout()
+      .subscribe(() => window.location.href = environment.redirectPath);
   }
 
   ngOnDestroy(): void {
