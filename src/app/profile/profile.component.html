@@ -35,7 +35,7 @@
                 color="accent"
                 class="google-font-bold" [routerLink]="['create-iteration']">Создать итерацию</button>
             </div>
-            <div class="horizontal-center" *ngIf="showIterationBtn && iterationExists">
+            <div class="horizontal-center" *ngIf="(showIterationBtn && iterationExists) || (isAdmin && iterationExists)">
               <button
                 mat-raised-button
                 color="accent"

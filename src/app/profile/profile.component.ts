@@ -42,6 +42,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
   showIterationBtn = false;
   componentActive = true;
   userRights: Rights = 'alien';
+  isAdmin = false;
 
   ngOnInit(): void {
     this.currentUser$ = this.store.select(selectCurrentUser);
@@ -150,6 +151,11 @@ export class ProfileComponent implements OnInit, OnDestroy {
   }
 
   private showButtons(selectedUser, currentUser) {
+    console.log(currentUser);
+    if (currentUser.attributes.roles.includes('admin')) {
+      this.isAdmin = true;
+    }
+
     if (selectedUser.id === currentUser.id) {
       this.showRequestButtons = true;
       this.userRights = 'current';
