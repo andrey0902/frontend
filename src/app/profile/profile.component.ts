@@ -19,8 +19,7 @@ export type Rights = 'mentor' | 'current' | 'alien';
 @Component({
   selector: 'lt-profile',
   templateUrl: './profile.component.html',
-  styleUrls: ['./profile.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  styleUrls: ['./profile.component.scss']
 })
 export class ProfileComponent implements OnInit, OnDestroy {
   constructor(
