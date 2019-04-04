@@ -3,7 +3,13 @@
 $primary-color: #141460;
 $accent-color: #4caf50;
 $warn-color: #f44336;
+$clear-color: white;
 
 /* ----- DIMENSIONS ----- */
 
 $header-height: 87px;
+
+
+/* ----- FONTS ----- */
+
+$roboto-font-path: "./scss/fonts/roboto/" !default;

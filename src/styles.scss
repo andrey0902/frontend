@@ -3,6 +3,7 @@
 @import '~material-design-icons/iconfont/material-icons.css';
 
 @import 'scss/fonts';
+@import 'scss/fonts/roboto/roboto';
 @import 'scss/variables';
 @import 'scss/helpers';
 @import 'scss/mixins';
@@ -12,3 +13,4 @@
 
 @import "scss/components/avatar";
 @import "scss/components/nav-bar";
+@import "scss/components/select";

@@ -1,0 +1,77 @@
+<div class="menu">
+  <div class="navigation" *ltCanView="permissionForView">
+    <ng-container *ltCanView="{ ban_groups: [PERMISSION_GROUPS?.SECURITY] }">
+
+      <lt-dropdown-menu>
+        <span class="bnt-dropdown">О компании</span>
+
+        <a [href]="nav_links.goal" class="link-dropdown">Цель и миссия</a>
+        <a [href]="nav_links.info" class="link-dropdown">Информация для новичка</a>
+        <a [href]="nav_links.codex" class="link-dropdown">Кодекс разработчика</a>
+        <a [href]="nav_links.rules" class="link-dropdown">Правила</a>
+        <a [href]="nav_links.faq" class="link-dropdown">FAQ</a>
+      </lt-dropdown-menu>
+    </ng-container>
+
+    <lt-dropdown-menu>
+      <span class="bnt-dropdown">Сотрудники</span>
+
+      <a [href]="nav_links.employees" class="link-dropdown">Сотрудники</a>
+      <a [href]="nav_links.birthdays" class="link-dropdown">Дни рождения</a>
+      <a [href]="nav_links.places" class="link-dropdown">Где кто</a>
+    </lt-dropdown-menu>
+
+    <ng-container *ltCanView="{ ban_groups: [PERMISSION_GROUPS?.SECURITY] }">
+      <lt-dropdown-menu>
+        <span class="bnt-dropdown">Менторство</span>
+
+        <a [routerLink]="['/profile', user?.id]" class="link-dropdown">Личный кабинет</a>
+        <a [routerLink]="'mentorship'" class="link-dropdown">Таблица ответственности</a>
+        <a *ltCanView="[ PERMISSION_GROUPS?.ALL_IPR ]" [href]="nav_links.all_ipr" class="link-dropdown">Список всех ИПР</a>
+        <!--TODO: It needs new data for full portal-validation:  user.has_available_idp, user.has_shared_idp-->
+        <!-- <mz-dropdown-item class="access-ipr" *ngIf="user?.mentor_status === 'ментор' && user?.has_available_idp || user?.has_shared_idp">  -- from portal -->
+        <a *ngIf="user.attributes.isMentor" [href]="nav_links.available_ipr" class="link-dropdown access-ipr">Доступные ИПР</a>
+        <a [href]="nav_links.manual" target="_blank" class="link-dropdown">Руководство ментора</a>
+      </lt-dropdown-menu>
+    </ng-container>
+
+    <ng-container *ltCanView="{ ban_groups: [PERMISSION_GROUPS?.SECURITY] }">
+
+      <lt-dropdown-menu>
+        <span class="bnt-dropdown">Жизнь Light IT</span>
+
+        <a [href]="nav_links.albums" class="link-dropdown">Альбомы</a>
+        <a [href]="nav_links.reports" class="link-dropdown">Доклады</a>
+        <a [href]="nav_links.wiki" target="_blank" class="link-dropdown">Наша Wiki</a>
+        <a [href]="nav_links.devices" class="link-dropdown">Тестовые устройства</a>
+      </lt-dropdown-menu>
+    </ng-container>
+
+  </div>
+
+
+  <div class="user-block">
+    <div class="trustbox">
+       <lt-trustbox
+         [PERMISSION_GROUPS]="PERMISSION_GROUPS"
+         [nav_links]="nav_links"
+         [countMessages]="countMessages"
+       ></lt-trustbox>
+    </div>
+
+    <lt-dropdown-menu>
+      <span class="bnt-dropdown image-wrapper" [style.background-image]="'url(' + user?.attributes.photoThumbnail + ')'"></span>
+
+      <a [href]="nav_links.profile" class="link-dropdown">Мой профиль</a>
+      <ng-container class="link-dropdown" *ltCanView="permissionForView">
+        <a *ltCanView="{ ban_groups: [PERMISSION_GROUPS?.SECURITY] }" [href]="nav_links.my_tasks + '/' + user.attributes.portalId" class="link-dropdown">Мои задачи</a>
+        <a *ltCanView="{ ban_groups: [PERMISSION_GROUPS?.SECURITY] }" [href]="nav_links.my_vacations" class="link-dropdown">Мои отпуска</a>
+        <a *ltCanView="[ PERMISSION_GROUPS?.ADMIN_MONEY ]" [href]="nav_links.wage" class="link-dropdown">Управление ЗП</a>
+        <a *ltCanView="[ PERMISSION_GROUPS?.ADMIN_PEOPLES ]" [href]="nav_links.users" class="link-dropdown">Управление пользователями</a>
+        <a  *ltCanView="[ PERMISSION_GROUPS.VACATIONS_FOR_MANAGER, PERMISSION_GROUPS.VACATIONS_FOR_REVIEWERS ]" [href]="nav_links.vacations" class="link-dropdown">Админ панель отпусков</a>
+      </ng-container>
+      <a (click)="logout()" class="link-dropdown">Выйти</a>
+
+    </lt-dropdown-menu>
+  </div>
+</div>

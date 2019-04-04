@@ -1,12 +1,15 @@
 import {Injectable} from '@angular/core';
 import {ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot, UrlTree} from '@angular/router';
-import {combineLatest, Observable, of, zip} from 'rxjs';
+import {combineLatest, Observable, of} from 'rxjs';
 import {Store} from '@ngrx/store';
 import {selectCurrentUser} from '../../root-store/currentUser/current-user.selectors';
 import {User} from '../../models/user.model';
-import {catchError, map, switchMap} from 'rxjs/operators';
-import {UserService} from '../services/user.service';
-import {CurrentIterationService} from '../../profile/services/iteration.service';
+import {filter, map, switchMap} from 'rxjs/operators';
+import {selectUser} from '../../root-store/profile/user/user.selectors';
+import {Iteration} from '../../models/iteration.model';
+import {selectIteration} from '../../root-store/profile/iteration/iteration.selectors';
+import {GetUserRequest} from '../../root-store/profile/user/user.actions';
+import {GetIterationRequest} from '../../root-store/profile/iteration/iteration.actions';
 
 
 @Injectable({
@@ -16,48 +19,54 @@ export class CreateIterationGuard implements CanActivate {
 
   constructor(
     private store: Store<any>,
-    private userService: UserService,
-    private currentIterationService: CurrentIterationService,
-    private router: Router,
-  ) {
-  }
+    private router: Router
+  ) {}
 
   currentUser$: Observable<User> = this.store.select(selectCurrentUser);
+  selectedUser$: Observable<User> = this.store.select(selectUser);
+  currentIteration$: Observable<Iteration> = this.store.select(selectIteration);
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
-    const protegeId = route.paramMap.get('id');
+
+    const selectedUserId = route.paramMap.get('id');
+
     return combineLatest(
-      this.getSelectedUser(protegeId),
-      this.currentUser$
+      this.currentUser$,
+      this.selectedUser$,
+      this.currentIteration$
     ).pipe(
-      switchMap(([selectedUser, currentUser]) => {
-        if (this.currentIterationService.isExist) {
-          this.router.navigate(['/profile', protegeId]);
+      switchMap(([currentUser, selectedUser, currentIteration]) => {
+        if (currentIteration) {
+          this.router.navigate(['/profile', selectedUserId]);
           return of(false);
         }
 
-        if (this.currentIterationService.userId !== undefined && !this.currentIterationService.isExist) {
-          return of(true);
-        }
+        if (currentUser && selectedUser) {
+          return of(this.checkIsMentor(selectedUser, currentUser));
+        } else {
+          this.store.dispatch(new GetUserRequest({userId: selectedUserId}));
+          this.store.dispatch(new GetIterationRequest({userId: selectedUserId}));
 
-        return this.getCurrentIteration(protegeId);
+          return combineLatest(
+            this.currentUser$,
+            this.selectedUser$
+          ).pipe(
+            filter(([curUser, selUser]) => !!curUser && !!selUser),
+            map(([curUser, selUser]) => {
+              return this.checkIsMentor(selUser, curUser);
+            })
+          );
+        }
       })
     );
   }
 
-  private getSelectedUser(protegeId) {
-    return this.userService.getUser(protegeId, {include: 'mentor'}).pipe(
-      map((res: any) => new User(res))
-    );
-  }
-
-  private getCurrentIteration(protegeId) {
-    return this.currentIterationService.getIteration(protegeId).pipe(
-      switchMap(() => {
-        this.router.navigate(['/profile', protegeId]);
-        return of(false);
-      }),
-      catchError(() => of(true))
-    );
+  checkIsMentor(selectedUser, currentUser) {
+    if (selectedUser.attributes.mentor && selectedUser.attributes.mentor.id === currentUser.id) {
+      return true;
+    } else {
+      this.router.navigate(['/profile', selectedUser.id]);
+      return false;
+    }
   }
 }

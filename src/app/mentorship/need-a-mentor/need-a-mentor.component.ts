@@ -47,4 +47,7 @@ export class NeedAMentorComponent implements OnInit {
     });
   }
 
+  checkIsEmpty(obj): boolean {
+    return Object.values(obj).length !== 0;
+  }
 }

@@ -46,4 +46,8 @@ export class WantToBeMentorComponent implements OnInit {
     });
   }
 
+  checkIsEmpty(obj): boolean {
+    return Object.values(obj).length !== 0;
+  }
+
 }

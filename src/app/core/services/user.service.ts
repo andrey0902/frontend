@@ -18,7 +18,7 @@ export class UserService {
   }
 
   getCurrentUser() {
-    return this.http.get(`${ApiConfig.users}/current`, { params: { include: 'proteges,mentor' } });
+    return this.http.get(`${ApiConfig.users}/current`, { params: { include: 'proteges,mentor'} });
   }
 
   getMentors(params = {}) {

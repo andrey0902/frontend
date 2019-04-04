@@ -18,6 +18,8 @@ export class TreeComponent implements OnChanges, OnInit {
   @Input() private data: ItemNode[];
   @Input() public canEdit = true;
   @Input() public type: new (...arg: any[]) => ItemNode;
+  @Input() public disable = false;
+  @Input() public checkboxDisable = false;
 
   @Output() public updateItem = new EventEmitter<ItemNode[]>();
   @Output() public deleteItem = new EventEmitter<ItemNode>();
@@ -46,8 +48,6 @@ export class TreeComponent implements OnChanges, OnInit {
   dragNodeExpandOverTime: number;
   dragNodeExpandOverArea: string;
   @ViewChild('emptyItem') emptyItem: ElementRef;
-
-  saveIsDisabled = true;
 
   constructor(private database: TreeDatabaseService, private dialogService: DialogService) {
     this.treeFlattener = new MatTreeFlattener(this.transformer, this.getLevel, this.isExpandable, this.getChildren);
@@ -198,7 +198,6 @@ export class TreeComponent implements OnChanges, OnInit {
           this.database.deleteNode(data);
           this.database.update();
           this.updateItemCheck(this.database.getParentOfNode(data), false);
-          console.log(data);
           this.deleteItem.emit(data);
         }
       });

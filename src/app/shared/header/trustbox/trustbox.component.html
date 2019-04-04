@@ -1,0 +1,19 @@
+<a class="trustbox-toggler"
+   title="Письма доверия"
+   [href]="nav_links.admin_letter"
+   *ltCanView="{ groups: [PERMISSION_GROUPS.READ_TRUST_BOX] }">
+  <img src="./assets/img/mail-35px.png"/>
+  <div class="trustbox-label">Письма доверия</div>
+  <span
+    [style.display]="countMessages !== 0 ? 'block' : 'none'"
+    class="trustbox-toggler-counter"
+  >{{ countMessages }}</span>
+</a>
+
+<a class="trustbox-toggler"
+   title="Письмо доверия"
+   [href]="nav_links.letter"
+   *ltCanView="{ ban_groups: [PERMISSION_GROUPS.READ_TRUST_BOX] }">
+  <img src="./assets/img/mail-35px.png"/>
+  <div class="trustbox-label">Письмо доверия</div>
+</a>

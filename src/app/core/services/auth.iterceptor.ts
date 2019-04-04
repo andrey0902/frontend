@@ -6,14 +6,16 @@ import {AuthService} from './auth.service';
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
 
-  constructor(private authService: AuthService) {}
+  constructor(private authService: AuthService) {
+  }
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     const authToken = this.authService.getAuthToken();
     const authReq = req.clone({
       setHeaders: {
         'Access-Control-Allow-Origin': '*',
-        'Authorization': authToken
+        'Authorization': authToken,
+        'X-Token-Authorization': authToken
       }
     });
     return next.handle(authReq);

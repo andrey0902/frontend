@@ -1,0 +1,96 @@
+@import '../../../../scss/variables';
+
+:host {
+ flex: 1;
+}
+
+.menu {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 8px;
+  width: 100%;
+}
+
+.navigation {
+  justify-self: flex-start;
+  margin-top: 8px;
+  display: flex;
+}
+
+.dropdown-button {
+  color: $clear-color;
+  box-shadow: none;
+  background-color: transparent;
+  cursor: pointer;
+  transition: background-color .2s;
+  font-size: 15px;
+  outline: 0;
+  border: none;
+  border-radius: 2px;
+  display: inline-block;
+  height: 36px;
+  line-height: 36px;
+  padding: 0 30px;
+  text-transform: uppercase;
+  vertical-align: middle;
+  text-decoration: none;
+  position: relative;
+  overflow: hidden;
+
+  .select {
+    position: absolute;
+    width: 172px;
+    right: 50%;
+    transform: translateX(50%);
+    top: 0;
+  }
+
+  ::ng-deep .mat-select .mat-select-arrow-wrapper {
+    opacity: 0;
+  }
+}
+
+.user-block {
+  position: relative;
+  float: right;
+  display: flex;
+  align-items: center;
+
+  .dropdown-button .select {
+    right: 0;
+    transform: unset;
+  }
+
+  .image-wrapper {
+    height: 50px;
+    width: 50px;
+    border-radius: 100%;
+    float: right;
+    background-size: cover;
+    background-position: 50% 50%;
+    background-repeat: no-repeat;
+    padding: unset;
+    cursor: pointer;
+    line-height: 22.5px;
+    margin: 0 -30px;
+  }
+}
+
+.link {
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  top:0;
+  left:0;
+  z-index: 10;
+  opacity: 0;
+}
+
+
+.access-ipr {
+  background: #fde4e3;
+
+  &:hover {
+    background: #fde4e3;
+  }
+}

@@ -1,6 +1,7 @@
 import {Component, Input, OnChanges, SimpleChanges} from '@angular/core';
 import { Iteration } from '../../models/iteration.model';
 import {IProgress} from '../../personal-plan/shared/models/progress.model';
+import {Rights} from '../profile.component';
 
 @Component({
   selector: 'lt-profile-overview',
@@ -10,7 +11,7 @@ import {IProgress} from '../../personal-plan/shared/models/progress.model';
 
 export class ProfileOverviewComponent implements OnChanges {
   @Input() currentIteration: Iteration;
-
+  @Input() userRights: Rights;
   progress: IProgress = null;
 
   constructor() {}
@@ -29,6 +30,5 @@ export class ProfileOverviewComponent implements OnChanges {
   }*/
 
   ngOnChanges(changes: SimpleChanges): void {
-    console.log(changes);
   }
 }

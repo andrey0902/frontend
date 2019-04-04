@@ -47,7 +47,8 @@ export class MentorshipManagementDialogComponent implements OnInit {
           }
           return this.userService.getUsers({
             name: value,
-            ...this.modeMap[this.data.mode]
+            ...this.modeMap[this.data.mode],
+            proteges_limit: 1
           })
             .pipe(
               map((res: any[]) => res.map(user => new User(user)))

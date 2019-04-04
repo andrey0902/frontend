@@ -24,7 +24,7 @@ import {MentorsHelper} from './mentors.helper';
   @Effect() getMentors: Observable<Action> = this.actions$.pipe(
     ofType(MentorsActionTypes.LOAD_MENTORS),
     switchMap(() => {
-        return this.userService.getMentors({include: 'proteges'}).pipe(
+        return this.userService.getMentors({include: 'proteges', sort: `last_name`}).pipe(
           map((mentors: any[]) => {
             const mentorList = MentorsHelper.createUsersMap(mentors);
             return new LoadMentorsSuccess(mentorList);

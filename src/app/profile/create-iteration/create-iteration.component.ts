@@ -1,9 +1,13 @@
-import { Component, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
+import { Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
 import {MatVerticalStepper} from '@angular/material';
-import {CurrentIterationService} from '../services/iteration.service';
 import { LtValidators } from '../../shared/helpers/validator-methods.static';
+import {Store} from '@ngrx/store';
+import {CreateIterationRequest} from '../../root-store/profile/iteration/iteration.actions';
+import {selectIteration} from '../../root-store/profile/iteration/iteration.selectors';
+import {filter, take} from 'rxjs/operators';
+import {Iteration} from '../../models/iteration.model';
 
 @Component({
   selector: 'lt-create-iteration',
@@ -16,36 +20,46 @@ export class CreateIterationComponent implements OnInit {
   @ViewChild(MatVerticalStepper) public stepper: MatVerticalStepper;
   iterationForm: FormGroup;
   treeChanged = false;
+  currentIteration: Iteration;
 
-  private _protegeId: number;
+  private _protegeId: string;
 
-  constructor(private route: ActivatedRoute, private router: Router, private currentIterationService: CurrentIterationService, private fb: FormBuilder,) {
-  }
+  constructor(
+    private route: ActivatedRoute,
+    private router: Router,
+    private fb: FormBuilder,
+    private store: Store<any>
+  ) {}
 
   ngOnInit() {
     this.iterationForm = this.fb.group({
       time: this.fb.group({
-        startDate: ['', [Validators.required, LtValidators.checkDataStartIteration]], endDate: ['', [Validators.required]]
-      }, {validator: LtValidators.checkEndDateIteration}),
+        startDate: ['', [Validators.required, LtValidators.checkDataStartIteration]],
+        endDate: ['', [Validators.required]]
+      }, { validator: LtValidators.checkEndDateIteration }),
       goal: ['', [Validators.required, Validators.minLength(3)]],
       projectLink: [''],
       meetType: ['', Validators.required],
       weekDay: ['', Validators.required]
     });
-
-    this._protegeId = +this.route.snapshot.paramMap.get('id');
+    this._protegeId = this.route.snapshot.paramMap.get('id');
   }
 
   createIteration() {
     const iteration = this.iterationForm.value;
-    this.currentIterationService.createIteration(this._protegeId, iteration)
-      .subscribe(() => this.stepper.next());
+    this.store.dispatch(new CreateIterationRequest({userId: this._protegeId, iteration}));
+    this.store.select(selectIteration).pipe(
+      filter((iter) => !!iter),
+      take(1)
+    ).subscribe((result) => {
+      this.currentIteration = result;
+      this.stepper.next();
+    });
   }
 
   onDone() {
     this.router.navigate(['/profile', this._protegeId]);
   }
-
 
   treeDataChanged($event) {
     if (!this.treeChanged && $event) {

@@ -29,18 +29,18 @@
                 [disabled]="user.attributes.needMentor || user.attributes.mentor"
                 (click)="needMentor()">Нужен ментор</button>
             </div>
-            <div class="horizontal-center request-buttons" *ngIf="showIterationBtn && !currentIterationService.isExist">
+            <div class="horizontal-center request-buttons" *ngIf="showIterationBtn && !iterationExists">
               <button
                 mat-raised-button
                 color="accent"
                 class="google-font-bold" [routerLink]="['create-iteration']">Создать итерацию</button>
             </div>
-            <div class="horizontal-center" *ngIf="showIterationBtn && currentIterationService.isExist">
+            <div class="horizontal-center" *ngIf="showIterationBtn && iterationExists">
               <button
                 mat-raised-button
                 color="accent"
                 class="google-font-bold"
-                (click)="deleteIteration(+user.id)">Завершить итерацию</button>
+                (click)="deleteIteration(user.id)">Завершить итерацию</button>
             </div>
           </div>
         </div>
@@ -76,11 +76,11 @@
     </div>
   </mat-card>
 
-  <div class="mentorship-info" *ngIf="currentIterationService.isExist">
-    <mat-tab-group>
+  <div class="mentorship-info">
+    <mat-tab-group *ngIf="iterationExists">
       <mat-tab label="Обзор">
         <mat-card class="iteration">
-          <lt-profile-overview [currentIteration]="currentIterationService.currentIteration"
+          <lt-profile-overview [currentIteration]="iterationExists" [userRights]="userRights"
           ></lt-profile-overview>
         </mat-card>
       </mat-tab>

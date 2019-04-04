@@ -1,6 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {DialogService} from '../../shared/dialog/services/dialog.service';
-import {UserService} from '../../core/services/user.service';
 import {Store} from '@ngrx/store';
 import {
   AddMentor,
@@ -11,28 +10,37 @@ import {
   DeleteProtege
 } from '../../root-store/mentors/mentors.actions';
 import {selectMentors} from '../../root-store/mentors/mentors.selectors';
-import {UsersMap} from '../../models/user.model';
+import {User, UsersMap} from '../../models/user.model';
 import {Observable} from 'rxjs';
+import {selectCurrentUser} from '../../root-store/currentUser/current-user.selectors';
+import {filter, takeWhile} from 'rxjs/operators';
 
 @Component({
   selector: 'lt-mentor-protege',
   templateUrl: './mentor-protege.component.html',
   styleUrls: ['./mentor-protege.component.scss']
 })
-export class MentorProtegeComponent implements OnInit {
+export class MentorProtegeComponent implements OnInit, OnDestroy {
 
   constructor(
     private dialogService: DialogService,
-    private userService: UserService,
     private store: Store<any>
   ) { }
 
-  mentorshipList$: Observable<UsersMap>;
+  isAdmin = false;
+  componentActive = true;
+  mentorshipList$: Observable<User[]>;
   objectValues = Object.values;
 
   ngOnInit() {
     this.mentorshipList$ = this.store.select(selectMentors);
     this.store.dispatch(new LoadMentors());
+    this.store.select(selectCurrentUser).pipe(
+      takeWhile(() => this.componentActive),
+      filter(user => !!user)
+    ).subscribe((user: User) => {
+      this.isAdmin = user.attributes.roles.some((item: string) => item.includes('admin'));
+    });
   }
 
   addMentor() {
@@ -77,6 +85,10 @@ export class MentorProtegeComponent implements OnInit {
     this.dialogService.openConfirmDialog({ htmlContent }, (result) => {
       if (result) { this.store.dispatch(new DeleteProtege({protegeId: protege.id, mentorId: '', currentMentorId: mentor.id})); }
     });
+  }
+
+  ngOnDestroy(): void {
+    this.componentActive = false;
   }
 
 }
