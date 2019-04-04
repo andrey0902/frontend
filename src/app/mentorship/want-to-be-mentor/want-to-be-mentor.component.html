@@ -3,8 +3,8 @@
     <div class="user-item" *ngFor="let request of objectValues(requests)">
       <lt-user
         class="same-width"
-        [user]="request.attributes.user.attributes"
-        [routerLink]="['/profile', request.attributes.user.id]">
+        [currentUser]="currentUser$ | async"
+        [user]="request.attributes.user">
       </lt-user>
       <div class="request-note" *ngIf="request.attributes.text; else emptyText">
         <p>Примечание:</p>

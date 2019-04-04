@@ -7,7 +7,8 @@
           type="button"
           class="add-mentor"
           *ngIf="isAdmin"
-          (click)="addMentor()">добавить ментора</button>
+          (click)="addMentor()">добавить ментора
+        </button>
       </div>
       <div class="mentorship-table__cell">
         <h3 class="table-label">Протеже</h3>
@@ -17,10 +18,7 @@
   <div class="mentorship-table__row" *ngFor="let mentorship of mentorshipList$ | async">
     <div class="mentorship-table__cell activator-actions">
       <div class="mentor">
-        <lt-user
-          [user]="mentorship.attributes"
-          [routerLink]="['/profile', mentorship.id]">
-        </lt-user>
+        <lt-user [currentUser]="currentUser$ | async" [user]="mentorship"></lt-user>
         <div class="actions" *ngIf="isAdmin">
           <lt-action-btn
             *ngIf="objectValues(mentorship.attributes.proteges).length < 3"
@@ -38,10 +36,7 @@
     </div>
     <div class="mentorship-table__cell">
       <div class="protege activator-actions" *ngFor="let protege of objectValues(mentorship.attributes.proteges)">
-        <lt-user
-          [user]="protege.attributes"
-          [routerLink]="['/profile', protege.id]">
-        </lt-user>
+        <lt-user [currentUser]="currentUser$ | async" [user]="protege"></lt-user>
         <div class="actions" *ngIf="isAdmin">
           <lt-action-btn
             [tooltip]="'Сменить ментора'"

@@ -1,2 +1,4 @@
-<img class="avatar" [src]="user?.photoThumbnail">
-<span class="user-name"> {{user?.fullName}}</span>
+<div class="user" (click) = 'redirect()'>
+<img class="avatar" [src]="user?.attributes.photoThumbnail">
+<span class="user-name"> {{user?.attributes.fullName}}</span>
+</div>

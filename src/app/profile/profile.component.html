@@ -1,6 +1,6 @@
 <div class="container" *ngIf="user">
   <mat-card class="top-block">
-    <div class="profile-wrapper" >
+    <div class="profile-wrapper">
 
       <div class="head-wrap">
         <div class="user-wrap">
@@ -21,26 +21,30 @@
                 color="accent"
                 class="google-font-bold btn btn-width"
                 [disabled]="user.attributes.isMentor || user.attributes.wantBeMentor"
-                (click)="wantBeMentor()">Хочу стать ментором</button>
+                (click)="wantBeMentor()">Хочу стать ментором
+              </button>
               <button
                 mat-raised-button
                 color="accent"
                 class="google-font-bold btn btn-width"
                 [disabled]="user.attributes.needMentor || user.attributes.mentor"
-                (click)="needMentor()">Нужен ментор</button>
+                (click)="needMentor()">Нужен ментор
+              </button>
             </div>
             <div class="horizontal-center request-buttons" *ngIf="showIterationBtn && !iterationExists">
               <button
                 mat-raised-button
                 color="accent"
-                class="google-font-bold" [routerLink]="['create-iteration']">Создать итерацию</button>
+                class="google-font-bold" [routerLink]="['create-iteration']">Создать итерацию
+              </button>
             </div>
             <div class="horizontal-center" *ngIf="(showIterationBtn && iterationExists) || (isAdmin && iterationExists)">
               <button
                 mat-raised-button
                 color="accent"
                 class="google-font-bold"
-                (click)="deleteIteration(user.id)">Завершить итерацию</button>
+                (click)="deleteIteration(user.id)">Завершить итерацию
+              </button>
             </div>
           </div>
         </div>
@@ -52,8 +56,9 @@
               <div class="user-container">
                 <lt-user
                   *ngFor="let protege of objectValues(user.attributes.proteges)"
-                  [user]="protege.attributes"
-                  [routerLink]="['/profile', protege.id]">
+                  [user]="protege"
+                  [currentUser]="currentUser$ | async"
+                >
                 </lt-user>
               </div>
             </div>
@@ -63,10 +68,7 @@
             <div class="relations-block" *ngIf="user.attributes.mentor">
               <span class="relation-title">Ментор</span>
               <div class="user-container">
-                <lt-user
-                  [user]="user.attributes.mentor.attributes"
-                  [routerLink]="['/profile', user.attributes.mentor.id]">
-                </lt-user>
+                <lt-user [user]="user.attributes.mentor" [currentUser]="currentUser$ | async"></lt-user>
               </div>
             </div>
           </div>

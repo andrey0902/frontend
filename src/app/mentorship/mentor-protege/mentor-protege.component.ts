@@ -25,15 +25,18 @@ export class MentorProtegeComponent implements OnInit, OnDestroy {
   constructor(
     private dialogService: DialogService,
     private store: Store<any>
-  ) { }
+  ) {
+  }
 
   isAdmin = false;
   componentActive = true;
   mentorshipList$: Observable<User[]>;
+  currentUser$: Observable<User>;
   objectValues = Object.values;
 
   ngOnInit() {
     this.mentorshipList$ = this.store.select(selectMentors);
+    this.currentUser$ = this.store.select(selectCurrentUser);
     this.store.dispatch(new LoadMentors());
     this.store.select(selectCurrentUser).pipe(
       takeWhile(() => this.componentActive),
@@ -44,16 +47,20 @@ export class MentorProtegeComponent implements OnInit, OnDestroy {
   }
 
   addMentor() {
-    this.dialogService.openMentorshipManagementDialog({ mode: 'addMentor' }, (mentor) => {
-      if (mentor) { this.store.dispatch(new AddMentor(mentor.id)); }
+    this.dialogService.openMentorshipManagementDialog({mode: 'addMentor'}, (mentor) => {
+      if (mentor) {
+        this.store.dispatch(new AddMentor(mentor.id));
+      }
     });
   }
 
   deleteMentor(mentor) {
     const htmlContent = `<p>Вы уверены, что <b>${mentor.attributes.fullName}</b> больше не ментор ?</p>`;
 
-    this.dialogService.openConfirmDialog({ htmlContent }, (confirm) => {
-      if (confirm) { this.store.dispatch(new DeleteMentor(mentor.id)); }
+    this.dialogService.openConfirmDialog({htmlContent}, (confirm) => {
+      if (confirm) {
+        this.store.dispatch(new DeleteMentor(mentor.id));
+      }
     });
   }
 
@@ -64,7 +71,9 @@ export class MentorProtegeComponent implements OnInit, OnDestroy {
       protege: protege.attributes,
       placeholder: 'Новый ментор'
     }, (mentor) => {
-      if (mentor) { this.store.dispatch(new ChangeMentor({protegeId: protege.id, mentorId: mentor.id, currentMentorId: mentorship.id})); }
+      if (mentor) {
+        this.store.dispatch(new ChangeMentor({protegeId: protege.id, mentorId: mentor.id, currentMentorId: mentorship.id}));
+      }
     });
   }
 
@@ -74,7 +83,9 @@ export class MentorProtegeComponent implements OnInit, OnDestroy {
       mentor: mentorship,
       placeholder: 'Протеже'
     }, (protege) => {
-      if (protege) { this.store.dispatch(new AddProtege({protegeId: protege.id, mentorId: mentorship.id})); }
+      if (protege) {
+        this.store.dispatch(new AddProtege({protegeId: protege.id, mentorId: mentorship.id}));
+      }
     });
   }
 
@@ -82,8 +93,10 @@ export class MentorProtegeComponent implements OnInit, OnDestroy {
     const htmlContent = `<p>Вы уверены, что <b>${protege.attributes.fullName}</b>
       больше не протеже для <b>${mentor.attributes.fullName}</b> ?</p>`;
 
-    this.dialogService.openConfirmDialog({ htmlContent }, (result) => {
-      if (result) { this.store.dispatch(new DeleteProtege({protegeId: protege.id, mentorId: '', currentMentorId: mentor.id})); }
+    this.dialogService.openConfirmDialog({htmlContent}, (result) => {
+      if (result) {
+        this.store.dispatch(new DeleteProtege({protegeId: protege.id, mentorId: '', currentMentorId: mentor.id}));
+      }
     });
   }
 
