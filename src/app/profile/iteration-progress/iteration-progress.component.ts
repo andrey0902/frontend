@@ -7,8 +7,7 @@ import {Store} from '@ngrx/store';
 @Component({
   selector: 'lt-iteration-progress',
   templateUrl: './iteration-progress.component.html',
-  styleUrls: ['./iteration-progress.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  styleUrls: ['./iteration-progress.component.scss']
 
 })
 export class IterationProgressComponent implements OnInit {
@@ -22,7 +21,6 @@ export class IterationProgressComponent implements OnInit {
     this.store.select(plan)
       .subscribe((data: IterationTaskModel[]) => {
         this.progress = this.treeDataChanged(data);
-        this.cd.detectChanges();
       });
   }
 

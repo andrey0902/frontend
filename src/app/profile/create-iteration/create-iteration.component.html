@@ -18,6 +18,7 @@
           class="plan--tree"
           *ngIf="currentIteration"
           (createItem)="treeDataChanged($event)"
+          [userRights]="'mentor'"
           [iteration]="currentIteration">
         </lt-iteration-plan>
         <button

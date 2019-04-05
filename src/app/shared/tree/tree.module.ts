@@ -6,6 +6,7 @@ import {CommonModule} from '@angular/common';
 import {CreateTreeItemComponent} from './components/create-tree-item/create-tree-item.component';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {DialogModule} from '../dialog/dialog.module';
+import {ComponentsModule} from '../components/components.module';
 
 @NgModule({
   declarations: [TreeComponent, CreateTreeItemComponent],
@@ -21,7 +22,8 @@ import {DialogModule} from '../dialog/dialog.module';
     FormsModule,
     ReactiveFormsModule,
     MatMenuModule,
-    DialogModule
+    DialogModule,
+    ComponentsModule
   ]
 })
 export class TreeModule {

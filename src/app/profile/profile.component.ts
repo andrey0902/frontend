@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit} from '@angular/core';
+import {ChangeDetectorRef, Component, OnDestroy, OnInit} from '@angular/core';
 import {User} from '../models/user.model';
 import {ActivatedRoute, ParamMap} from '@angular/router';
 import {combineLatest, Observable, of} from 'rxjs';
@@ -19,16 +19,14 @@ export type Rights = 'mentor' | 'current' | 'alien';
 @Component({
   selector: 'lt-profile',
   templateUrl: './profile.component.html',
-  styleUrls: ['./profile.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  styleUrls: ['./profile.component.scss']
 })
 export class ProfileComponent implements OnInit, OnDestroy {
   constructor(
     private route: ActivatedRoute,
     private userService: UserService,
     private store: Store<any>,
-    private dialogService: DialogService,
-    private cd: ChangeDetectorRef
+    private dialogService: DialogService
   ) {
   }
 
@@ -42,6 +40,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
   showIterationBtn = false;
   componentActive = true;
   userRights: Rights = 'alien';
+  isAdmin = false;
 
   ngOnInit(): void {
     this.currentUser$ = this.store.select(selectCurrentUser);
@@ -52,7 +51,6 @@ export class ProfileComponent implements OnInit, OnDestroy {
       takeWhile(() => this.componentActive)
     ).subscribe((iteration) => {
       this.iterationExists = iteration;
-      this.cd.detectChanges();
     });
 
     this.route.paramMap.pipe(
@@ -124,7 +122,6 @@ export class ProfileComponent implements OnInit, OnDestroy {
       })
     ).subscribe(user => {
       this.user = user;
-      this.cd.detectChanges();
     });
   }
 
@@ -150,6 +147,10 @@ export class ProfileComponent implements OnInit, OnDestroy {
   }
 
   private showButtons(selectedUser, currentUser) {
+    if (currentUser.attributes.roles.includes('admin')) {
+      this.isAdmin = true;
+    }
+
     if (selectedUser.id === currentUser.id) {
       this.showRequestButtons = true;
       this.userRights = 'current';

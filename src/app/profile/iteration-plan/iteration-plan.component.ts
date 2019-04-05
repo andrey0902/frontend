@@ -1,5 +1,5 @@
-import {ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges} from '@angular/core';
-import {IterationTaskModel, TreeHelper} from '../../personal-plan/shared/models/iteration-plan.model';
+import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges} from '@angular/core';
+import {IterationTaskModel} from '../../personal-plan/shared/models/iteration-plan.model';
 import {ItemNode} from '../../shared/tree/models/item-node.model';
 import {InfoPlanModel} from '../../personal-plan/shared/models/info-plan.model';
 import {Iteration} from '../../models/iteration.model';
@@ -7,14 +7,13 @@ import {IterationTreeService} from '../services/iteration-tree.service';
 import {Store} from '@ngrx/store';
 import {CreatePlanTaskRequest, DeletePlanTaskRequest, EditPlanTaskRequest, GetPlanRequest, UpdatePlanTasksRequest} from '../../root-store/profile/plan/plan.actions';
 import {plan, planWithNewTask} from '../../root-store/profile/plan/plan.selectors';
-import {filter, first, take} from 'rxjs/operators';
+import {filter, first} from 'rxjs/operators';
 import {Rights} from '../profile.component';
 
 @Component({
   selector: 'lt-iteration-plan',
   templateUrl: './iteration-plan.component.html',
   styleUrls: ['./iteration-plan.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
 })
 
 export class IterationPlanComponent implements OnChanges, OnInit {
@@ -32,18 +31,16 @@ export class IterationPlanComponent implements OnChanges, OnInit {
   };
 
   constructor(private treeService: IterationTreeService,
-              private store: Store<any>,
-              private cd: ChangeDetectorRef) {
+              private store: Store<any>) {
   }
 
   ngOnInit(): void {
     this.store.select(planWithNewTask)
       .pipe(
-        filter((data: IterationTaskModel[]) => !!data && data.length > 0)
+        filter((data: IterationTaskModel[]) => !!data)
       )
       .subscribe((data: IterationTaskModel[]) => {
         this.plan = data;
-        this.cd.detectChanges();
       });
   }
 
@@ -78,12 +75,11 @@ export class IterationPlanComponent implements OnChanges, OnInit {
   private getPlanFromStore() {
     this.store.select(plan)
       .pipe(
-        filter((data: IterationTaskModel[]) => !!data && data.length > 0),
-        first((data: IterationTaskModel[]) => this.plan.length !== data.length || this.plan[0].id !== data[0].id)
+        filter((data: IterationTaskModel[]) => !!data),
+        first((data: IterationTaskModel[]) => !data.length || this.plan.length !== data.length || this.plan[0].id !== data[0].id)
       )
       .subscribe((data: IterationTaskModel[]) => {
         this.plan = data;
-        this.cd.detectChanges();
       });
   }
 }

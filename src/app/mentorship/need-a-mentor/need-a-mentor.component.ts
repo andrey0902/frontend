@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {UserService} from '../../core/services/user.service';
 import {DialogService} from '../../shared/dialog/services/dialog.service';
 import {Store} from '@ngrx/store';
@@ -6,6 +6,8 @@ import {Observable} from 'rxjs';
 import {MentorRequestMap} from '../../models/mentor-request';
 import {AssignMentor, DeleteProtegeRequest, LoadProtegeRequests} from '../../root-store/protege-requests/protege-requests.actions';
 import {selectProtegeRequests} from '../../root-store/protege-requests/protege-requests.selectors';
+import {User} from '../../models/user.model';
+import {selectCurrentUser} from '../../root-store/currentUser/current-user.selectors';
 
 @Component({
   selector: 'lt-need-a-mentor',
@@ -18,12 +20,15 @@ export class NeedAMentorComponent implements OnInit {
     private userService: UserService,
     private dialogService: DialogService,
     private store: Store<any>
-  ) { }
+  ) {
+  }
 
   requests$: Observable<MentorRequestMap>;
   objectValues = Object.values;
+  currentUser$: Observable<User>;
 
   ngOnInit() {
+    this.currentUser$ = this.store.select(selectCurrentUser);
     this.requests$ = this.store.select(selectProtegeRequests);
     this.store.dispatch(new LoadProtegeRequests());
   }
@@ -34,7 +39,7 @@ export class NeedAMentorComponent implements OnInit {
       protege: request.attributes.user.attributes
     }, (mentor) => {
       if (mentor) {
-        this.store.dispatch(new AssignMentor({ protegeId: request.attributes.user.id, mentorId: mentor.id, requestId: request.id }));
+        this.store.dispatch(new AssignMentor({protegeId: request.attributes.user.id, mentorId: mentor.id, requestId: request.id}));
       }
     });
   }
@@ -43,7 +48,9 @@ export class NeedAMentorComponent implements OnInit {
     const htmlContent = `<p>Вы уверены, что хотите очистить статус «Нуждаюсь в менторе» для <b>${request.attributes.user.attributes.fullName}</b> ?</p>`;
 
     this.dialogService.openConfirmDialog({htmlContent}, (confirm) => {
-      if (confirm) { this.store.dispatch(new DeleteProtegeRequest( request.id )); }
+      if (confirm) {
+        this.store.dispatch(new DeleteProtegeRequest(request.id));
+      }
     });
   }
 

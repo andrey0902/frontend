@@ -29,7 +29,7 @@ export class ItemNode {
 export class ItemFlatNode {
   text: string;
   showAsInput: InputType;
-  id: number;
   level: number;
   expandable: boolean;
+  confirmed: boolean;
 }

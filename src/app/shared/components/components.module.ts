@@ -8,6 +8,7 @@ import {UserComponent} from './user/user.component';
 import {MatButtonModule, MatIconModule, MatMenuModule, MatTabsModule, MatTooltipModule} from '@angular/material';
 import {RouterModule} from '@angular/router';
 import {UserPermissionDirective} from './directives/user-permission.directive';
+import { AutoFocusDirective } from './directives/auto-focus.directive';
 
 @NgModule({
   declarations: [
@@ -16,7 +17,8 @@ import {UserPermissionDirective} from './directives/user-permission.directive';
     SafeHtmlPipe,
     SvgIconComponent,
     UserComponent,
-    UserPermissionDirective
+    UserPermissionDirective,
+    AutoFocusDirective
   ],
   exports: [
     ActionBtnComponent,
@@ -24,7 +26,8 @@ import {UserPermissionDirective} from './directives/user-permission.directive';
     SafeHtmlPipe,
     SvgIconComponent,
     UserComponent,
-    UserPermissionDirective
+    UserPermissionDirective,
+    AutoFocusDirective
   ],
   imports: [
     CommonModule,
