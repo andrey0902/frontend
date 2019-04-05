@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit} from '@angular/core';
+import {ChangeDetectorRef, Component, OnDestroy, OnInit} from '@angular/core';
 import {User} from '../models/user.model';
 import {ActivatedRoute, ParamMap} from '@angular/router';
 import {combineLatest, Observable, of} from 'rxjs';
