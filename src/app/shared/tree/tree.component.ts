@@ -261,7 +261,8 @@ export class TreeComponent implements OnChanges {
   handleDrop(event, flatNode: ItemFlatNode) {
     event.preventDefault();
     const node: ItemNode = this.flatNodeMap.get(flatNode);
-    if (flatNode !== this.dragNode) {
+
+    if (flatNode !== this.dragNode && node.children.length < 100 && !this.dragNode.expandable) {
       const dragNode = this.flatNodeMap.get(this.dragNode);
       const dragNodeParent = this.database.getParentOfNode(dragNode);
       const {order: oldOrder, parentId: oldParentId} = dragNode;

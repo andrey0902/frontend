@@ -13,7 +13,7 @@
                   (dragstart)="editLevel === 2 && handleDragStart($event, node);"
                   (dragover)="handleDragOver($event, node);"
                   (drop)="handleDrop($event, node);"
-                  (dragend)="handleDragEnd($event);">{{node.text}} {{flatNodeMap.get(node).order}}</mat-checkbox>
+                  (dragend)="handleDragEnd($event);">{{node.text}}</mat-checkbox>
     <ng-container *ngTemplateOutlet="nodeMenu; context: {node: node}"></ng-container>
   </mat-tree-node>
 
@@ -44,7 +44,7 @@
                   [checked]="checklistSelection.isSelected(node)"
                   [disabled]="editLevel === 0"
                   [indeterminate]="descendantsPartiallySelected(node)"
-                  (change)="todoItemSelectionToggle(node)">{{node.text}} {{flatNodeMap.get(node).order}}</mat-checkbox>
+                  (change)="todoItemSelectionToggle(node)">{{node.text}}</mat-checkbox>
     <ng-container *ngTemplateOutlet="nodeMenu; context: {node: node}" class="buttons"></ng-container>
   </mat-tree-node>
 </mat-tree>
