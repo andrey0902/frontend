@@ -54,7 +54,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   getUnreadMessages() {
-    if (!GroupsService.checkGroup([GroupsService.PERMISSION_GROUPS.SECURITY], this.cookieService.permissions)) {
+    if (GroupsService.checkGroup([GroupsService.PERMISSION_GROUPS.READ_TRUST_BOX], this.cookieService.permissions)) {
       timer(0, 30000).pipe(
         takeWhile(() => this.loaded),
         switchMap(() => this.trustboxService.getUnreadCountMessage())
