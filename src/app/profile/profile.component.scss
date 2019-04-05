@@ -41,6 +41,11 @@
   color: #aaadb1;
 }
 
+.admin-profile {
+  padding-bottom: 14px;
+  box-sizing: border-box;
+}
+
 .request-buttons {
   @extend .flex-container;
   justify-content: space-around;
