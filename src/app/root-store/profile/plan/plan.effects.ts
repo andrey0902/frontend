@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {Actions, Effect, ofType} from '@ngrx/effects';
 import {combineLatest, Observable, of} from 'rxjs';
-import {catchError, map, switchMap} from 'rxjs/operators';
+import {catchError, map, share, switchMap} from 'rxjs/operators';
 import {IterationPlanService} from '../../../core/services/iteration-plan.service';
 import {
   CreatePlanTaskFail,

@@ -1,9 +1,7 @@
   <div class="tree">
-    <lt-tree *ngIf="plan"
-             [disable]="userRights === 'current'"
-             [checkboxDisable]="userRights === 'alien'"
-             [data]="plan"
+    <lt-tree [data]="plan"
              [type]="itemConstructor"
+             [editLevel]="treeEditLevel[userRights]"
              (deleteItem)="deleteTreeItem($event)"
              (createItem)="createTreeItem($event)"
              (editItem)="editTreeItem($event)"

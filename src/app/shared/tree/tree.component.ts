@@ -6,6 +6,7 @@ import {InsertionType, TreeDatabaseService} from './services/tree-database.servi
 import {ItemFlatNode, ItemNode} from './models/item-node.model';
 import {Observable, of} from 'rxjs';
 import {DialogService} from '../dialog/services/dialog.service';
+import {TreeHelper} from '../../personal-plan/shared/models/iteration-plan.model';
 
 @Component({
   selector: 'lt-tree',
@@ -14,12 +15,10 @@ import {DialogService} from '../dialog/services/dialog.service';
   providers: [TreeDatabaseService]
 })
 
-export class TreeComponent implements OnChanges, OnInit {
+export class TreeComponent implements OnChanges {
   @Input() private data: ItemNode[];
-  @Input() public canEdit = true;
   @Input() public type: new (...arg: any[]) => ItemNode;
-  @Input() public disable = false;
-  @Input() public checkboxDisable = false;
+  @Input() public editLevel: number;
 
   @Output() public updateItem = new EventEmitter<ItemNode[]>();
   @Output() public deleteItem = new EventEmitter<ItemNode>();
@@ -61,12 +60,13 @@ export class TreeComponent implements OnChanges, OnInit {
       });
   }
 
-  ngOnInit(): void {
-    this.database.data = this.data.map((item) => new ItemNode(item));
-    this.treeControl.expandAll();
-  }
-
   ngOnChanges(changes: SimpleChanges): void {
+    if (changes.data && changes.data.currentValue) {
+      const newData = changes.data.currentValue.map((item) => new ItemNode(item));
+      this.database.data = TreeHelper.treeStructureGenerator(newData);
+      this.treeControl.expandAll();
+    }
+
     if (changes.type && changes.type.currentValue) {
       this.database.type = changes.type.currentValue;
     }
@@ -283,6 +283,11 @@ export class TreeComponent implements OnChanges, OnInit {
 
       if (dragNodeParent) {
         this.updateItemCheck(dragNodeParent, false);
+      }
+
+      const newItemParent = this.database.getParentOfNode(newItem);
+      if (newItemParent) {
+        this.updateItemCheck(newItemParent, false);
       }
     }
 

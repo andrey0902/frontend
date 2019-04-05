@@ -50,12 +50,12 @@ export class IterationTaskModelByConfig extends IterationTaskModel {
 }
 
 export class TreeHelper {
-  public static treeStructureGenerator(tasks: IterationTaskModel[]): IterationTaskModel[] {
-    let tasksTree: IterationTaskModel[] = [];
-    const tasksDictionary: { number: IterationTaskModel } | {} = {};
+  public static treeStructureGenerator(tasks: ItemNode[]): ItemNode[] {
+    let tasksTree: ItemNode[] = [];
+    const tasksDictionary: { number: ItemNode } | {} = {};
     if (tasks && tasks.length > 0) {
-      tasks.forEach((task: IterationTaskModel) => tasksDictionary[task.id] = task);
-      tasks.forEach((task: IterationTaskModel) => {
+      tasks.forEach((task: ItemNode) => tasksDictionary[task.id] = task);
+      tasks.forEach((task: ItemNode) => {
         task.parentId ? tasksDictionary[task.parentId].children.push(task) : tasksTree.push(task);
       });
     }
@@ -63,13 +63,13 @@ export class TreeHelper {
     return tasksTree;
   }
 
-  public static sortTreeByOrder(tasks: IterationTaskModel[]): IterationTaskModel[] {
-    tasks.forEach((task: IterationTaskModel) => {
+  public static sortTreeByOrder(tasks: ItemNode[]): ItemNode[] {
+    tasks.forEach((task: ItemNode) => {
       if (task.children.length > 0) {
         task.children = TreeHelper.sortTreeByOrder(task.children);
       }
     });
-    return tasks.sort((a, b) => a.order - b.order);
+    return tasks.sort((a, b) =>  a.order - b.order);
   }
 
   // get all items, that doesn't have children, so they are not parents

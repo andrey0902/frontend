@@ -56,7 +56,7 @@ export class TreeDatabaseService {
 
     item.isNew = isNew;
 
-    arr.unshift(item);
+    arr.push(item);
     this._recalculateOrdering(arr);
     return item;
   }
@@ -64,25 +64,17 @@ export class TreeDatabaseService {
   insertItemNear(nodeAnchor: ItemNode, insertNode: ItemNode, typeInsertion: InsertionType): ItemNode {
 
     const oldParentNode = this.getParentOfNode(insertNode);
+    const oldArr = oldParentNode != null ? oldParentNode.children : this.data;
     const parentNode = this.getParentOfNode(nodeAnchor);
     const arr = parentNode != null ? parentNode.children : this.data;
-    const oldArr = oldParentNode != null ? oldParentNode.children : this.data;
-    const oldIndex = oldArr.indexOf(insertNode);
 
     this.deleteNode(insertNode, oldArr);
-    this._recalculateOrdering(oldArr);
 
-    let newOrder: number = nodeAnchor.order;
-    let index: number = arr.indexOf(nodeAnchor);
-
-    if (typeInsertion === InsertionType.BELOW) {
-      index++;
-      newOrder++;
-    }
-
+    let index: number = typeInsertion === InsertionType.BELOW ? arr.indexOf(nodeAnchor) + 1 : arr.indexOf(nodeAnchor);
     insertNode.parentId = parentNode ? parentNode.id : null;
-    insertNode.order = newOrder;
     arr.splice(index, 0, insertNode);
+
+    this._recalculateOrdering(oldArr);
     this._recalculateOrdering(arr);
     return insertNode;
   }
@@ -125,6 +117,6 @@ export class TreeDatabaseService {
   }
 
   private _recalculateOrdering(arr: ItemNode[]): void {
-    arr.forEach((item: ItemNode, index: number) => item.order = index);
+    arr.forEach((item: ItemNode, index: number) => item.order = index + 1);
   }
 }
