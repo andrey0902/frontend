@@ -168,6 +168,10 @@ export class ProfileComponent implements OnInit, OnDestroy {
     this.showRequestButtons = false;
   }
 
+  checkIsMentor(user: User): boolean {
+    return user.attributes.roles.includes('admin');
+  }
+
   ngOnDestroy(): void {
     this.componentActive = false;
   }

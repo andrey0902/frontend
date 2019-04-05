@@ -95,6 +95,7 @@ lt-user {
 
   &-wrap {
     display: flex;
+    flex-shrink: 0;
     height: 150px;
   }
 
@@ -158,4 +159,12 @@ mat-card {
 
 .iteration {
   margin-bottom: 100px;
+}
+
+.m-b {
+  margin-bottom: 10px;
+}
+
+.mentor {
+  padding-top: 10px;
 }
