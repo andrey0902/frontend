@@ -6,7 +6,7 @@ import {Iteration} from '../../models/iteration.model';
 import {IterationTreeService} from '../services/iteration-tree.service';
 import {Store} from '@ngrx/store';
 import {CreatePlanTaskRequest, DeletePlanTaskRequest, EditPlanTaskRequest, GetPlanRequest, UpdatePlanTasksRequest} from '../../root-store/profile/plan/plan.actions';
-import {plan} from '../../root-store/profile/plan/plan.selectors';
+import {plan, planWithNewTask} from '../../root-store/profile/plan/plan.selectors';
 import {filter, first, take} from 'rxjs/operators';
 import {Rights} from '../profile.component';
 
@@ -17,7 +17,7 @@ import {Rights} from '../profile.component';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 
-export class IterationPlanComponent implements OnChanges {
+export class IterationPlanComponent implements OnChanges, OnInit {
   @Input() iteration: Iteration;
   @Input() plan: IterationTaskModel[] = [];
   @Input() userRights: Rights;
@@ -36,6 +36,17 @@ export class IterationPlanComponent implements OnChanges {
               private cd: ChangeDetectorRef) {
   }
 
+  ngOnInit(): void {
+    this.store.select(planWithNewTask)
+      .pipe(
+        filter((data: IterationTaskModel[]) => !!data && data.length > 0)
+      )
+      .subscribe((data: IterationTaskModel[]) => {
+        this.plan = data;
+        this.cd.detectChanges();
+      });
+  }
+
   ngOnChanges(changes: SimpleChanges): void {
     if (changes.iteration && changes.iteration.currentValue) {
       this.store.dispatch(new GetPlanRequest({iterationId: this.iteration.id, userId: this.iteration.user_id}));
@@ -51,7 +62,6 @@ export class IterationPlanComponent implements OnChanges {
   public createTreeItem(task: ItemNode): void {
     console.log('create');
     this.store.dispatch(new CreatePlanTaskRequest({userId: this.iteration.user_id, iterationId: this.iteration.id, task: new IterationTaskModel(task)}));
-    this.getPlanFromStore();
   }
 
   public editTreeItem(task: ItemNode): void {

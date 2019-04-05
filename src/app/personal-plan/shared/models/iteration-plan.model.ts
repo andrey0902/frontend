@@ -69,7 +69,7 @@ export class TreeHelper {
         task.children = TreeHelper.sortTreeByOrder(task.children);
       }
     });
-    return tasks.sort((a, b) =>  a.order - b.order);
+    return tasks.sort((a, b) => a.order - b.order);
   }
 
   // get all items, that doesn't have children, so they are not parents
