@@ -17,14 +17,12 @@
         <lt-iteration-plan
           class="plan--tree"
           *ngIf="currentIteration"
-          (createItem)="treeDataChanged($event)"
-          [userRights]="'mentor'"
           [iteration]="currentIteration">
         </lt-iteration-plan>
         <button
           mat-raised-button
           color="accent"
-          [disabled]="!treeChanged"
+          [disabled]="!plan.length"
           class="google-font-bold plan--btn" (click)="onDone()">Завершить
         </button>
       </div>

@@ -19,7 +19,7 @@ import {Rights} from '../profile.component';
 export class IterationPlanComponent implements OnChanges, OnInit {
   @Input() iteration: Iteration;
   @Input() plan: IterationTaskModel[] = [];
-  @Input() userRights: Rights;
+  @Input() userRights: Rights = 'mentor';
 
   @Output() public createItem = new EventEmitter<ItemNode>();
 

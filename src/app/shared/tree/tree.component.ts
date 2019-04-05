@@ -130,6 +130,7 @@ export class TreeComponent implements OnChanges {
     this.checklistSelection.toggle(flatNode);
     const node = this.flatNodeMap.get(flatNode);
     node.is_completed = !node.is_completed;
+    console.log(this.editLevel);
 
     this.updateItem.emit([...this.getChangedCheckedItems(node), node]);
   }

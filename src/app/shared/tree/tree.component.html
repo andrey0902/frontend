@@ -34,7 +34,8 @@
     </button>
     <mat-checkbox [ngClass]="{'drop-above': dragNodeExpandOverArea === 'above' && dragNodeExpandOverNode === node,
                               'drop-below': dragNodeExpandOverArea === 'below' && dragNodeExpandOverNode === node,
-                              'drop-center': dragNodeExpandOverArea === 'center' && dragNodeExpandOverNode === node}"
+                              'drop-center': dragNodeExpandOverArea === 'center' && dragNodeExpandOverNode === node
+                              }"
                   draggable="true"
                   (dragstart)="editLevel === 2 && handleDragStart($event, node);"
                   (dragover)="handleDragOver($event, node);"

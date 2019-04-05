@@ -31,5 +31,4 @@ export class ItemFlatNode {
   showAsInput: InputType;
   level: number;
   expandable: boolean;
-  confirmed: boolean;
 }
