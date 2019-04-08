@@ -161,6 +161,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
       this.userRights = 'mentor';
       return;
     }
+    this.userRights = 'alien';
     this.showRequestButtons = false;
   }
 

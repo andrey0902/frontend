@@ -4,7 +4,7 @@ import {IterationTaskModel} from '../../../personal-plan/shared/models/iteration
 
 export const PlanFeatureSelector = createFeatureSelector('profile');
 
-export const plan = createSelector(
+export const newPlan = createSelector(
   PlanFeatureSelector,
   (state: ProfileState) => {
     return Object.values(state.plan.planDictionary || {}).map((task: IterationTaskModel) => new IterationTaskModel(task));
@@ -16,9 +16,9 @@ let oldPlan: IterationTaskModel[] = [];
 export const planWithNewTask = createSelector(
   PlanFeatureSelector,
   (state: ProfileState) => {
-    const newPlan: IterationTaskModel[] = Object.values(state.plan.planDictionary || {}).map((task: IterationTaskModel) => new IterationTaskModel(task));
-    const result = newPlan.length > oldPlan.length ? newPlan : null;
-    oldPlan = [...newPlan];
+    const newplan: IterationTaskModel[] = Object.values(state.plan.planDictionary || {}).map((task: IterationTaskModel) => new IterationTaskModel(task));
+    const result = newplan.length > oldPlan.length ? newplan : null;
+    oldPlan = [...newplan];
     return result;
   }
 );

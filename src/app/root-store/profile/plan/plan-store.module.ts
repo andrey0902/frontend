@@ -7,7 +7,6 @@ import {PlanEffectsService} from './plan.effects';
 @NgModule({
   declarations: [],
   imports: [
-    StoreModule.forFeature('plan', planReducer),
     EffectsModule.forFeature([PlanEffectsService])
   ]
 })
