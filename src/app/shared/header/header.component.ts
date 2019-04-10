@@ -68,8 +68,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   logout() {
-    this.authService.logout()
-      .subscribe(() => window.location.href = environment.redirectPath);
+    window.location.href = environment.redirectPath;
   }
 
   ngOnDestroy(): void {

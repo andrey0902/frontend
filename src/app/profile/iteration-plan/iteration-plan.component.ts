@@ -1,9 +1,8 @@
-import {Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges} from '@angular/core';
+import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges} from '@angular/core';
 import {IterationTaskModel} from '../../personal-plan/shared/models/iteration-plan.model';
 import {ItemNode} from '../../shared/tree/models/item-node.model';
 import {InfoPlanModel} from '../../personal-plan/shared/models/info-plan.model';
 import {Iteration} from '../../models/iteration.model';
-import {IterationTreeService} from '../services/iteration-tree.service';
 import {Store} from '@ngrx/store';
 import {
   CreatePlanTaskRequest,
@@ -36,8 +35,7 @@ export class IterationPlanComponent implements OnChanges, OnInit {
     mentor: 2
   };
 
-  constructor(private treeService: IterationTreeService,
-              private store: Store<any>) {
+  constructor(private store: Store<any>) {
   }
 
   ngOnInit(): void {
@@ -66,22 +64,18 @@ export class IterationPlanComponent implements OnChanges, OnInit {
   }
 
   public deleteTreeItem(task: ItemNode): void {
-    console.log('delete');
     this.store.dispatch(new DeletePlanTaskRequest({userId: this.iteration.user_id, iterationId: this.iteration.id, task: new IterationTaskModel(task)}));
   }
 
   public createTreeItem(task: ItemNode): void {
-    console.log('create');
     this.store.dispatch(new CreatePlanTaskRequest({userId: this.iteration.user_id, iterationId: this.iteration.id, task: new IterationTaskModel(task)}));
   }
 
   public editTreeItem(task: ItemNode): void {
-    console.log('edit');
     this.store.dispatch(new EditPlanTaskRequest({userId: this.iteration.user_id, iterationId: this.iteration.id, task: new IterationTaskModel(task)}));
   }
 
   public updateTreeItems(items: ItemNode[]): void {
-    console.log('update');
     const tasks: IterationTaskModel[] = items.map((item: ItemNode) => new IterationTaskModel(item));
     this.store.dispatch(new UpdatePlanTasksRequest({userId: this.iteration.user_id, iterationId: this.iteration.id, tasks: tasks}));
   }

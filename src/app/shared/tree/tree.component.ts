@@ -130,7 +130,6 @@ export class TreeComponent implements OnChanges {
     this.checklistSelection.toggle(flatNode);
     const node = this.flatNodeMap.get(flatNode);
     node.is_completed = !node.is_completed;
-    console.log(this.editLevel);
 
     this.updateItem.emit([...this.getChangedCheckedItems(node), node]);
   }
@@ -261,8 +260,7 @@ export class TreeComponent implements OnChanges {
   handleDrop(event, flatNode: ItemFlatNode) {
     event.preventDefault();
     const node: ItemNode = this.flatNodeMap.get(flatNode);
-
-    if (flatNode !== this.dragNode && node.children.length < 100 && !this.dragNode.expandable) {
+    if (flatNode !== this.dragNode && node.children.length < 100 && !this.dragNode.expandable && flatNode.level < 2) {
       const dragNode = this.flatNodeMap.get(this.dragNode);
       const dragNodeParent = this.database.getParentOfNode(dragNode);
       const {order: oldOrder, parentId: oldParentId} = dragNode;
