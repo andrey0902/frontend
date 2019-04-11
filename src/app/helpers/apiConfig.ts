@@ -8,4 +8,5 @@ export class ApiConfig {
   public static protege = `${ApiConfig.base}/protege`;
   public static trustboxMessages = `${ApiConfig.portalBase}/trust_box/messages/`;
   public static logout = `${ApiConfig.portalBase}/auth/logout/`;
+  public static getAccessUserPortal = `${ApiConfig.portalBase}/mentoring/plans/check_available_idp/`;
 }
