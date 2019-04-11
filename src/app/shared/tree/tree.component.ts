@@ -5,8 +5,8 @@ import {SelectionModel} from '@angular/cdk/collections';
 import {InsertionType, TreeDatabaseService} from './services/tree-database.service';
 import {ItemFlatNode, ItemNode} from './models/item-node.model';
 import {Observable, of} from 'rxjs';
-import {DeleteProtege} from '../../root-store/mentors/mentors.actions';
 import {DialogService} from '../dialog/services/dialog.service';
+import {TreeHelper} from '../../personal-plan/shared/models/iteration-plan.model';
 
 @Component({
   selector: 'lt-tree',
@@ -15,18 +15,15 @@ import {DialogService} from '../dialog/services/dialog.service';
   providers: [TreeDatabaseService]
 })
 
-export class TreeComponent implements OnChanges, OnInit {
+export class TreeComponent implements OnChanges {
   @Input() private data: ItemNode[];
-  @Input() public canEdit = true;
   @Input() public type: new (...arg: any[]) => ItemNode;
-  @Input() public disable = false;
-  @Input() public checkboxDisable = false;
+  @Input() public editLevel: number;
 
   @Output() public updateItem = new EventEmitter<ItemNode[]>();
   @Output() public deleteItem = new EventEmitter<ItemNode>();
   @Output() public createItem = new EventEmitter<ItemNode>();
   @Output() public editItem = new EventEmitter<ItemNode>();
-  @Output() public dataChanged = new EventEmitter<ItemNode[]>();
 
   /** Map from flat node to nested node. This helps us finding the nested node to be modified */
   flatNodeMap = new Map<ItemFlatNode, ItemNode>();
@@ -51,25 +48,28 @@ export class TreeComponent implements OnChanges, OnInit {
   dragNodeExpandOverArea: string;
   @ViewChild('emptyItem') emptyItem: ElementRef;
 
-  saveIsDisabled = true;
-
   constructor(private database: TreeDatabaseService, private dialogService: DialogService) {
     this.treeFlattener = new MatTreeFlattener(this.transformer, this.getLevel, this.isExpandable, this.getChildren);
     this.treeControl = new FlatTreeControl<ItemFlatNode>(this.getLevel, this.isExpandable);
     this.dataSource = new MatTreeFlatDataSource(this.treeControl, this.treeFlattener);
-    database.updateEventEmitter = this.updateItem;
-    database.deleteEventEmitter = this.deleteItem;
 
     database.dataChange
       .subscribe(data => {
         this.dataSource.data = [];
         this.dataSource.data = data;
-        this.dataChanged.emit(data);
       });
   }
 
-  ngOnInit(): void {
-    this.treeControl.expandAll();
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes.data && changes.data.currentValue) {
+      const newData = changes.data.currentValue.map((item) => new ItemNode(item));
+      this.database.data = TreeHelper.treeStructureGenerator(newData);
+      this.treeControl.expandAll();
+    }
+
+    if (changes.type && changes.type.currentValue) {
+      this.database.type = changes.type.currentValue;
+    }
   }
 
   getLevel = (node: ItemFlatNode) => node.level;
@@ -78,7 +78,7 @@ export class TreeComponent implements OnChanges, OnInit {
 
   isValidToAdd = (flatNode: ItemFlatNode) => {
     const node = this.flatNodeMap.get(flatNode);
-    const nestingLevel = this.database.getParentsFromNodes(node).length + 1;
+    const nestingLevel = this.getLevel(flatNode) + 1;
     return nestingLevel < 3 && node.children.length < 100;
   };
 
@@ -103,7 +103,7 @@ export class TreeComponent implements OnChanges, OnInit {
     flatNode.text = node.text;
     flatNode.showAsInput = node.showAsInput;
     flatNode.level = level;
-    flatNode.expandable = (node.children && node.children.length > 0);
+    flatNode.expandable = node.children.length > 0;
     if (node.is_completed) {
       this.checklistSelection.select(flatNode);
     }
@@ -132,7 +132,6 @@ export class TreeComponent implements OnChanges, OnInit {
     node.is_completed = !node.is_completed;
 
     this.updateItem.emit([...this.getChangedCheckedItems(node), node]);
-    this.database.updateData();
   }
 
   /** add item(add value-item)**/
@@ -142,6 +141,7 @@ export class TreeComponent implements OnChanges, OnInit {
       data.is_completed = false;
       data.text = nodeText;
       this.database.insertItem(null, data, true);
+      this.database.update();
       this.createItem.emit(data);
     }
   }
@@ -149,13 +149,14 @@ export class TreeComponent implements OnChanges, OnInit {
   /** add item(add input-item) **/
   addNewItem(node: ItemFlatNode) {
     const parentNode = this.flatNodeMap.get(node);
-    const nestingLevel = this.database.getParentsFromNodes(parentNode).length + 2;
 
     const data = new this.type();
     data.showAsInput = 'add';
     data.is_completed = false;
 
     this.database.insertItem(parentNode, data, true);
+    this.database.update();
+
     if (!!parentNode.children) {
       this.treeControl.expand(node);
     }
@@ -165,11 +166,12 @@ export class TreeComponent implements OnChanges, OnInit {
   addItem(nodeText: string, node: ItemFlatNode) {
     const data = this.flatNodeMap.get(node);
     data.showAsInput = false;
-    this.database.updateItem(data, nodeText);
+    data.text = nodeText;
+    this.database.update();
 
     if (node.showAsInput === 'add') {
-      this.createItem.emit(data);
       this.updateItemCheck(data);
+      this.createItem.emit(data);
     }
 
     if (node.showAsInput === 'edit') {
@@ -182,40 +184,61 @@ export class TreeComponent implements OnChanges, OnInit {
     const data = this.flatNodeMap.get(node);
     data.showAsInput = 'edit';
     data.isNew = false;
-    this.database.updateItem(data, data.text);
+    this.database.update();
   }
 
   /** remove item **/
   removeItem(node: ItemFlatNode) {
     const data = this.flatNodeMap.get(node);
-    const parent = this.database.getParentFromNodes(data);
-    console.log(node);
+
     if (node.showAsInput !== 'add' && node.showAsInput !== 'edit') {
       const htmlContent = `<p>Вы уверены, что хотите удалить пункт <b>${node.text}</b> ?</p>`;
-      this.dialogService.openConfirmDialog({ htmlContent }, (confirm) => {
+      this.dialogService.openConfirmDialog({htmlContent}, (confirm) => {
         if (confirm) {
-          this.database.deleteItem(data);
+          this.database.deleteNode(data);
+          this.database.update();
+          this.updateItemCheck(this.database.getParentOfNode(data), false);
           this.deleteItem.emit(data);
         }
       });
     }
 
     if (node.showAsInput === 'add') {
-      this.database.deleteItem(data);
+      this.database.deleteNode(data);
+      this.database.update();
     }
 
     if (node.showAsInput === 'edit') {
       data.showAsInput = false;
-      this.database.updateItem(data, data.text);
+      this.database.update();
     }
   }
 
-  updateItemCheck(node: ItemNode) {
-    const changesCheckedItems = this.getChangedCheckedItems(node);
-    if (changesCheckedItems.length > 0) {
-      this.updateItem.emit(changesCheckedItems);
-      this.database.updateData();
+  updateItemCheck(node: ItemNode, checkChildren: boolean = true) {
+    if (node) {
+      const changesCheckedItems = this.getChangedCheckedItems(node, checkChildren);
+      if (changesCheckedItems.length > 0) {
+        this.updateItem.emit(changesCheckedItems);
+      }
     }
+  }
+
+  // Drag'n'Drop
+
+  getNewDropItem(flatNode: ItemFlatNode, dragNode: ItemNode): ItemNode {
+    const node: ItemNode = this.flatNodeMap.get(flatNode);
+    const nodeDrop: boolean = !this.dragNode.expandable || node.parentId === dragNode.parentId || node.parentId === 0;
+    let newItem: ItemNode = null;
+
+    if (this.dragNodeExpandOverArea === 'above' && nodeDrop) {
+      newItem = this.database.insertItemNear(node, dragNode, InsertionType.ABOVE);
+    } else if (this.dragNodeExpandOverArea === 'below' && nodeDrop) {
+      newItem = this.database.insertItemNear(node, dragNode, InsertionType.BELOW);
+    } else if (node.children.length < 100 && flatNode.level < 2 && !this.dragNode.expandable) {
+      newItem = this.database.copyPasteItem(dragNode, node);
+    }
+
+    return newItem;
   }
 
   handleDragStart(event, node: ItemFlatNode) {
@@ -254,32 +277,20 @@ export class TreeComponent implements OnChanges, OnInit {
 
   handleDrop(event, flatNode: ItemFlatNode) {
     event.preventDefault();
+    const dragNode = this.flatNodeMap.get(this.dragNode);
+    const {order: oldOrder, parentId: oldParentId} = dragNode;
+    const newItem: ItemNode = flatNode !== this.dragNode ? this.getNewDropItem(flatNode, dragNode) : null;
 
-    const node: ItemNode = this.flatNodeMap.get(flatNode);
-    const nestingLevel = this.database.getParentsFromNodes(node).length + 1;
-    const parentChildren = node.parentId ? this.database.getParentFromNodes(node).children.length : 0;
-    if (flatNode !== this.dragNode && nestingLevel < 3 && parentChildren < 100) {
-      const dragNode = this.flatNodeMap.get(this.dragNode);
-      const dragNodeParent = this.database.getParentFromNodes(dragNode);
-      const {order: oldOrder, parentId: oldParentId} = dragNode;
-      let newItem: ItemNode;
-
-      if (this.dragNodeExpandOverArea === 'above') {
-        newItem = this.database.insertItemNear(node, dragNode, InsertionType.ABOVE);
-      } else if (this.dragNodeExpandOverArea === 'below') {
-        newItem = this.database.insertItemNear(node, dragNode, InsertionType.BELOW);
-      } else {
-        newItem = this.database.copyPasteItem(dragNode, node);
-      }
+    if (newItem) {
+      this.database.update();
 
       if (oldOrder !== newItem.order || oldParentId !== newItem.parentId) {
         this.editItem.emit(newItem);
         this.treeControl.expandDescendants(this.nestedNodeMap.get(newItem));
       }
 
-      if (dragNodeParent && dragNodeParent.children && dragNodeParent.children.length > 0) {
-        this.updateItemCheck(dragNodeParent.children[0]);
-      }
+      this.updateItemCheck(this.database.getParentOfNode(dragNode), false);
+      this.updateItemCheck(this.database.getParentOfNode(newItem), false);
     }
 
     this.dragNode = null;
@@ -287,22 +298,7 @@ export class TreeComponent implements OnChanges, OnInit {
     this.dragNodeExpandOverTime = 0;
   }
 
-  handleDragEnd(event) {
-    this.dragNode = null;
-    this.dragNodeExpandOverNode = null;
-    this.dragNodeExpandOverTime = 0;
-  }
-
-  ngOnChanges(changes: SimpleChanges): void {
-
-    if (changes.data && changes.data.currentValue) {
-      this.database.initialize(changes.data.currentValue);
-    }
-
-    if (changes.type && changes.type.currentValue) {
-      this.database.type = changes.type.currentValue;
-    }
-  }
+  //
 
   getChangedCheckedItems(startNode: ItemNode, checkChildren: boolean = true): ItemNode[] {
     const changedItems: ItemNode[] = [];
@@ -312,8 +308,9 @@ export class TreeComponent implements OnChanges, OnInit {
     const descendants: ItemNode[] = flatDescendants.map((descendant: ItemFlatNode) => this.flatNodeMap.get(descendant));
 
     // check all children and save changes
+
     if (descendants.length > 0 && checkChildren) {
-      descendants.forEach((descendant: ItemNode) => {
+      descendants.forEach((descendant) => {
         if (descendant.is_completed !== nodeIsCompleted) {
           descendant.is_completed = nodeIsCompleted;
           changedItems.push(descendant);
@@ -333,7 +330,7 @@ export class TreeComponent implements OnChanges, OnInit {
     }
 
     // check parent
-    const parentNode = this.database.getParentFromNodes(startNode);
+    const parentNode = this.database.getParentOfNode(startNode);
     if (parentNode) {
       changedItems.push(...this.getChangedCheckedItems(parentNode, false));
     }

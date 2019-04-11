@@ -8,6 +8,9 @@ import {CreateIterationRequest} from '../../root-store/profile/iteration/iterati
 import {selectIteration} from '../../root-store/profile/iteration/iteration.selectors';
 import {filter, take} from 'rxjs/operators';
 import {Iteration} from '../../models/iteration.model';
+import {GetPlanRequest} from '../../root-store/profile/plan/plan.actions';
+import {newPlan} from '../../root-store/profile/plan/plan.selectors';
+import {IterationTaskModel} from '../../personal-plan/shared/models/iteration-plan.model';
 
 @Component({
   selector: 'lt-create-iteration',
@@ -19,8 +22,8 @@ export class CreateIterationComponent implements OnInit {
 
   @ViewChild(MatVerticalStepper) public stepper: MatVerticalStepper;
   iterationForm: FormGroup;
-  treeChanged = false;
   currentIteration: Iteration;
+  plan: IterationTaskModel[] = [];
 
   private _protegeId: string;
 
@@ -42,6 +45,7 @@ export class CreateIterationComponent implements OnInit {
       meetType: ['', Validators.required],
       weekDay: ['', Validators.required]
     });
+
     this._protegeId = this.route.snapshot.paramMap.get('id');
   }
 
@@ -53,20 +57,13 @@ export class CreateIterationComponent implements OnInit {
       take(1)
     ).subscribe((result) => {
       this.currentIteration = result;
+      this.store.dispatch(new GetPlanRequest({iterationId: this.currentIteration.id, userId: this.currentIteration.user_id}));
+      this.store.select(newPlan).subscribe((data: IterationTaskModel[]) => this.plan = data);
       this.stepper.next();
     });
   }
 
   onDone() {
     this.router.navigate(['/profile', this._protegeId]);
-  }
-
-  treeDataChanged($event) {
-    if (!this.treeChanged && $event) {
-      this.treeChanged = true;
-    }
-
-    // TODO: Redirect to user profile after successful creation plan
-    //
   }
 }

@@ -6,8 +6,7 @@ export interface IPlanPayload {
   userId?: number;
   taskId?: number;
   tasksId?: number[];
-  status?: boolean;
-  plan?: IterationTaskModel[];
+  tasks?: IterationTaskModel[];
   task?: IterationTaskModel;
   error?: Error;
 }

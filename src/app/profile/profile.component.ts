@@ -26,8 +26,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private userService: UserService,
     private store: Store<any>,
-    private dialogService: DialogService,
-    private cd: ChangeDetectorRef
+    private dialogService: DialogService
   ) {
   }
 
@@ -52,7 +51,6 @@ export class ProfileComponent implements OnInit, OnDestroy {
       takeWhile(() => this.componentActive)
     ).subscribe((iteration) => {
       this.iterationExists = iteration;
-      this.cd.detectChanges();
     });
 
     this.route.paramMap.pipe(
@@ -124,7 +122,6 @@ export class ProfileComponent implements OnInit, OnDestroy {
       })
     ).subscribe(user => {
       this.user = user;
-      this.cd.detectChanges();
     });
   }
 
@@ -164,6 +161,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
       this.userRights = 'mentor';
       return;
     }
+    this.userRights = 'alien';
     this.showRequestButtons = false;
   }
 

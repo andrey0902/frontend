@@ -10,8 +10,19 @@ export class ItemNode {
   text: string;
   id: number;
   parentId: number;
-  isNew = false;
+  isNew: boolean;
   is_completed: boolean;
+
+  constructor(config) {
+    this.children = config.children || [];
+    this.showAsInput = false;
+    this.isNew = false;
+    this.order = config.order;
+    this.text = config.text;
+    this.id = config.id;
+    this.parentId = config.parentId;
+    this.is_completed = config.is_completed;
+  }
 }
 
 /** Flat to-do item node with expandable and level information */
