@@ -29,7 +29,9 @@ import {MentorsHelper} from './mentors.helper';
             const mentorList = MentorsHelper.createUsersMap(mentors);
             return new LoadMentorsSuccess(mentorList);
           }),
-          catchError(err => of(new DispatchMentorsFail(err.error.errors)))
+          catchError(err => {
+            return this.handlerError(err);
+          })
       );
     })
   );
@@ -42,7 +44,9 @@ import {MentorsHelper} from './mentors.helper';
           const mentor: UsersMap = { [res.id]: new User(res)};
           return new AddMentorSuccess(mentor);
         }),
-        catchError(err => of(new DispatchMentorsFail(err.error.errors)))
+        catchError(err => {
+          return this.handlerError(err);
+        })
       );
     })
   );
@@ -54,7 +58,9 @@ import {MentorsHelper} from './mentors.helper';
         map((res: any) => {
           return new DeleteMentorSuccess(res.id);
         }),
-        catchError(err => of(new DispatchMentorsFail(err.error.errors)))
+        catchError(err => {
+          return this.handlerError(err);
+        })
       );
     })
   );
@@ -69,7 +75,9 @@ import {MentorsHelper} from './mentors.helper';
             mentorId: action.payload.mentorId
           });
         }),
-        catchError(err => of(new DispatchMentorsFail(err.error.errors)))
+        catchError(err => {
+          return this.handlerError(err);
+        })
       );
     })
   );
@@ -85,7 +93,9 @@ import {MentorsHelper} from './mentors.helper';
             currentMentorId: action.payload.currentMentorId
           });
         }),
-        catchError(err => of(new DispatchMentorsFail(err.error.errors)))
+        catchError(err => {
+          return this.handlerError(err);
+        })
       );
     })
   );
@@ -100,8 +110,14 @@ import {MentorsHelper} from './mentors.helper';
             currentMentorId: action.payload.currentMentorId
           });
         }),
-        catchError(err => of(new DispatchMentorsFail(err.error.errors)))
+        catchError(err => {
+          return this.handlerError(err);
+        })
       );
     })
   );
+
+  private handlerError(err: any): Observable<any> {
+    return of(new DispatchMentorsFail(err.error ? err.error.errors : null));
+  }
 }
