@@ -1,4 +1,5 @@
 @import "../../scss/helpers";
+@import "../../scss/variables";
 
 .container {
   margin-top: 30px;
@@ -120,6 +121,11 @@ lt-user {
 }
 
 .btn {
+
+  &-accent {
+    background: $primary-color;
+    color: #ffffff;
+  }
 
   &:last-child {
     margin-left: 20px;
