@@ -68,7 +68,7 @@ export class CreateTreeItemComponent implements OnInit {
    */
   private listenChanges(): void {
     this.control.valueChanges.subscribe((value) => {
-      if (value && value.length > 0 && !LtValidators.noWhitespaceValidator(this.control)) {
+      if (value && value.length > 0 && value.length < 121 && !LtValidators.noWhitespaceValidator(this.control)) {
         this.isDisabled = false;
       } else {
         this.isDisabled = true;
