@@ -1,7 +1,6 @@
-.create-tree-item{
+.create-tree-item {
   width: 100%;
 }
-
 
 .drop-above {
   border-top: 10px solid #dddddd;
@@ -22,10 +21,15 @@
 }
 
 mat-tree-node:hover .buttons {
+  width: 80px;
   display: flex;
   opacity: 0.7;
   align-items: center;
-  margin-left: 10px;
+  height: 0;
+  position: relative;
+  top: 10px;
+  left: 10px;
+
   button {
     font-size: 12px;
     width: 27px;
@@ -38,17 +42,42 @@ mat-tree-node:hover .buttons {
 
 mat-tree-node {
   font-size: 16px;
+  overflow: unset;
+  display: flex;
+  align-items: flex-start;
+  padding-bottom: 15px;
+}
+
+.checkbox {
+  max-width: calc(100% - 120px);
+}
+
+.btn-children {
+  top: -9px;
+  position: relative;
+  height: 0;
 }
 
 ::ng-deep .mat-checkbox-checked .mat-checkbox-background,
 ::ng-deep .mat-checkbox-indeterminate .mat-checkbox-background,
-::ng-deep .mat-checkbox-ripple .mat-ripple-element
-{
+::ng-deep .mat-checkbox-ripple .mat-ripple-element {
   background-color: #141460 !important;
 }
 
-.padding{
+.padding {
   padding-left: 40px;
 }
 
+::ng-deep .checkbox .mat-checkbox-layout {
+  white-space: normal;
+  word-break: break-all;
+  display: flex;
+  align-items: flex-start;
+
+  .mat-checkbox-inner-container {
+    margin: 0 10px;
+    position: relative;
+    top: 3px;
+  }
+}
 
