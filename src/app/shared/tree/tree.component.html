@@ -1,4 +1,5 @@
-<lt-create-tree-item *ngIf="editLevel === 2" label="Добавить задачу" (createItem)="addItemToRoot($event)" class="create-tree-item" [main] = 'true'></lt-create-tree-item>
+<lt-create-tree-item *ngIf="editLevel === 2" label="Добавить задачу" (createItem)="addItemToRoot($event)"
+                     class="create-tree-item" [main]='true'></lt-create-tree-item>
 <mat-tree [dataSource]="dataSource" [treeControl]="treeControl">
   <mat-tree-node *matTreeNodeDef="let node" matTreeNodePadding>
     <mat-checkbox class="checklist-leaf-node padding"
@@ -12,17 +13,16 @@
                   draggable="true"
                   (dragstart)="editLevel === 2 && handleDragStart($event, node);"
                   (dragover)="handleDragOver($event, node);"
-                  (drop)="handleDrop($event, node);"
-                  (dragend)="handleDragEnd($event);">{{node.text}}</mat-checkbox>
+                  (drop)="handleDrop($event, node);">{{node.text}}</mat-checkbox>
     <ng-container *ngTemplateOutlet="nodeMenu; context: {node: node}"></ng-container>
   </mat-tree-node>
 
   <mat-tree-node *matTreeNodeDef="let node; when: showAsInput" matTreeNodePadding>
     <lt-create-tree-item
-                         [value] = "node.text"
-                         (createItem)="addItem($event, node)"
-                         (removeItem)="removeItem(node)"
-                         class="create-tree-item padding"></lt-create-tree-item>
+      [value]="node.text"
+      (createItem)="addItem($event, node)"
+      (removeItem)="removeItem(node)"
+      class="create-tree-item padding"></lt-create-tree-item>
   </mat-tree-node>
 
   <mat-tree-node *matTreeNodeDef="let node; when: hasChild" matTreeNodePadding>
@@ -40,7 +40,6 @@
                   (dragstart)="editLevel === 2 && handleDragStart($event, node);"
                   (dragover)="handleDragOver($event, node);"
                   (drop)="handleDrop($event, node);"
-                  (dragend)="handleDragEnd($event);"
                   [checked]="checklistSelection.isSelected(node)"
                   [disabled]="editLevel === 0"
                   [indeterminate]="descendantsPartiallySelected(node)"
@@ -52,10 +51,16 @@
 
 <span #emptyItem></span>
 
-<ng-template #nodeMenu let-node = "node">
+<ng-template #nodeMenu let-node="node">
   <div class="buttons" *ngIf="editLevel === 2">
-  <button mat-icon-button (click)="redactItem(node)"><mat-icon>edit</mat-icon></button>
-  <button mat-icon-button (click)="removeItem(node)"><mat-icon>close</mat-icon></button>
-  <button *ngIf="isValidToAdd(node)" mat-icon-button (click)="addNewItem(node)"><mat-icon>add</mat-icon></button>
+    <button mat-icon-button (click)="redactItem(node)">
+      <mat-icon>edit</mat-icon>
+    </button>
+    <button mat-icon-button (click)="removeItem(node)">
+      <mat-icon>close</mat-icon>
+    </button>
+    <button *ngIf="isValidToAdd(node)" mat-icon-button (click)="addNewItem(node)">
+      <mat-icon>add</mat-icon>
+    </button>
   </div>
 </ng-template>

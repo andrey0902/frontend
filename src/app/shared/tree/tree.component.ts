@@ -223,6 +223,24 @@ export class TreeComponent implements OnChanges {
     }
   }
 
+  // Drag'n'Drop
+
+  getNewDropItem(flatNode: ItemFlatNode, dragNode: ItemNode): ItemNode {
+    const node: ItemNode = this.flatNodeMap.get(flatNode);
+    const nodeDrop: boolean = !this.dragNode.expandable || node.parentId === dragNode.parentId || node.parentId === 0;
+    let newItem: ItemNode = null;
+
+    if (this.dragNodeExpandOverArea === 'above' && nodeDrop) {
+      newItem = this.database.insertItemNear(node, dragNode, InsertionType.ABOVE);
+    } else if (this.dragNodeExpandOverArea === 'below' && nodeDrop) {
+      newItem = this.database.insertItemNear(node, dragNode, InsertionType.BELOW);
+    } else if (node.children.length < 100 && flatNode.level < 2 && !this.dragNode.expandable) {
+      newItem = this.database.copyPasteItem(dragNode, node);
+    }
+
+    return newItem;
+  }
+
   handleDragStart(event, node: ItemFlatNode) {
     // Required by Firefox (https://stackoverflow.com/questions/19055264/why-doesnt-html5-drag-and-drop-work-in-firefox)
     event.dataTransfer.setData('foo', 'bar');
@@ -259,21 +277,11 @@ export class TreeComponent implements OnChanges {
 
   handleDrop(event, flatNode: ItemFlatNode) {
     event.preventDefault();
-    const node: ItemNode = this.flatNodeMap.get(flatNode);
-    if (flatNode !== this.dragNode && node.children.length < 100 && !this.dragNode.expandable && flatNode.level < 2) {
-      const dragNode = this.flatNodeMap.get(this.dragNode);
-      const dragNodeParent = this.database.getParentOfNode(dragNode);
-      const {order: oldOrder, parentId: oldParentId} = dragNode;
-      let newItem: ItemNode;
+    const dragNode = this.flatNodeMap.get(this.dragNode);
+    const {order: oldOrder, parentId: oldParentId} = dragNode;
+    const newItem: ItemNode = flatNode !== this.dragNode ? this.getNewDropItem(flatNode, dragNode) : null;
 
-      if (this.dragNodeExpandOverArea === 'above') {
-        newItem = this.database.insertItemNear(node, dragNode, InsertionType.ABOVE);
-      } else if (this.dragNodeExpandOverArea === 'below') {
-        newItem = this.database.insertItemNear(node, dragNode, InsertionType.BELOW);
-      } else {
-        newItem = this.database.copyPasteItem(dragNode, node);
-      }
-
+    if (newItem) {
       this.database.update();
 
       if (oldOrder !== newItem.order || oldParentId !== newItem.parentId) {
@@ -281,14 +289,8 @@ export class TreeComponent implements OnChanges {
         this.treeControl.expandDescendants(this.nestedNodeMap.get(newItem));
       }
 
-      if (dragNodeParent) {
-        this.updateItemCheck(dragNodeParent, false);
-      }
-
-      const newItemParent = this.database.getParentOfNode(newItem);
-      if (newItemParent) {
-        this.updateItemCheck(newItemParent, false);
-      }
+      this.updateItemCheck(this.database.getParentOfNode(dragNode), false);
+      this.updateItemCheck(this.database.getParentOfNode(newItem), false);
     }
 
     this.dragNode = null;
@@ -296,11 +298,7 @@ export class TreeComponent implements OnChanges {
     this.dragNodeExpandOverTime = 0;
   }
 
-  handleDragEnd(event) {
-    this.dragNode = null;
-    this.dragNodeExpandOverNode = null;
-    this.dragNodeExpandOverTime = 0;
-  }
+  //
 
   getChangedCheckedItems(startNode: ItemNode, checkChildren: boolean = true): ItemNode[] {
     const changedItems: ItemNode[] = [];
