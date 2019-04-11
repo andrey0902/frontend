@@ -13,6 +13,7 @@ import {switchMap} from 'rxjs/operators';
 import {takeWhile} from 'rxjs/internal/operators/takeWhile';
 import {Router} from '@angular/router';
 import {AuthService} from '../../core/services/auth.service';
+import { UserPortalIDP } from './shared/models/userPortalIDP';
 
 @Component({
   selector: 'lt-header',
@@ -26,7 +27,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   countMessages: number;
   portalSitePath: string;
   loaded = true;
-
+  userPortalIdp: UserPortalIDP;
   constructor(
     private authService: AuthService,
     private userService: UserService,
@@ -51,6 +52,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.portalSitePath = environment.portalSitePath;
     this.nav_links = GroupsService.get_nav_links(this.portalSitePath);
     this.getUnreadMessages();
+    this.getUserPortalIdp();
   }
 
   getUnreadMessages() {
@@ -65,6 +67,13 @@ export class HeaderComponent implements OnInit, OnDestroy {
         }
       });
     }
+  }
+/*TODO: need it's request do for ngrx*/
+  getUserPortalIdp() {
+    this.userService.getUserPortalAccesse()
+      .subscribe((res: UserPortalIDP) => {
+        this.userPortalIdp = res;
+      });
   }
 
   logout() {
