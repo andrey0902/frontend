@@ -23,7 +23,9 @@ export class CurrentUserEffectService {
           const user = new User(res);
           return new LoadUserSuccess(user);
         }),
-        catchError(err => of(new LoadUserFail(err.error.errors)))
+        catchError(err => {
+          return of(new LoadUserFail(err.error ? err.error.errors : null));
+        })
       );
     })
   );
