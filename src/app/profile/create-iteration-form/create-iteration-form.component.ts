@@ -28,6 +28,7 @@ export class CreateIterationFormComponent implements OnInit {
   get startDate() { return this.iterationForm.get('time').get('startDate'); }
   get endDate() { return this.iterationForm.get('time').get('endDate'); }
   get goal() { return this.iterationForm.get('goal'); }
+  get projectLink() { return this.iterationForm.get('projectLink'); }
   get meetType() { return this.iterationForm.get('meetType'); }
   get weekDay() { return this.iterationForm.get('weekDay'); }
 
