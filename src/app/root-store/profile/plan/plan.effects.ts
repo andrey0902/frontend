@@ -34,7 +34,7 @@ export class PlanEffectsService {
             const tasks: IterationTaskModel[] = data.map((task) => new IterationTaskModelByConfig(task));
             return new GetPlanSuccess({tasks: tasks});
           }),
-          catchError(err => of(new GetPlanFail({error: err.error.errors})))
+          catchError(err => of(new GetPlanFail({error: err.error.error})))
         );
     })
   );
@@ -48,7 +48,7 @@ export class PlanEffectsService {
             const newTask = new IterationTaskModelByConfig(data);
             return new CreatePlanTaskSuccess({task: newTask});
           }),
-          catchError(err => of(new CreatePlanTaskFail({error: err.error.errors})))
+          catchError(err => of(new CreatePlanTaskFail({error: err.error.error})))
         );
     })
   );
@@ -62,7 +62,7 @@ export class PlanEffectsService {
             const task = new IterationTaskModelByConfig(data);
             return new EditPlanTaskSuccess({task: task});
           }),
-          catchError(err => of(new EditPlanTaskFail({error: err.error.errors})))
+          catchError(err => of(new EditPlanTaskFail({error: err.error.error})))
         );
     })
   );
@@ -76,7 +76,7 @@ export class PlanEffectsService {
             const nodeIds: number[] = TreeHelper.getAllNodeIds(action.payload.task);
             return new DeletePlanTaskSuccess({tasksId: nodeIds});
           }),
-          catchError(err => of(new DeletePlanTaskFail({error: err.error.errors})))
+          catchError(err => of(new DeletePlanTaskFail({error: err.error.error})))
         );
     })
   );
@@ -95,7 +95,7 @@ export class PlanEffectsService {
             });
             return new UpdatePlanTasksSuccess({tasks: tasks});
           }),
-          catchError(err => of(new UpdatePlanTasksFail({error: err.error.errors})))
+          catchError(err => of(new UpdatePlanTasksFail({error: err.error.error})))
         );
     })
   );

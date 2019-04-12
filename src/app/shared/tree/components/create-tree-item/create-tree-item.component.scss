@@ -1,3 +1,7 @@
+:host {
+  width: 100%;
+}
+
 .simple-input {
   position: relative;
 }
@@ -27,3 +31,5 @@
 ::ng-deep input.mat-input-element {
   width: calc(100% - 80px);
 }
+
+

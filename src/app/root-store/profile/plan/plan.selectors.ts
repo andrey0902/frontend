@@ -4,21 +4,29 @@ import {IterationTaskModel} from '../../../personal-plan/shared/models/iteration
 
 export const PlanFeatureSelector = createFeatureSelector('profile');
 
-export const newPlan = createSelector(
+export const plan = createSelector(
   PlanFeatureSelector,
   (state: ProfileState) => {
     return Object.values(state.plan.planDictionary || {}).map((task: IterationTaskModel) => new IterationTaskModel(task));
   }
 );
 
-let oldPlan: IterationTaskModel[] = [];
-
-export const planWithNewTask = createSelector(
+export const loadingPlan = createSelector(
   PlanFeatureSelector,
   (state: ProfileState) => {
-    const newplan: IterationTaskModel[] = Object.values(state.plan.planDictionary || {}).map((task: IterationTaskModel) => new IterationTaskModel(task));
-    const result = newplan.length > oldPlan.length ? newplan : null;
-    oldPlan = [...newplan];
-    return result;
+    return {
+      loading: state.plan.loading,
+      plan : Object.values(state.plan.planDictionary || {}).map((task: IterationTaskModel) => new IterationTaskModel(task))
+    };
+  }
+);
+
+export const errorPlan = createSelector(
+  PlanFeatureSelector,
+  (state: ProfileState) => {
+    return {
+      error: state.plan.error ? state.plan.error.message : '',
+      plan : Object.values(state.plan.planDictionary || {}).map((task: IterationTaskModel) => new IterationTaskModel(task))
+    };
   }
 );

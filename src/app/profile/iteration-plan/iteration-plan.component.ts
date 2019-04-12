@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges} from '@angular/core';
+import {Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges} from '@angular/core';
 import {IterationTaskModel} from '../../personal-plan/shared/models/iteration-plan.model';
 import {ItemNode} from '../../shared/tree/models/item-node.model';
 import {InfoPlanModel} from '../../personal-plan/shared/models/info-plan.model';
@@ -8,12 +8,13 @@ import {
   CreatePlanTaskRequest,
   DeletePlanTaskRequest,
   EditPlanTaskRequest,
-  GetPlanRequest,
+  GetPlanRequest, GetPlanSuccess,
   UpdatePlanTasksRequest
 } from '../../root-store/profile/plan/plan.actions';
-import {newPlan, planWithNewTask} from '../../root-store/profile/plan/plan.selectors';
-import {filter, first} from 'rxjs/operators';
+import {errorPlan, loadingPlan} from '../../root-store/profile/plan/plan.selectors';
 import {Rights} from '../profile.component';
+import {take, takeWhile} from 'rxjs/operators';
+import {filter} from 'rxjs/internal/operators/filter';
 
 @Component({
   selector: 'lt-iteration-plan',
@@ -21,7 +22,7 @@ import {Rights} from '../profile.component';
   styleUrls: ['./iteration-plan.component.scss'],
 })
 
-export class IterationPlanComponent implements OnChanges, OnInit {
+export class IterationPlanComponent implements OnChanges, OnInit, OnDestroy {
   @Input() iteration: Iteration;
   @Input() plan: IterationTaskModel[] = [];
   @Input() userRights: Rights = 'mentor';
@@ -34,33 +35,33 @@ export class IterationPlanComponent implements OnChanges, OnInit {
     current: 1,
     mentor: 2
   };
+  public componentActive = true;
 
   constructor(private store: Store<any>) {
   }
 
   ngOnInit(): void {
-    this.store.select(planWithNewTask)
+    this.store.select(errorPlan)
       .pipe(
-        filter((data: IterationTaskModel[]) => !!data)
+        takeWhile(() => this.componentActive),
+        filter((data) => data.error)
       )
-      .subscribe((data: IterationTaskModel[]) => {
-        this.plan = data;
-      });
-
-    this.store.select(newPlan)
-      .pipe(
-        filter((data: IterationTaskModel[]) => !!data),
-        filter((data: IterationTaskModel[]) => !data.length || this.plan.length !== data.length || this.plan[0].id !== data[0].id)
-      )
-      .subscribe((data: IterationTaskModel[]) => {
-        this.plan = data;
+      .subscribe((data) => {
+        // TODO: toster error (data.error)
+        this.plan = data.plan;
       });
   }
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes.iteration && changes.iteration.currentValue) {
       this.store.dispatch(new GetPlanRequest({iterationId: this.iteration.id, userId: this.iteration.user_id}));
+      this.getPlan();
     }
+  }
+
+  ngOnDestroy(): void {
+    this.componentActive = false;
+    this.store.dispatch(new GetPlanSuccess({tasks: []}));
   }
 
   public deleteTreeItem(task: ItemNode): void {
@@ -69,6 +70,7 @@ export class IterationPlanComponent implements OnChanges, OnInit {
 
   public createTreeItem(task: ItemNode): void {
     this.store.dispatch(new CreatePlanTaskRequest({userId: this.iteration.user_id, iterationId: this.iteration.id, task: new IterationTaskModel(task)}));
+    this.getPlan();
   }
 
   public editTreeItem(task: ItemNode): void {
@@ -78,5 +80,14 @@ export class IterationPlanComponent implements OnChanges, OnInit {
   public updateTreeItems(items: ItemNode[]): void {
     const tasks: IterationTaskModel[] = items.map((item: ItemNode) => new IterationTaskModel(item));
     this.store.dispatch(new UpdatePlanTasksRequest({userId: this.iteration.user_id, iterationId: this.iteration.id, tasks: tasks}));
+  }
+
+  public getPlan() {
+    this.store.select(loadingPlan)
+      .pipe(
+        filter((data) => !data.loading),
+        take(1)
+      )
+      .subscribe((data) => this.plan = data.plan);
   }
 }

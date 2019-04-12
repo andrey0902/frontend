@@ -1,4 +1,18 @@
-import {Component, ElementRef, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild} from '@angular/core';
+import {
+  AfterViewInit,
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  ElementRef,
+  EventEmitter,
+  Input,
+  OnChanges,
+  Output,
+  QueryList,
+  SimpleChanges,
+  ViewChild,
+  ViewChildren
+} from '@angular/core';
 import {FlatTreeControl} from '@angular/cdk/tree';
 import {MatTreeFlatDataSource, MatTreeFlattener} from '@angular/material';
 import {SelectionModel} from '@angular/cdk/collections';
@@ -7,15 +21,17 @@ import {ItemFlatNode, ItemNode} from './models/item-node.model';
 import {Observable, of} from 'rxjs';
 import {DialogService} from '../dialog/services/dialog.service';
 import {TreeHelper} from '../../personal-plan/shared/models/iteration-plan.model';
+import {CreateTreeItemComponent} from './components/create-tree-item/create-tree-item.component';
 
 @Component({
   selector: 'lt-tree',
   templateUrl: './tree.component.html',
   styleUrls: ['./tree.component.scss'],
-  providers: [TreeDatabaseService]
+  providers: [TreeDatabaseService],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 
-export class TreeComponent implements OnChanges {
+export class TreeComponent implements OnChanges, AfterViewInit {
   @Input() private data: ItemNode[];
   @Input() public type: new (...arg: any[]) => ItemNode;
   @Input() public editLevel: number;
@@ -24,6 +40,8 @@ export class TreeComponent implements OnChanges {
   @Output() public deleteItem = new EventEmitter<ItemNode>();
   @Output() public createItem = new EventEmitter<ItemNode>();
   @Output() public editItem = new EventEmitter<ItemNode>();
+
+  @ViewChildren(CreateTreeItemComponent) inputView !: QueryList<CreateTreeItemComponent>;
 
   /** Map from flat node to nested node. This helps us finding the nested node to be modified */
   flatNodeMap = new Map<ItemFlatNode, ItemNode>();
@@ -48,7 +66,7 @@ export class TreeComponent implements OnChanges {
   dragNodeExpandOverArea: string;
   @ViewChild('emptyItem') emptyItem: ElementRef;
 
-  constructor(private database: TreeDatabaseService, private dialogService: DialogService) {
+  constructor(private database: TreeDatabaseService, private dialogService: DialogService, private cd: ChangeDetectorRef) {
     this.treeFlattener = new MatTreeFlattener(this.transformer, this.getLevel, this.isExpandable, this.getChildren);
     this.treeControl = new FlatTreeControl<ItemFlatNode>(this.getLevel, this.isExpandable);
     this.dataSource = new MatTreeFlatDataSource(this.treeControl, this.treeFlattener);
@@ -58,6 +76,10 @@ export class TreeComponent implements OnChanges {
         this.dataSource.data = [];
         this.dataSource.data = data;
       });
+  }
+
+  ngAfterViewInit(): void {
+    this.inputView.changes.subscribe(() => this.cd.detectChanges());
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -104,6 +126,7 @@ export class TreeComponent implements OnChanges {
     flatNode.showAsInput = node.showAsInput;
     flatNode.level = level;
     flatNode.expandable = node.children.length > 0;
+
     if (node.is_completed) {
       this.checklistSelection.select(flatNode);
     }
@@ -227,15 +250,20 @@ export class TreeComponent implements OnChanges {
 
   getNewDropItem(flatNode: ItemFlatNode, dragNode: ItemNode): ItemNode {
     const node: ItemNode = this.flatNodeMap.get(flatNode);
-    const nodeDrop: boolean = !this.dragNode.expandable || node.parentId === dragNode.parentId || node.parentId === 0;
     let newItem: ItemNode = null;
 
-    if (this.dragNodeExpandOverArea === 'above' && nodeDrop) {
-      newItem = this.database.insertItemNear(node, dragNode, InsertionType.ABOVE);
-    } else if (this.dragNodeExpandOverArea === 'below' && nodeDrop) {
-      newItem = this.database.insertItemNear(node, dragNode, InsertionType.BELOW);
-    } else if (node.children.length < 100 && flatNode.level < 2 && !this.dragNode.expandable) {
-      newItem = this.database.copyPasteItem(dragNode, node);
+    if (this.dragNodeExpandOverArea === 'above' || this.dragNodeExpandOverArea === 'below') {
+      const newParent = this.database.getParentOfNode(node);
+      const isValidByChildren = node.parentId === dragNode.parentId || !newParent && this.dataSource.data.length < 100 || newParent.children.length < 100;
+      const isValidByLevel = flatNode.level + TreeHelper.getExpandLevelOfNode(dragNode) < 3;
+      const isValidToDrop = isValidByChildren && isValidByLevel;
+
+      newItem = isValidToDrop ? this.database.insertItemNear(node, dragNode, this.dragNodeExpandOverArea) : null;
+    } else if (this.dragNodeExpandOverArea === 'center') {
+      const isValidByLevel = flatNode.level + TreeHelper.getExpandLevelOfNode(dragNode) < 2;
+      const isValidToDrop = node.children.length < 100 && isValidByLevel;
+
+      newItem = isValidToDrop ? this.database.copyPasteItem(dragNode, node) : null;
     }
 
     return newItem;

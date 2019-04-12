@@ -72,6 +72,15 @@ export class TreeHelper {
     return tasks.sort((a, b) => a.order - b.order);
   }
 
+  public static getExpandLevelOfNode(task: ItemNode): number {
+    let lvl: number = 0;
+    if (task.children.length > 0) {
+      lvl++;
+      task.children.forEach((child: ItemNode) => lvl += TreeHelper.getExpandLevelOfNode(child));
+    }
+    return lvl;
+  }
+
   // get all items, that doesn't have children, so they are not parents
   public static getChildrenFromTree(tasks: IterationTaskModel[]): IterationTaskModel[] {
     const children: IterationTaskModel[] = [];

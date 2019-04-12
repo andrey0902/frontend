@@ -1,6 +1,9 @@
-<lt-create-tree-item *ngIf="editLevel === 2" label="Добавить задачу" (createItem)="addItemToRoot($event)"
-                     class="create-tree-item" [main]='true'></lt-create-tree-item>
-<mat-tree [dataSource]="dataSource" [treeControl]="treeControl">
+<lt-create-tree-item *ngIf="editLevel === 2"
+                     label="Добавить задачу"
+                     (createItem)="addItemToRoot($event)"
+                     [main]='true'></lt-create-tree-item>
+
+<mat-tree [dataSource]="dataSource" [treeControl]="treeControl" class="tree">
   <mat-tree-node *matTreeNodeDef="let node" matTreeNodePadding>
     <mat-checkbox class="checklist-leaf-node padding checkbox"
                   [ngClass]="{'drop-above': dragNodeExpandOverArea === 'above' && dragNodeExpandOverNode === node,
@@ -22,7 +25,7 @@
       [value]="node.text"
       (createItem)="addItem($event, node)"
       (removeItem)="removeItem(node)"
-      class="create-tree-item padding"></lt-create-tree-item>
+      class="padding"></lt-create-tree-item>
   </mat-tree-node>
 
   <mat-tree-node *matTreeNodeDef="let node; when: hasChild" matTreeNodePadding>
@@ -55,7 +58,7 @@
 <span #emptyItem></span>
 
 <ng-template #nodeMenu let-node="node">
-  <div class="buttons" *ngIf="editLevel === 2">
+  <div class="buttons" *ngIf="editLevel === 2 && inputView && inputView.length < 2">
     <button mat-icon-button (click)="redactItem(node)">
       <mat-icon>edit</mat-icon>
     </button>
