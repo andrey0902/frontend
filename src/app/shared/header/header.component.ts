@@ -19,7 +19,6 @@ import { UserPortalIDP } from './shared/models/userPortalIDP';
   selector: 'lt-header',
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss'],
- // changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class HeaderComponent implements OnInit, OnDestroy {
   PERMISSION_GROUPS: any;
@@ -44,7 +43,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.store.select(selectCurrentUser).subscribe((user) => {
       this.currentUser = user;
- //     this.cd.detectChanges();
     });
 
     this.store.dispatch(new LoadUser());
@@ -63,7 +61,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
       ).subscribe((count) => {
         if (this.countMessages !== count) {
           this.countMessages = count;
- //         this.cd.detectChanges();
         }
       });
     }

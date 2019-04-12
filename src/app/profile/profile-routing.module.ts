@@ -4,9 +4,10 @@ import {ProfileComponent} from './profile.component';
 import {CreateIterationComponent} from './create-iteration/create-iteration.component';
 import {CreateIterationGuard} from '../core/guards/create-iteration.guard';
 import { ProfileGuard } from '../core/guards/profile.guard';
+import { DashboardService } from './shared/services/dashboard.service';
 
 const routes: Routes = [
-  { path: '', redirectTo: ':id', pathMatch: 'full' },
+  { path: '', component: ProfileComponent, resolve: {user: DashboardService} },
   { path: ':id', component: ProfileComponent, canActivate: [ProfileGuard]},
   { path: ':id/create-iteration', component: CreateIterationComponent, canActivate: [CreateIterationGuard] }
 ];

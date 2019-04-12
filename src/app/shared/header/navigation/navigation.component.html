@@ -25,7 +25,7 @@
       <lt-dropdown-menu>
         <span class="bnt-dropdown">Менторство</span>
 
-        <a [routerLink]="['/profile', user?.id]" class="link-dropdown">Личный кабинет</a>
+        <a [routerLink]="['mentorship/dashboard']" class="link-dropdown">Личный кабинет</a>
         <a [routerLink]="'mentorship'" class="link-dropdown">Таблица ответственности</a>
         <a *ltCanView="[ PERMISSION_GROUPS?.ALL_IPR ]" [href]="nav_links.all_ipr" class="link-dropdown access-ipr">Список всех ИПР</a>
         <!--TODO: It needs new data for full portal-validation:  user.has_available_idp, user.has_shared_idp-->

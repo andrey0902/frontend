@@ -18,7 +18,7 @@ export class MentorshipComponent implements OnInit, OnDestroy {
   isAdmin = false;
   componentActive = true;
   navLinks = [
-    { path: './mentor-protege', label: 'Менторы и протеже' },
+    { path: './', label: 'Менторы и протеже' },
     { path: './need-a-mentor', label: 'Нуждаюсь в менторе' },
     { path: './want-to-be-mentor', label: 'Хочу быть ментором' }
   ];
