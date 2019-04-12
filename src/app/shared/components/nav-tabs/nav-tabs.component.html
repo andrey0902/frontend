@@ -4,7 +4,10 @@
             [routerLink]="link.path"
             routerLinkActive #rla="routerLinkActive"
             [active]="rla.isActive"
-            [class.active]="rla.isActive">
+            [class.active]="rla.isActive"
+            [routerLinkActiveOptions]="{exact:
+            true}">
         {{ link.label }}
+
       </span>
 </nav>

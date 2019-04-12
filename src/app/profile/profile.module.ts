@@ -16,6 +16,7 @@ import {IterationPlanComponent} from './iteration-plan/iteration-plan.component'
 import {IterationProgressComponent} from './iteration-progress/iteration-progress.component';
 import {CreateIterationGuard} from '../core/guards/create-iteration.guard';
 import {LazyLoadImageModule} from 'ng-lazyload-image';
+import { DashboardService } from './shared/services/dashboard.service';
 
 @NgModule({
   declarations: [
@@ -38,7 +39,8 @@ import {LazyLoadImageModule} from 'ng-lazyload-image';
     LazyLoadImageModule
   ],
   providers: [
-    CreateIterationGuard
+    CreateIterationGuard,
+    DashboardService,
   ]
 })
 export class ProfileModule {

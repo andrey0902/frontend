@@ -55,11 +55,17 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
     this.route.paramMap.pipe(
       takeWhile(() => this.componentActive),
-    ).subscribe(params => {
-      const userId = params.get('id');
+      switchMap((params) => {
+        if (params.get('id')) {
+          return (of(params.get('id')));
+        }
+        return this.route.data.pipe(map((data) => {
+          return data.user.id;
+        }));
+      })
+    ).subscribe(userId => {
       this.store.dispatch(new GetIterationRequest({userId}));
     });
-
     this.checkUserExist();
   }
 
@@ -108,11 +114,11 @@ export class ProfileComponent implements OnInit, OnDestroy {
   }
 
   private checkUserExist() {
-    combineLatest(this.selectedUser$, this.route.paramMap, this.currentUser$).pipe(
+    combineLatest(this.selectedUser$, this.route.paramMap, this.currentUser$, this.route.data).pipe(
       takeWhile(() => this.componentActive),
       tap(() => this.resetRequestButtons()),
-      switchMap(([user, routeParams, currentUser]) => {
-        const userId = routeParams.get('id');
+      switchMap(([user, routeParams, currentUser, data]) => {
+        const userId = routeParams.get('id') ? routeParams.get('id') : data.user.id;
         if (!user || this.checkUserId(user, userId)) {
           return this.initUser(userId);
         } else {
