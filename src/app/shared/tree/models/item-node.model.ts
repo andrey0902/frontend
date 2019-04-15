@@ -30,5 +30,6 @@ export class ItemFlatNode {
   text: string;
   showAsInput: InputType;
   level: number;
+  order: number;
   expandable: boolean;
 }

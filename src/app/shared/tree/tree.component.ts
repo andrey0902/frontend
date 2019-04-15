@@ -96,6 +96,8 @@ export class TreeComponent implements OnChanges, AfterViewInit {
 
   getLevel = (node: ItemFlatNode) => node.level;
 
+  getOrder = (node: ItemFlatNode) => +node.order as number;
+
   isExpandable = (node: ItemFlatNode) => node.expandable;
 
   isValidToAdd = (flatNode: ItemFlatNode) => {
@@ -125,6 +127,7 @@ export class TreeComponent implements OnChanges, AfterViewInit {
     flatNode.text = node.text;
     flatNode.showAsInput = node.showAsInput;
     flatNode.level = level;
+    flatNode.order = node.order;
     flatNode.expandable = node.children.length > 0;
 
     if (node.is_completed) {
@@ -247,6 +250,29 @@ export class TreeComponent implements OnChanges, AfterViewInit {
   }
 
   // Drag'n'Drop
+  handleNodeExpand(node) {
+    if (node === this.dragNodeExpandOverNode) {
+      if (this.dragNode !== node && !this.treeControl.isExpanded(node)) {
+        if ((new Date().getTime() - this.dragNodeExpandOverTime) > this.dragNodeExpandOverWaitTimeMs) {
+          this.treeControl.expand(node);
+        }
+      }
+    } else {
+      this.dragNodeExpandOverNode = node;
+      this.dragNodeExpandOverTime = new Date().getTime();
+    }
+  }
+
+  handleDragArea(node, event) {
+    const percentageY = event.offsetY / event.target.clientHeight;
+    if (percentageY < 0.25) {
+      this.dragNodeExpandOverArea = 'above';
+    } else if (percentageY > 0.75) {
+      this.dragNodeExpandOverArea = 'below';
+    } else {
+      this.dragNodeExpandOverArea = 'center';
+    }
+  }
 
   getNewDropItem(flatNode: ItemFlatNode, dragNode: ItemNode): ItemNode {
     const node: ItemNode = this.flatNodeMap.get(flatNode);
@@ -280,26 +306,9 @@ export class TreeComponent implements OnChanges, AfterViewInit {
   handleDragOver(event, node) {
     event.preventDefault();
 
-    // Handle node expand
-    if (node === this.dragNodeExpandOverNode) {
-      if (this.dragNode !== node && !this.treeControl.isExpanded(node)) {
-        if ((new Date().getTime() - this.dragNodeExpandOverTime) > this.dragNodeExpandOverWaitTimeMs) {
-          this.treeControl.expand(node);
-        }
-      }
-    } else {
-      this.dragNodeExpandOverNode = node;
-      this.dragNodeExpandOverTime = new Date().getTime();
-    }
-
-    // Handle drag area
-    const percentageY = event.offsetY / event.target.clientHeight;
-    if (percentageY < 0.25) {
-      this.dragNodeExpandOverArea = 'above';
-    } else if (percentageY > 0.75) {
-      this.dragNodeExpandOverArea = 'below';
-    } else {
-      this.dragNodeExpandOverArea = 'center';
+    if (node !== this.dragNode) {
+      this.handleNodeExpand(node);
+      this.handleDragArea(node, event);
     }
   }
 

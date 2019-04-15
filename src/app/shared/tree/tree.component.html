@@ -5,7 +5,7 @@
 
 <mat-tree [dataSource]="dataSource" [treeControl]="treeControl" class="tree">
   <mat-tree-node *matTreeNodeDef="let node" matTreeNodePadding>
-    <mat-checkbox class="checklist-leaf-node padding checkbox"
+    <mat-checkbox class="padding checkbox"
                   [ngClass]="{'drop-above': dragNodeExpandOverArea === 'above' && dragNodeExpandOverNode === node,
                               'drop-below': dragNodeExpandOverArea === 'below' && dragNodeExpandOverNode === node,
                               'drop-center': dragNodeExpandOverArea === 'center' && dragNodeExpandOverNode === node
@@ -16,7 +16,7 @@
                   draggable="true"
                   (dragstart)="editLevel === 2 && handleDragStart($event, node);"
                   (dragover)="handleDragOver($event, node);"
-                  (drop)="handleDrop($event, node);">{{node.text}}</mat-checkbox>
+                  (drop)="handleDrop($event, node);">{{node.text}} {{node.order}}</mat-checkbox>
     <ng-container *ngTemplateOutlet="nodeMenu; context: {node: node}"></ng-container>
   </mat-tree-node>
 
@@ -39,7 +39,6 @@
     </button>
     <mat-checkbox class="checkbox"
                   [ngClass]="{'drop-above': dragNodeExpandOverArea === 'above' && dragNodeExpandOverNode === node,
-                              'drop-below': dragNodeExpandOverArea === 'below' && dragNodeExpandOverNode === node,
                               'drop-center': dragNodeExpandOverArea === 'center' && dragNodeExpandOverNode === node
                               }"
                   draggable="true"
@@ -58,7 +57,7 @@
 <span #emptyItem></span>
 
 <ng-template #nodeMenu let-node="node">
-  <div class="buttons" *ngIf="editLevel === 2 && inputView && inputView.length < 2">
+  <div class="buttons" *ngIf="editLevel === 2 && !dragNode && inputView && inputView.length < 2">
     <button mat-icon-button (click)="redactItem(node)">
       <mat-icon>edit</mat-icon>
     </button>
