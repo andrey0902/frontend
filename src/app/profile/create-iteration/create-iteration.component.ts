@@ -11,6 +11,7 @@ import {Iteration} from '../../models/iteration.model';
 import {GetPlanRequest} from '../../root-store/profile/plan/plan.actions';
 import {plan} from '../../root-store/profile/plan/plan.selectors';
 import {IterationTaskModel} from '../../personal-plan/shared/models/iteration-plan.model';
+import { RegExpService } from '../../shared/helpers/reg-exp.service';
 
 @Component({
   selector: 'lt-create-iteration',
@@ -40,8 +41,8 @@ export class CreateIterationComponent implements OnInit {
         startDate: ['', [Validators.required, LtValidators.checkDataStartIteration]],
         endDate: ['', [Validators.required]]
       }, { validator: LtValidators.checkEndDateIteration }),
-      goal: ['', [Validators.required, Validators.minLength(3)]],
-      projectLink: [''],
+      goal: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(70)]],
+      projectLink: ['', [Validators.pattern(RegExpService.url)]],
       meetType: ['', Validators.required],
       weekDay: ['', Validators.required]
     });

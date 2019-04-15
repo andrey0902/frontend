@@ -22,8 +22,11 @@ export class UserComponent {
       const currentUser = this.checkUserId(this.currentUser, this.user.id);
       const isMentor = this.checkIsMentor(this.currentUser, this.user.id);
 
-      if (isAdmin || currentUser || isMentor) {
-        this.route.navigate(['/profile', this.user.id]);
+      if (isAdmin || isMentor) {
+        this.route.navigate(['/mentorship/dashboard', this.user.id]);
+        return;
+      } else if (currentUser) {
+        this.route.navigate(['/mentorship/dashboard']);
         return;
       }
 

@@ -1,7 +1,11 @@
 <div mat-dialog-content class="modal-content">
   <div class="title-container">
     <mat-form-field class="full-width">
-      <input matInput [formControl]="title" [placeholder]="data">
+      <textarea class="text-area" #area matInput [formControl]="title" [placeholder]="data"></textarea>
+      <mat-hint align="end">{{area.value?.length || 0}}/1000</mat-hint>
+      <mat-error *ngIf="title.hasError('required')">Это поле обязательно для заполнения</mat-error>
+      <mat-error *ngIf="title.hasError('maxlength')">Поле не должно превышать 1000 символов</mat-error>
+      <mat-error *ngIf="title.hasError('minlength')">Нужно больше 3 символов</mat-error>
     </mat-form-field>
   </div>
 </div>

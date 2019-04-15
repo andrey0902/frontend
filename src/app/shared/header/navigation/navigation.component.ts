@@ -1,6 +1,6 @@
-import {ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {User} from '../../../models/user.model';
-import {ItemNode} from '../../tree/models/item-node.model';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { User } from '../../../models/user.model';
+import { UserPortalIDP } from '../shared/models/userPortalIDP';
 
 
 @Component({
@@ -14,6 +14,7 @@ export class NavigationComponent implements OnInit {
   @Input() PERMISSION_GROUPS: any;
   @Input() nav_links: any;
   @Input() countMessages: number;
+  @Input() userPortalIdp: UserPortalIDP;
   @Output() public logouting = new EventEmitter();
   public permissionForView: any;
 

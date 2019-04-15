@@ -48,8 +48,11 @@
     </label>
     <div class="control-input">
       <mat-form-field>
-        <input matInput formControlName="goal">
+        <textarea class="main-goal" #mainGoal matInput formControlName="goal"></textarea>
+        <!--<input matInput formControlName="goal">-->
+        <mat-hint align="end">{{mainGoal.value?.length || 0}}/70</mat-hint>
         <mat-error *ngIf="goal.hasError('required')">Это поле обязательно для заполнения</mat-error>
+        <mat-error *ngIf="goal.hasError('maxlength')">Поле не должно превышать 70 символов</mat-error>
         <mat-error *ngIf="goal.hasError('minlength')">Нужно больше 3 символов</mat-error>
         <mat-error *ngIf="goal.hasError('strEmpty')">Неверный формат ввода.</mat-error>
       </mat-form-field>
@@ -60,6 +63,7 @@
     <div class="control-input">
       <mat-form-field>
         <input matInput formControlName="projectLink">
+        <mat-error *ngIf="projectLink.hasError('pattern')">Неверный формат ввода URL</mat-error>
       </mat-form-field>
     </div>
   </div>

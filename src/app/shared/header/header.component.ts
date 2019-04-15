@@ -13,12 +13,12 @@ import {switchMap} from 'rxjs/operators';
 import {takeWhile} from 'rxjs/internal/operators/takeWhile';
 import {Router} from '@angular/router';
 import {AuthService} from '../../core/services/auth.service';
+import { UserPortalIDP } from './shared/models/userPortalIDP';
 
 @Component({
   selector: 'lt-header',
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss'],
- // changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class HeaderComponent implements OnInit, OnDestroy {
   PERMISSION_GROUPS: any;
@@ -26,7 +26,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   countMessages: number;
   portalSitePath: string;
   loaded = true;
-
+  userPortalIdp: UserPortalIDP;
   constructor(
     private authService: AuthService,
     private userService: UserService,
@@ -43,7 +43,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.store.select(selectCurrentUser).subscribe((user) => {
       this.currentUser = user;
- //     this.cd.detectChanges();
     });
 
     this.store.dispatch(new LoadUser());
@@ -51,6 +50,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.portalSitePath = environment.portalSitePath;
     this.nav_links = GroupsService.get_nav_links(this.portalSitePath);
     this.getUnreadMessages();
+    this.getUserPortalIdp();
   }
 
   getUnreadMessages() {
@@ -61,10 +61,16 @@ export class HeaderComponent implements OnInit, OnDestroy {
       ).subscribe((count) => {
         if (this.countMessages !== count) {
           this.countMessages = count;
- //         this.cd.detectChanges();
         }
       });
     }
+  }
+/*TODO: need it's request do for ngrx*/
+  getUserPortalIdp() {
+    this.userService.getUserPortalAccesse()
+      .subscribe((res: UserPortalIDP) => {
+        this.userPortalIdp = res;
+      });
   }
 
   logout() {

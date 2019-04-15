@@ -9,7 +9,11 @@ import {MAT_DIALOG_DATA} from '@angular/material';
 })
 export class RequestDialogComponent  {
 
-  title = new FormControl('', Validators.required);
+  title = new FormControl('', [
+    Validators.required,
+    Validators.minLength(3),
+    Validators.maxLength(1000)
+  ]);
 
   constructor(@Inject(MAT_DIALOG_DATA) public data) { }
 }
