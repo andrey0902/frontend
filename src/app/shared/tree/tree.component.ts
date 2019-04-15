@@ -264,12 +264,14 @@ export class TreeComponent implements OnChanges, AfterViewInit {
   }
 
   handleDragArea(node, event) {
-    const percentageY = event.offsetY / event.target.clientHeight;
-    if (percentageY < 0.25) {
+    if (event.target.className === 'above') {
+      console.log('above');
       this.dragNodeExpandOverArea = 'above';
-    } else if (percentageY > 0.75) {
+    } else if (event.target.className === 'below') {
+      console.log('below');
       this.dragNodeExpandOverArea = 'below';
     } else {
+      console.log('center');
       this.dragNodeExpandOverArea = 'center';
     }
   }
@@ -300,7 +302,6 @@ export class TreeComponent implements OnChanges, AfterViewInit {
     event.dataTransfer.setData('foo', 'bar');
     event.dataTransfer.setDragImage(this.emptyItem.nativeElement, 0, 0);
     this.dragNode = node;
-    this.treeControl.collapse(node);
   }
 
   handleDragOver(event, node) {
@@ -310,6 +311,16 @@ export class TreeComponent implements OnChanges, AfterViewInit {
       this.handleNodeExpand(node);
       this.handleDragArea(node, event);
     }
+  }
+
+  handleDragLeave() {
+    this.dragNodeExpandOverNode = null;
+  }
+
+  handleDragEnd(event) {
+    this.dragNode = null;
+    this.dragNodeExpandOverNode = null;
+    this.dragNodeExpandOverTime = 0;
   }
 
   handleDrop(event, flatNode: ItemFlatNode) {
