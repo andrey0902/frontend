@@ -16,7 +16,7 @@
                   draggable="true"
                   (dragstart)="editLevel === 2 && handleDragStart($event, node);"
                   (dragover)="handleDragOver($event, node);"
-                  (drop)="handleDrop($event, node);">{{node.text}} {{node.order}}</mat-checkbox>
+                  (drop)="handleDrop($event, node);">{{node.text}}</mat-checkbox>
     <ng-container *ngTemplateOutlet="nodeMenu; context: {node: node}"></ng-container>
   </mat-tree-node>
 
