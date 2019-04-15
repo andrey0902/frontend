@@ -1,0 +1,16 @@
+<div class="item-wrap">
+
+  <div class="mentor-figure center">
+    <div class="mentor-wrap">
+      <div class="mentor-img"
+           [matBadge]="objectValues(userMentor.attributes?.proteges).length"
+      >
+        <img class="img" [src]="userMentor?.attributes?.photoThumbnail" alt="avatar">
+      </div>
+      <h3 class="mentor-name text-center">
+        {{userMentor.attributes.fullName}}
+      </h3>
+    </div>
+  </div>
+
+</div>

@@ -20,7 +20,8 @@ export class MentorshipComponent implements OnInit, OnDestroy {
   navLinks = [
     { path: './', label: 'Менторы и протеже' },
     { path: './need-a-mentor', label: 'Нуждаюсь в менторе' },
-    { path: './want-to-be-mentor', label: 'Хочу быть ментором' }
+    { path: './want-to-be-mentor', label: 'Хочу быть ментором' },
+    { path: './summary', label: 'Прогресс' },
   ];
 
   ngOnInit() {
