@@ -34,8 +34,7 @@
   <div class="summary-wrap">
     <ng-container *ngIf="isLoad; else summary">
       <mat-progress-bar
-        class="example-margin"
-        [color]="'primary'"
+        color="primary"
         mode="indeterminate"
       >
       </mat-progress-bar>
@@ -48,5 +47,6 @@
 <ng-template #summary>
   <lt-summary-item *ngFor="let userMentor of mentorshipList"
                    [userMentor]="userMentor"
+                   (fetchIteration)="fetchIteration($event)"
   ></lt-summary-item>
 </ng-template>

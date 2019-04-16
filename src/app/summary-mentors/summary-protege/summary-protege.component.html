@@ -1,0 +1,60 @@
+<div class="protege">
+
+  <div class="protege-figure">
+    <div class="protege-img-wrap">
+      <img [src]="user?.attributes.photoThumbnail" alt="avatar" class="protege-img">
+    </div>
+    <p class="protege-name text-center">
+      <span>{{user?.attributes.fullName}}</span>
+    </p>
+  </div>
+
+  <ng-container *ngIf="!isLoad; else load">
+    <div class="protege-progress"
+         *ngIf="iteration; else noIteration"
+    >
+
+      <div class="protege-title">
+        <div class="section vertical-center">
+          <h3 class="protege-title-text">
+            Цель: <span> ({{progressInPercent}}%) </span>
+            <span class="iteration-name">{{ iteration?.goal }}</span>
+          </h3>
+        </div>
+      </div>
+
+      <div class="protege-timeline">
+        <lt-iteration-timeline [iteration]="iteration"></lt-iteration-timeline>
+      </div>
+
+      <!--<div class="protege-completed-task">-->
+        <!--<p class="protege-completed-title">-->
+          <!--<lt-protege-progress *ngIf="tasks" [plan]="tasks"></lt-protege-progress>-->
+        <!--</p>-->
+      <!--</div>-->
+
+      <div class="protege-tasks">
+        <button mat-raised-button
+                class="google-font-bold btn-accent">
+          Показать ИПР
+        </button>
+      </div>
+    </div>
+  </ng-container>
+
+
+
+</div>
+
+<ng-template #load>
+  <mat-progress-bar
+    color="primary"
+    mode="indeterminate"
+  >
+  </mat-progress-bar>
+</ng-template>
+<ng-template #noIteration>
+  <div class="w100">
+    <h3 class="text-center iteration-name">Итерация еще не создана</h3>
+  </div>
+</ng-template>

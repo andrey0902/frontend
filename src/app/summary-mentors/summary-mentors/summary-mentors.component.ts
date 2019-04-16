@@ -5,10 +5,11 @@ import { Observable, of } from 'rxjs';
 import { User } from '../../models/user.model';
 import { selectMentors, selectMentorsLoad } from '../../root-store/mentors/mentors.selectors';
 import { selectCurrentUser } from '../../root-store/currentUser/current-user.selectors';
-import { LoadMentors } from '../../root-store/mentors/mentors.actions';
+import { LoadMentors, LoadProtegeIteration } from '../../root-store/mentors/mentors.actions';
 import { debounceTime, distinctUntilChanged, filter, map, switchMap, takeWhile } from 'rxjs/operators';
 import { FormControl, Validators } from '@angular/forms';
 import { LtValidators } from '../../shared/helpers/validator-methods.static';
+import { MentorProtegeId } from '../shared/models/mentor-protege-id.model';
 
 @Component({
   selector: 'lt-summary-mentors',
@@ -16,6 +17,7 @@ import { LtValidators } from '../../shared/helpers/validator-methods.static';
   styleUrls: ['./summary-mentors.component.scss']
 })
 export class SummaryMentorsComponent implements OnInit, OnDestroy {
+
   constructor(
     private dialogService: DialogService,
     private store: Store<any>
@@ -33,6 +35,13 @@ export class SummaryMentorsComponent implements OnInit, OnDestroy {
   filteredOptions$: Observable<User[]>;
   userInput: FormControl = new FormControl('', [LtValidators.noWhitespaceValidator]);
   selectedUser: User;
+
+  /* need*/
+
+  fetchIteration(data: MentorProtegeId) {
+    this.store.dispatch(new LoadProtegeIteration(data));
+  }
+  /**/
 
   ngOnInit() {
     this.store.select(selectMentorsLoad)

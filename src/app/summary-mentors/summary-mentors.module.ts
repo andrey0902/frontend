@@ -7,11 +7,16 @@ import { CoreModule } from '../core/core.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatAutocompleteModule, MatBadgeModule, MatButtonModule, MatFormFieldModule, MatInputModule, MatProgressBarModule } from '@angular/material';
 import { SummaryItemComponent } from './summary-item/summary-item.component';
+import { SummaryProtegeComponent } from './summary-protege/summary-protege.component';
+import { ProfileModule } from '../profile/profile.module';
+import { ProtegeProgressComponent } from './protege-progress/protege-progress.component';
 
 @NgModule({
   declarations: [
     SummaryMentorsComponent,
-    SummaryItemComponent
+    SummaryItemComponent,
+    SummaryProtegeComponent,
+    ProtegeProgressComponent
   ],
   imports: [
     CommonModule,
@@ -28,6 +33,8 @@ import { SummaryItemComponent } from './summary-item/summary-item.component';
     SummaryMentorsRoutingModule,
     SharedModule,
     CoreModule,
+
+    ProfileModule,
   ]
 })
 export class SummaryMentorsModule { }

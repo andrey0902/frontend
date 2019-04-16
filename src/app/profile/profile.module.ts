@@ -38,6 +38,13 @@ import { DashboardService } from './shared/services/dashboard.service';
     ProgressBarModule,
     LazyLoadImageModule
   ],
+  exports: [
+    IterationTimelineComponent,
+    CreateIterationComponent,
+    CreateIterationFormComponent,
+    IterationPlanComponent,
+    IterationProgressComponent
+  ],
   providers: [
     CreateIterationGuard,
     DashboardService,

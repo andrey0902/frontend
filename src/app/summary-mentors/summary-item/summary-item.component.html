@@ -3,7 +3,6 @@
   <div class="mentor-figure center">
     <div class="mentor-wrap">
       <div class="mentor-img"
-           [matBadge]="objectValues(userMentor.attributes?.proteges).length"
       >
         <img class="img" [src]="userMentor?.attributes?.photoThumbnail" alt="avatar">
       </div>
@@ -13,4 +12,17 @@
     </div>
   </div>
 
+  <div class="proteges"
+  *ngIf="objectValues(userMentor.attributes.proteges).length; else noProtege"
+  >
+    <lt-summary-protege *ngFor="let user of objectValues(userMentor.attributes.proteges)"
+                        [user]="user"
+                        (getIteration)="getIteration($event)"
+    ></lt-summary-protege>
+  </div>
+
 </div>
+
+<ng-template #noProtege>
+  <h4 class="text-center">У ментора пока нет протеже</h4>
+</ng-template>
