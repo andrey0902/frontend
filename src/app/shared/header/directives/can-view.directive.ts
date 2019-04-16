@@ -59,7 +59,6 @@ export class CanViewDirective {
 
     if (groups.hasOwnProperty('check_author')) {
       result['check_author'] = !!(groups.check_author.some((item) => item.owner.id === this.user.id));
-      // console.log(result['check_author']);
     }
 
     if (groups.hasOwnProperty('not_author')) {
@@ -83,7 +82,6 @@ export class CanViewDirective {
       if (!result.is_condition_important) {
         res = this.checkResult(result);
       } else {
-        // console.log(result.custom_condition);
         if (!result.custom_condition) {
           res = false;
         } else {

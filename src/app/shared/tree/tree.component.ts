@@ -265,13 +265,10 @@ export class TreeComponent implements OnChanges, AfterViewInit {
 
   handleDragArea(node, event) {
     if (event.target.className === 'above') {
-      console.log('above');
       this.dragNodeExpandOverArea = 'above';
     } else if (event.target.className === 'below') {
-      console.log('below');
       this.dragNodeExpandOverArea = 'below';
     } else {
-      console.log('center');
       this.dragNodeExpandOverArea = 'center';
     }
   }
