@@ -281,12 +281,14 @@ export class TreeComponent implements OnChanges, AfterViewInit {
       const newParent = this.database.getParentOfNode(node);
       const isValidByChildren = node.parentId === dragNode.parentId || !newParent && this.dataSource.data.length < 100 || newParent.children.length < 100;
       const isValidByLevel = flatNode.level + TreeHelper.getExpandLevelOfNode(dragNode) < 3;
-      const isValidToDrop = isValidByChildren && isValidByLevel;
+      const isValidByNode = !TreeHelper.getAllNodeIds(dragNode).includes(node.id);
+      const isValidToDrop = isValidByChildren && isValidByLevel && isValidByNode;
 
       newItem = isValidToDrop ? this.database.insertItemNear(node, dragNode, this.dragNodeExpandOverArea) : null;
     } else if (this.dragNodeExpandOverArea === 'center') {
       const isValidByLevel = flatNode.level + TreeHelper.getExpandLevelOfNode(dragNode) < 2;
-      const isValidToDrop = node.children.length < 100 && isValidByLevel;
+      const isValidByNode = !TreeHelper.getAllNodeIds(dragNode).includes(node.id);
+      const isValidToDrop = node.children.length < 100 && isValidByLevel && isValidByNode;
 
       newItem = isValidToDrop ? this.database.copyPasteItem(dragNode, node) : null;
     }
