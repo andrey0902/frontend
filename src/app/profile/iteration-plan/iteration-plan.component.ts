@@ -30,7 +30,7 @@ export class IterationPlanComponent implements OnChanges, OnInit {
 
   public itemConstructor = InfoPlanModel;
   public treeEditLevel = {
-    alien: 0,
+    read: 0,
     current: 1,
     mentor: 2
   };
