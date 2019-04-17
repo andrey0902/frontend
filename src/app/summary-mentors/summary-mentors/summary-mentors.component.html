@@ -1,35 +1,20 @@
 <div class="container">
+  <div class="actions">
+    <div class="search-wrap">
+      <lt-search [placeholder]="'Введите имя'" (search)="onFilter($event)"></lt-search>
+    </div>
 
-  <div class="search-wrap">
-    <div class="search-block">
-      <mat-form-field
-        class="full-width"
-        appearance="standard">
-        <input
-          matInput
-          [placeholder]="'Введите имя ментора'"
-          [formControl]="userInput"
-          [matAutocomplete]="auto">
-        <mat-autocomplete
-          #auto="matAutocomplete"
-          (optionSelected)="selectUser($event)"
-          [displayWith]="displayFn">
-          <mat-option
-            *ngFor="let option of filteredOptions$ | async"
-            [value]="option">
-            <div class="user-wrapper">
-              <lt-user [user]="option"></lt-user>
-            </div>
-          </mat-option>
-          <!--<mat-option *ngIf="!(filteredOptions$ | async)?.length"-->
-          <!--[value]="null"-->
-          <!--[disabled]="true">-->
-          <!--<span>Нет совпадений</span>-->
-          <!--</mat-option>-->
-        </mat-autocomplete>
+    <div class="option-filtration">
+      <mat-form-field>
+        <mat-label>Поиск по</mat-label>
+        <mat-select [(value)]="filterMode">
+          <mat-option [value]="filterModes.mentor">Ментор</mat-option>
+          <mat-option [value]="filterModes.protege">Протеже</mat-option>
+        </mat-select>
       </mat-form-field>
     </div>
   </div>
+
 
   <div class="summary-wrap">
     <ng-container *ngIf="isLoad; else summary">
@@ -47,6 +32,5 @@
 <ng-template #summary>
   <lt-summary-item *ngFor="let userMentor of mentorshipList"
                    [userMentor]="userMentor"
-                   (fetchIteration)="fetchIteration($event)"
   ></lt-summary-item>
 </ng-template>

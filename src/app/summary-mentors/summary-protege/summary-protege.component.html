@@ -1,7 +1,7 @@
 <div class="protege">
 
   <div class="protege-figure">
-    <div class="protege-img-wrap">
+    <div class="protege-img-wrap" [routerLink]="['/mentorship/dashboard/', user.id ]">
       <img [src]="user?.attributes.photoThumbnail" alt="avatar" class="protege-img">
     </div>
     <p class="protege-name text-center">
@@ -27,22 +27,20 @@
         <lt-iteration-timeline [iteration]="iteration"></lt-iteration-timeline>
       </div>
 
-      <!--<div class="protege-completed-task">-->
-        <!--<p class="protege-completed-title">-->
-          <!--<lt-protege-progress *ngIf="tasks" [plan]="tasks"></lt-protege-progress>-->
-        <!--</p>-->
-      <!--</div>-->
-
       <div class="protege-tasks">
         <button mat-raised-button
-                class="google-font-bold btn-accent">
-          Показать ИПР
+                class="google-font-bold btn-accent protege-tasks-btn"
+                (click)="setShoveIpr()"
+        >
+          <span>{{shoveIpr ? 'Скрыть ИПР' : 'Показать ИПР'}}</span>
         </button>
+
+        <div class="tree-container">
+          <lt-protege-tasks  [isOpen]="shoveIpr" [tasks]="tasks"></lt-protege-tasks>
+        </div>
       </div>
     </div>
   </ng-container>
-
-
 
 </div>
 
@@ -54,7 +52,7 @@
   </mat-progress-bar>
 </ng-template>
 <ng-template #noIteration>
-  <div class="w100">
-    <h3 class="text-center iteration-name">Итерация еще не создана</h3>
+  <div>
+    <h3 class="iteration-name protege-no-iteration">Итерация еще не создана</h3>
   </div>
 </ng-template>

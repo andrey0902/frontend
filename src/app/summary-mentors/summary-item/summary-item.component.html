@@ -1,28 +1,31 @@
-<div class="item-wrap">
+<mat-card>
+  <div class="item-wrap">
 
-  <div class="mentor-figure center">
-    <div class="mentor-wrap">
-      <div class="mentor-img"
-      >
-        <img class="img" [src]="userMentor?.attributes?.photoThumbnail" alt="avatar">
+    <div class="mentor-figure center">
+      <div class="mentor-wrap" [routerLink]="['mentorship/dashboard/', userMentor.id ]">
+        <div class="mentor-img"
+        >
+          <img class="img" [src]="userMentor?.attributes?.photoThumbnail" alt="avatar">
+        </div>
+        <h3 class="mentor-name text-center">
+          {{userMentor.attributes.fullName}}
+        </h3>
       </div>
-      <h3 class="mentor-name text-center">
-        {{userMentor.attributes.fullName}}
-      </h3>
     </div>
+
+    <div class="proteges"
+         *ngIf="objectValues(userMentor.attributes.proteges).length; else noProtege"
+    >
+      <lt-summary-protege *ngFor="let user of objectValues(userMentor.attributes.proteges)"
+                          [user]="user"
+                          (getIteration)="getIteration($event)"
+      ></lt-summary-protege>
+    </div>
+
   </div>
 
-  <div class="proteges"
-  *ngIf="objectValues(userMentor.attributes.proteges).length; else noProtege"
-  >
-    <lt-summary-protege *ngFor="let user of objectValues(userMentor.attributes.proteges)"
-                        [user]="user"
-                        (getIteration)="getIteration($event)"
-    ></lt-summary-protege>
-  </div>
+  <ng-template #noProtege>
+    <h4 class="text-center">У ментора пока нет протеже</h4>
+  </ng-template>
+</mat-card>
 
-</div>
-
-<ng-template #noProtege>
-  <h4 class="text-center">У ментора пока нет протеже</h4>
-</ng-template>

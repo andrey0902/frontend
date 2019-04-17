@@ -9,7 +9,9 @@ import { IterationPlanService } from '../../core/services/iteration-plan.service
 import { IProgress } from '../../personal-plan/shared/models/progress.model';
 
 @Component({
-  selector: 'lt-summary-protege', templateUrl: './summary-protege.component.html', styleUrls: ['./summary-protege.component.scss']
+  selector: 'lt-summary-protege',
+  templateUrl: './summary-protege.component.html',
+  styleUrls: ['./summary-protege.component.scss']
 })
 export class SummaryProtegeComponent implements OnInit, OnChanges {
   @Input() user: User;
@@ -19,6 +21,7 @@ export class SummaryProtegeComponent implements OnInit, OnChanges {
   tasks: IterationTaskModel[];
   public progressInPercent: number;
   public progress: any;
+  public shoveIpr = false;
 
   constructor(private iterationService: IterationService, private planService: IterationPlanService) {
   }
@@ -44,7 +47,6 @@ export class SummaryProtegeComponent implements OnInit, OnChanges {
           return this.getTasks(this.user.id, iteration.id);
         }))
       .subscribe((tasks) => {
-        console.log('getTasks', tasks);
 
         // TODO: if change tree need to run method toCountProgress
         this.toCountProgress(tasks);
@@ -70,23 +72,12 @@ export class SummaryProtegeComponent implements OnInit, OnChanges {
   public ngOnChanges(): void {
   }
 
-
-  public treeDataChanged(items: IterationTaskModel[]): IProgress {
-    if (items.length > 0) {
-      const children = TreeHelper.getChildrenFromTree(items);
-      let progress = 0;
-      children.forEach((child: IterationTaskModel) => progress += +child.is_completed);
-      return {
-        endPoint: children.length,
-        progress: progress
-      };
-    }
-    return null;
+  toCountProgress(tasks) {
+    this.progress = TreeHelper.treeProgress(tasks);
+    this.progressInPercent = Math.round(this.progress.progress * 100 / this.progress.endPoint) || 0;
   }
 
-
-  toCountProgress(tasks) {
-    this.progress = this.treeDataChanged(tasks);
-    this.progressInPercent = Math.round(this.progress.progress * 100 / this.progress.endPoint) || 0;
+  setShoveIpr() {
+    this.shoveIpr = !this.shoveIpr;
   }
 }

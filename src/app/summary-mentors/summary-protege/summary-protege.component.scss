@@ -7,7 +7,7 @@
   padding-top: 35px;
   transition: box-shadow .2s ease;
 
-  &:hover &-tasks {
+  &:hover &-tasks-btn {
     opacity: 1;
   }
 
@@ -19,9 +19,9 @@
   }
 
   &-figure {
-    padding-right: 25px;
+    padding: 0 25px;
     cursor: pointer;
-    max-width: 125px;
+    max-width: 150px;
   }
 
   &-img-wrap {
@@ -51,8 +51,19 @@
 
   &-tasks {
     margin-top: -32px;
-    opacity: 0;
-    transition: .3s ease-out;
+
+    &-btn {
+      opacity: 0;
+      transition: .3s ease-out;
+    }
+  }
+
+  &-no-iteration {
+    margin: 0;
+    height: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 
 }
@@ -82,4 +93,8 @@
   &-width {
     min-width: 180px;
   }
+}
+
+.section {
+  padding: 0 17px;
 }
