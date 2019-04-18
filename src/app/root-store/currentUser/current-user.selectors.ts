@@ -10,10 +10,5 @@ export const selectCurrentUser = createSelector(
 
 export const selectLoadingCurrentUser = createSelector(
   CurrentUserFeatureSelector,
-  (state: CurrentUserState) => {
-    return {
-      loading: state.loading,
-      user: state.user
-    };
-  }
+  (state: CurrentUserState) => state.loading
 );

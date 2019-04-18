@@ -16,6 +16,8 @@ import {DeleteIterationRequest, GetIterationRequest} from '../root-store/profile
 
 export type Rights = 'mentor' | 'current' | 'read';
 
+enum USERRULES {MENTOR = 'mentor', CURRENT = 'current', READ = 'read'}
+
 @Component({
   selector: 'lt-profile',
   templateUrl: './profile.component.html',
@@ -30,17 +32,12 @@ export class ProfileComponent implements OnInit, OnDestroy {
   ) {
   }
 
-  USERRIGHTS: { [id: string]: Rights } = {
-    MENTOR: 'mentor',
-    CURRENT: 'current',
-    READ: 'read'
-  };
-
+  USERRIGHTS = USERRULES;
   user: User;
   userId: string;
   iteration: Iteration;
   userRights: Rights = this.USERRIGHTS.READ;
-  isAdmin: boolean = false;
+  isAdmin = false;
   objectValues = Object.values;
 
   currentUser$: Observable<User>;
@@ -107,6 +104,10 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
   // initialize
 
+  /**
+   * dispatch selected User and save userId
+   *
+   * */
   private updateSelectedUser() {
     combineLatest(this.route.paramMap, this.route.data).pipe(
       takeWhile(() => this.componentActive)
@@ -122,7 +123,6 @@ export class ProfileComponent implements OnInit, OnDestroy {
   private initUser(): Observable<User> {
     return combineLatest(this.selectedUser$, this.currentUser$)
       .pipe(
-        takeWhile(() => this.componentActive),
         filter(([selectedUser, currentUser]) => !!selectedUser && !!currentUser && selectedUser.id === this.userId),
         take(1),
         switchMap(([selectedUser, currentUser]) => {
