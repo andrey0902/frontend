@@ -7,7 +7,7 @@
     <div class="option-filtration">
       <mat-form-field>
         <mat-label>Поиск по</mat-label>
-        <mat-select [(value)]="filterMode">
+        <mat-select [formControl]="control">
           <mat-option [value]="filterModes.mentor">Ментор</mat-option>
           <mat-option [value]="filterModes.protege">Протеже</mat-option>
         </mat-select>
@@ -30,7 +30,13 @@
 </div>
 
 <ng-template #summary>
-  <lt-summary-item *ngFor="let userMentor of mentorshipList"
-                   [userMentor]="userMentor"
-  ></lt-summary-item>
+  <ng-container *ngIf="mentorshipList.length; else emptyFiltration">
+    <lt-summary-item *ngFor="let userMentor of mentorshipList"
+                     [userMentor]="userMentor"
+    ></lt-summary-item>
+  </ng-container>
+</ng-template>
+
+<ng-template #emptyFiltration>
+  <h3 class="text-center">К сожалению сотрудников по такому запросу не найдено...</h3>
 </ng-template>

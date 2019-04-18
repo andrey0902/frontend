@@ -6,6 +6,7 @@ import { User, UsersMap } from '../../models/user.model';
 import { selectMentors, selectMentorsLoad } from '../../root-store/mentors/mentors.selectors';
 import { LoadMentors, LoadProtegeIteration } from '../../root-store/mentors/mentors.actions';
 import { filter, map, takeWhile } from 'rxjs/operators';
+import { FormControl } from '@angular/forms';
 
 export enum filterMode {
   mentor = 0,
@@ -20,29 +21,33 @@ export enum filterMode {
 export class SummaryMentorsComponent implements OnInit, OnDestroy {
   filterMode = filterMode.mentor;
   filterModes = filterMode;
-  constructor(
-    private dialogService: DialogService,
-    private store: Store<any>
-  ) {
-  }
-
   isLoad: boolean;
-
   isAdmin = false;
   componentActive = true;
   mentorshipList: User[];
   currentUser$: Observable<User>;
   objectValues = Object.values;
   gotMentorList: User[];
+  control: FormControl;
+  searchString = null;
+  constructor(
+    private dialogService: DialogService,
+    private store: Store<any>
+  ) {
+  }
+
 
   ngOnInit() {
     // subscribe for know is mentors is loaded or not
     this.getStatusLoaded();
     // selected mentors
     this.getMentors();
+
+    this.createControl();
+    this.controlValueChanges();
   }
 
-  getMentors() {
+  getMentors(): void {
     this.store.select(selectMentors)
       .pipe(
         filter((items: any) => (items && items.length)),
@@ -58,7 +63,7 @@ export class SummaryMentorsComponent implements OnInit, OnDestroy {
     this.store.dispatch(new LoadMentors());
   }
 
-  getStatusLoaded() {
+  getStatusLoaded(): void {
     this.store.select(selectMentorsLoad)
       .pipe(
         takeWhile(() => this.componentActive)
@@ -68,10 +73,24 @@ export class SummaryMentorsComponent implements OnInit, OnDestroy {
       });
   }
 
+  createControl(): void {
+    this.control = new FormControl(filterMode.mentor);
+  }
 
-  onFilter(search: string | null) {
+  controlValueChanges(): void {
+    this.control.valueChanges
+      .pipe(takeWhile(() => this.componentActive))
+      .subscribe(value => {
+        this.filterMode = value;
+        this.onFilter(this.searchString);
+      });
+  }
+
+
+  onFilter(search: string | null): void {
 
     if (search) {
+      this.searchString = search;
       this.mentorshipList = this.gotMentorList.filter((item: User) => {
         const text = search.toLocaleLowerCase();
         const data = item.attributes;
@@ -81,6 +100,7 @@ export class SummaryMentorsComponent implements OnInit, OnDestroy {
       });
       return;
     }
+    this.searchString = null;
     this.mentorshipList = this.gotMentorList;
   }
 

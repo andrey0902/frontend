@@ -19,8 +19,6 @@ export function mentorsReducer(state = initialState, action: MentorsActionUnion)
 
     case MentorsActionTypes.LOAD_PROTEGE_ITERATION_SUCCESS: {
       const {mentorId, protegeId, iteration} = action.payload;
-      console.log('mentorId', mentorId);
-      console.log('state', state);
       const { mentors } = state;
 
       mentors[mentorId].attributes.proteges[protegeId].iteration = iteration;

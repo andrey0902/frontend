@@ -10,7 +10,7 @@ export class AuthService {
   constructor(private cookieService: CookieStorageService) {
 
     // TODO: Remove this in the future. This is a temporary solution
-     this.cookieService.token = '1c46805def7959e416b5244256e581ee7612ead5';
+    // this.cookieService.token = '1c46805def7959e416b5244256e581ee7612ead5';
   }
 
   getAuthToken() {
