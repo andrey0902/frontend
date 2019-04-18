@@ -17,7 +17,7 @@
       <div class="protege-title">
         <div class="section vertical-center">
           <h3 class="protege-title-text">
-            Цель: <span> ({{progressInPercent}}%) </span>
+            Цель: <span *ngIf="isEmptyTasks"> ({{progressInPercent}}%) </span>
             <span class="iteration-name">{{ iteration?.goal }}</span>
           </h3>
         </div>
