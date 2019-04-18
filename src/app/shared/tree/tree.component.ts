@@ -242,7 +242,8 @@ export class TreeComponent implements OnChanges, AfterViewInit {
 
   addComment(node: ItemFlatNode) {
     this.dialogService.openCommentDialog(node.comment, this.editLevel !== 2, (request => {
-      if (request !== node.comment && this.editLevel === 2) {
+      console.log(request);
+      if (request !== undefined && request !== node.comment && this.editLevel === 2) {
         const data = this.flatNodeMap.get(node);
         data.comment = (request || '').trim().length !== 0 ? request : undefined;
         this.editItem.emit(data);
