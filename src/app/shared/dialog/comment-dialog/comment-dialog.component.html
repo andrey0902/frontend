@@ -26,9 +26,7 @@
 
 <ng-template #onlyRead>
   <div mat-dialog-content class="modal-content">
-    <div class="title-container">
-      {{data.value || 'No comment'}}
-    </div>
+    <div class="title-container" [innerHTML]="data.value | wrapLink"></div>
   </div>
   <mat-dialog-actions align="end">
     <button mat-raised-button color="accent" class="google-font-bold" [mat-dialog-close]="null">Ок</button>
