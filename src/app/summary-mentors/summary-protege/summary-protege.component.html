@@ -30,6 +30,7 @@
       <div class="protege-tasks">
         <button mat-raised-button
                 class="google-font-bold btn-accent protege-tasks-btn"
+                *ngIf="isEmptyTasks"
                 (click)="setShoveIpr()"
         >
           <span>{{shoveIpr ? 'Скрыть ИПР' : 'Показать ИПР'}}</span>
