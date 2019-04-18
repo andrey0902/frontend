@@ -28,7 +28,7 @@ export class SummaryMentorsComponent implements OnInit, OnDestroy {
   currentUser$: Observable<User>;
   objectValues = Object.values;
   gotMentorList: User[];
-  control: FormControl;
+  control = new FormControl(filterMode.mentor);
   searchString = null;
   constructor(
     private dialogService: DialogService,
@@ -43,7 +43,6 @@ export class SummaryMentorsComponent implements OnInit, OnDestroy {
     // selected mentors
     this.getMentors();
 
-    this.createControl();
     this.controlValueChanges();
   }
 
@@ -71,10 +70,6 @@ export class SummaryMentorsComponent implements OnInit, OnDestroy {
       .subscribe((res: boolean) => {
         this.isLoad = res;
       });
-  }
-
-  createControl(): void {
-    this.control = new FormControl(filterMode.mentor);
   }
 
   controlValueChanges(): void {
