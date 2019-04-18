@@ -22,6 +22,8 @@ import {Observable, of} from 'rxjs';
 import {DialogService} from '../dialog/services/dialog.service';
 import {TreeHelper} from '../../personal-plan/shared/models/iteration-plan.model';
 import {CreateTreeItemComponent} from './components/create-tree-item/create-tree-item.component';
+import {DeleteIterationRequest} from '../../root-store/profile/iteration/iteration.actions';
+import {LtValidators} from '../helpers/validator-methods.static';
 
 @Component({
   selector: 'lt-tree',
@@ -96,8 +98,6 @@ export class TreeComponent implements OnChanges, AfterViewInit {
 
   getLevel = (node: ItemFlatNode) => node.level;
 
-  getOrder = (node: ItemFlatNode) => +node.order as number;
-
   isExpandable = (node: ItemFlatNode) => node.expandable;
 
   isValidToAdd = (flatNode: ItemFlatNode) => {
@@ -127,7 +127,7 @@ export class TreeComponent implements OnChanges, AfterViewInit {
     flatNode.text = node.text;
     flatNode.showAsInput = node.showAsInput;
     flatNode.level = level;
-    flatNode.order = node.order;
+    flatNode.comment = node.comment;
     flatNode.expandable = node.children.length > 0;
 
     if (node.is_completed) {
@@ -238,6 +238,17 @@ export class TreeComponent implements OnChanges, AfterViewInit {
       data.showAsInput = false;
       this.database.update();
     }
+  }
+
+  addComment(node: ItemFlatNode) {
+    this.dialogService.openCommentDialog(node.comment, this.editLevel !== 2, (request => {
+      if (request !== node.comment && this.editLevel === 2) {
+        const data = this.flatNodeMap.get(node);
+        data.comment = (request || '').trim().length !== 0 ? request : undefined;
+        this.editItem.emit(data);
+        this.database.update();
+      }
+    }));
   }
 
   updateItemCheck(node: ItemNode, checkChildren: boolean = true) {
