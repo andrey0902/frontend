@@ -1,8 +1,9 @@
 import {ChangeDetectorRef, Component, Input, OnInit} from '@angular/core';
 import {IProgress} from '../../personal-plan/shared/models/progress.model';
-import {newPlan} from '../../root-store/profile/plan/plan.selectors';
 import {IterationTaskModel, TreeHelper} from '../../personal-plan/shared/models/iteration-plan.model';
 import {Store} from '@ngrx/store';
+import {ItemNode} from '../../shared/tree/models/item-node.model';
+import {newPlan} from '../../root-store/profile/plan/plan.selectors';
 
 @Component({
   selector: 'lt-iteration-progress',
@@ -20,21 +21,27 @@ export class IterationProgressComponent implements OnInit {
   ngOnInit() {
     this.store.select(newPlan)
       .subscribe((data: IterationTaskModel[]) => {
-        this.progress = this.treeDataChanged(data);
+        const dataTree: ItemNode[] = TreeHelper.treeStructureGenerator(data);
+        this.progress = {
+          endPoint: dataTree.length,
+          progress: this.getProgress(dataTree)
+        };
       });
   }
 
-  public treeDataChanged(items: IterationTaskModel[]): IProgress {
+  public getProgress(items: ItemNode[], percent = 100): number {
+    let progress = 0;
     if (items.length > 0) {
-      const children = TreeHelper.getChildrenFromTree(items);
-      let progress = 0;
-      children.forEach((child: IterationTaskModel) => progress += +child.is_completed);
-      return {
-        endPoint: children.length,
-        progress: progress
-      };
+      const childPercent = +((percent / items.length).toFixed(1));
+      items.forEach((item: ItemNode) => {
+        if (item.children.length > 0) {
+          progress += this.getProgress(item.children, childPercent);
+        } else if (item.is_completed) {
+          progress += childPercent;
+        }
+      });
     }
-    return null;
+    return +(progress.toFixed(1));
   }
 
 }
