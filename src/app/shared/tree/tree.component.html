@@ -74,9 +74,9 @@
     <button mat-icon-button (click)="redactItem(node)" *ngIf="editLevel === 2">
       <mat-icon>edit</mat-icon>
     </button>
-    <button mat-icon-button (click)="addComment(node)" *ngIf="editLevel === 2 || node.comment">
+<!--    <button mat-icon-button (click)="addComment(node)" *ngIf="editLevel === 2 || node.comment">
       <mat-icon [class.activeComment]="node.comment">comment</mat-icon>
-    </button>
+    </button>-->
     <button mat-icon-button (click)="removeItem(node)" *ngIf="editLevel === 2">
       <mat-icon>close</mat-icon>
     </button>
