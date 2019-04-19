@@ -79,4 +79,19 @@ export class TreeHelper {
     }
     return nodeIds;
   }
+
+  public static getProgress(items: ItemNode[], percent = 100): number {
+    let progress = 0;
+    if (items.length > 0) {
+      const childPercent = percent / items.length;
+      items.forEach((item: ItemNode) => {
+        if (item.children.length > 0) {
+          progress += this.getProgress(item.children, childPercent);
+        } else if (item.is_completed) {
+          progress += childPercent;
+        }
+      });
+    }
+    return progress;
+  }
 }

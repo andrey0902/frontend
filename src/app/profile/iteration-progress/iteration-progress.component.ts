@@ -24,24 +24,8 @@ export class IterationProgressComponent implements OnInit {
         const dataTree: ItemNode[] = TreeHelper.treeStructureGenerator(data);
         this.progress = {
           endPoint: dataTree.length,
-          progress: this.getProgress(dataTree)
+          progress: +TreeHelper.getProgress(dataTree).toFixed(1)
         };
       });
   }
-
-  public getProgress(items: ItemNode[], percent = 100): number {
-    let progress = 0;
-    if (items.length > 0) {
-      const childPercent = +((percent / items.length).toFixed(1));
-      items.forEach((item: ItemNode) => {
-        if (item.children.length > 0) {
-          progress += this.getProgress(item.children, childPercent);
-        } else if (item.is_completed) {
-          progress += childPercent;
-        }
-      });
-    }
-    return +(progress.toFixed(1));
-  }
-
 }
