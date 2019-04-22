@@ -36,6 +36,13 @@ import { DashboardService } from './shared/services/dashboard.service';
     SharedModule,
     LazyLoadImageModule
   ],
+  exports: [
+    IterationTimelineComponent,
+    CreateIterationComponent,
+    CreateIterationFormComponent,
+    IterationPlanComponent,
+    IterationProgressComponent
+  ],
   providers: [
     CreateIterationGuard,
     DashboardService,

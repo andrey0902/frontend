@@ -72,6 +72,13 @@ export class TreeHelper {
     return tasks.sort((a, b) => a.order - b.order);
   }
 
+  // get all items, that doesn't have children, so they are not parents
+  public static getChildrenFromTree(tasks: IterationTaskModel[]): IterationTaskModel[] {
+    const children: IterationTaskModel[] = [];
+    tasks.forEach((task: IterationTaskModel) => task.children.length > 0 ? children.push(...TreeHelper.getChildrenFromTree(task.children)) : children.push(task));
+    return children;
+  }
+
   public static getAllNodeIds(task: ItemNode) {
     const nodeIds: number[] = [task.id];
     if (task.children.length > 0) {
@@ -80,13 +87,13 @@ export class TreeHelper {
     return nodeIds;
   }
 
-  public static getProgress(items: ItemNode[], percent = 100): number {
+  public static getTreeProgress(items: ItemNode[], percent = 100): number {
     let progress = 0;
     if (items.length > 0) {
       const childPercent = percent / items.length;
       items.forEach((item: ItemNode) => {
         if (item.children.length > 0) {
-          progress += this.getProgress(item.children, childPercent);
+          progress += this.getTreeProgress(item.children, childPercent);
         } else if (item.is_completed) {
           progress += childPercent;
         }
