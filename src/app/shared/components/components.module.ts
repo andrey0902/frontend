@@ -9,6 +9,7 @@ import {MatButtonModule, MatIconModule, MatMenuModule, MatTabsModule, MatTooltip
 import {RouterModule} from '@angular/router';
 import {UserPermissionDirective} from './directives/user-permission.directive';
 import { AutoFocusDirective } from './directives/auto-focus.directive';
+import {WrapLinkPipe} from './pipes/wrap-link.pipe';
 
 @NgModule({
   declarations: [
@@ -18,7 +19,8 @@ import { AutoFocusDirective } from './directives/auto-focus.directive';
     SvgIconComponent,
     UserComponent,
     UserPermissionDirective,
-    AutoFocusDirective
+    AutoFocusDirective,
+    WrapLinkPipe
   ],
   exports: [
     ActionBtnComponent,
@@ -27,7 +29,8 @@ import { AutoFocusDirective } from './directives/auto-focus.directive';
     SvgIconComponent,
     UserComponent,
     UserPermissionDirective,
-    AutoFocusDirective
+    AutoFocusDirective,
+    WrapLinkPipe
   ],
   imports: [
     CommonModule,

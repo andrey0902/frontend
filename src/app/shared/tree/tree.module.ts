@@ -1,6 +1,6 @@
 import {NgModule} from '@angular/core';
 import {TreeComponent} from './tree.component';
-import {MatButtonModule, MatCheckboxModule, MatIconModule, MatInputModule, MatMenuModule, MatTreeModule} from '@angular/material';
+import {MatButtonModule, MatCheckboxModule, MatIconModule, MatInputModule, MatMenuModule, MatTooltipModule, MatTreeModule} from '@angular/material';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {CommonModule} from '@angular/common';
 import {CreateTreeItemComponent} from './components/create-tree-item/create-tree-item.component';

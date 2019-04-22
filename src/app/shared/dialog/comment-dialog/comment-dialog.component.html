@@ -1,0 +1,38 @@
+<ng-container *ngIf="!data.read; else onlyRead">
+<div mat-dialog-content class="modal-content">
+  <div class="title-container">
+    <mat-form-field class="full-width">
+      <textarea class="text-area" #area matInput [formControl]="title" placeholder="Описание"></textarea>
+      <mat-hint align="end">{{area.value?.length || 0}}/1000</mat-hint>
+      <mat-error *ngIf="title.hasError('maxlength')">Поле не должно превышать 1000 символов</mat-error>
+    </mat-form-field>
+  </div>
+</div>
+<mat-dialog-actions align="end">
+  <button
+    mat-raised-button
+    color="accent"
+    class="google-font-bold"
+    [disabled]="title.invalid"
+    [mat-dialog-close]="title.value">
+    Ок
+  </button>
+  <button
+    mat-button
+    class="google-font-bold"
+    [mat-dialog-close]="undefined">Отмена</button>
+</mat-dialog-actions>
+</ng-container>
+
+<ng-template #onlyRead>
+  <div mat-dialog-content class="modal-content">
+    <div class="title-container read-container">
+      <div class="title">Описание</div>
+      <pre class="text-area" [innerHTML]="data.value | wrapLink"></pre>
+    </div>
+  </div>
+  <mat-dialog-actions align="end">
+    <button mat-raised-button color="accent" class="google-font-bold" [mat-dialog-close]="undefined">Ок</button>
+  </mat-dialog-actions>
+</ng-template>
+

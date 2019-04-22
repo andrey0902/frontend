@@ -4,6 +4,7 @@ import {ConfirmDialogComponent} from '../confirm-dialog/confirm-dialog.component
 import {MentorshipManagementDialogComponent} from '../mentorship-management-dialog/mentorship-management-dialog.component';
 import {RequestDialogComponent} from '../request-dialog/request-dialog.component';
 import {DeleteIterationDialogComponent} from '../delete-iteration-dialog/delete-iteration-dialog.component';
+import {CommentDialogComponent} from '../comment-dialog/comment-dialog.component';
 
 @Injectable({
   providedIn: 'root'
@@ -18,6 +19,20 @@ export class DialogService {
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
       width: '960px',
       data
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      callback(result);
+    });
+  }
+
+  openCommentDialog(comment, onlyRead, callback) {
+    const dialogRef = this.dialog.open(CommentDialogComponent, {
+      width: '500px',
+      data: {
+        value: comment,
+        read: onlyRead
+      }
     });
 
     dialogRef.afterClosed().subscribe(result => {

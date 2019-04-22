@@ -9,7 +9,7 @@ import {selectIteration} from '../../root-store/profile/iteration/iteration.sele
 import {filter, take} from 'rxjs/operators';
 import {Iteration} from '../../models/iteration.model';
 import {GetPlanRequest} from '../../root-store/profile/plan/plan.actions';
-import {newPlan} from '../../root-store/profile/plan/plan.selectors';
+import {plan} from '../../root-store/profile/plan/plan.selectors';
 import {IterationTaskModel} from '../../personal-plan/shared/models/iteration-plan.model';
 import { RegExpService } from '../../shared/helpers/reg-exp.service';
 
@@ -59,7 +59,7 @@ export class CreateIterationComponent implements OnInit {
     ).subscribe((result) => {
       this.currentIteration = result;
       this.store.dispatch(new GetPlanRequest({iterationId: this.currentIteration.id, userId: this.currentIteration.user_id}));
-      this.store.select(newPlan).subscribe((data: IterationTaskModel[]) => this.plan = data);
+      this.store.select(plan).subscribe((data: IterationTaskModel[]) => this.plan = data);
       this.stepper.next();
     });
   }

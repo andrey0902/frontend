@@ -61,7 +61,7 @@ export class TreeDatabaseService {
     return item;
   }
 
-  insertItemNear(nodeAnchor: ItemNode, insertNode: ItemNode, typeInsertion: InsertionType): ItemNode {
+  insertItemNear(nodeAnchor: ItemNode, insertNode: ItemNode, typeInsertion: string): ItemNode {
 
     const oldParentNode = this.getParentOfNode(insertNode);
     const oldArr = oldParentNode != null ? oldParentNode.children : this.data;

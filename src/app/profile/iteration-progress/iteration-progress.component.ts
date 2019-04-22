@@ -1,6 +1,6 @@
 import {ChangeDetectorRef, Component, Input, OnInit} from '@angular/core';
 import {IProgress} from '../../personal-plan/shared/models/progress.model';
-import {newPlan} from '../../root-store/profile/plan/plan.selectors';
+import {plan} from '../../root-store/profile/plan/plan.selectors';
 import {IterationTaskModel, TreeHelper} from '../../personal-plan/shared/models/iteration-plan.model';
 import {Store} from '@ngrx/store';
 
@@ -18,7 +18,7 @@ export class IterationProgressComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.store.select(newPlan)
+    this.store.select(plan)
       .subscribe((data: IterationTaskModel[]) => {
         this.progress = TreeHelper.treeProgress(data);
       });
