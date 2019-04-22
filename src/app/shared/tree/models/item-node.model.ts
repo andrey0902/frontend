@@ -8,7 +8,7 @@ export class ItemNode {
   showAsInput: InputType;
   order: number;
   text: string;
-  comment: string;
+  description: string;
   id: number;
   parentId: number;
   isNew: boolean;
@@ -19,7 +19,7 @@ export class ItemNode {
     this.showAsInput = false;
     this.isNew = false;
     this.order = config.order;
-    this.comment = config.comment;
+    this.description = config.description;
     this.text = config.text;
     this.id = config.id;
     this.parentId = config.parentId;
@@ -30,7 +30,7 @@ export class ItemNode {
 /** Flat to-do item node with expandable and level information */
 export class ItemFlatNode {
   text: string;
-  comment: string;
+  description: string;
   showAsInput: InputType;
   level: number;
   expandable: boolean;

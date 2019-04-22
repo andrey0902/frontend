@@ -127,7 +127,7 @@ export class TreeComponent implements OnChanges, AfterViewInit {
     flatNode.text = node.text;
     flatNode.showAsInput = node.showAsInput;
     flatNode.level = level;
-    flatNode.comment = node.comment;
+    flatNode.description = node.description;
     flatNode.expandable = node.children.length > 0;
 
     if (node.is_completed) {
@@ -241,11 +241,10 @@ export class TreeComponent implements OnChanges, AfterViewInit {
   }
 
   addComment(node: ItemFlatNode) {
-    this.dialogService.openCommentDialog(node.comment, this.editLevel !== 2, (request => {
-      console.log(request);
-      if (request !== undefined && request !== node.comment && this.editLevel === 2) {
+    this.dialogService.openCommentDialog(node.description, this.editLevel !== 2, (request => {
+      if (request !== undefined && request !== node.description && this.editLevel === 2) {
         const data = this.flatNodeMap.get(node);
-        data.comment = (request || '').trim().length !== 0 ? request : undefined;
+        data.description = (request || '').trim().length !== 0 ? request : undefined;
         this.editItem.emit(data);
         this.database.update();
       }
