@@ -14,7 +14,7 @@ export class ItemNode {
   is_completed: boolean;
 
   constructor(config) {
-    this.children = config.children || [];
+    this.children = config.children && config.children.length > 0 ? config.children.map((child) => new ItemNode(child)) : [];
     this.showAsInput = false;
     this.isNew = false;
     this.order = config.order;

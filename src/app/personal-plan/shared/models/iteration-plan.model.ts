@@ -50,7 +50,8 @@ export class IterationTaskModelByConfig extends IterationTaskModel {
 }
 
 export class TreeHelper {
-  public static treeStructureGenerator(tasks: ItemNode[]): ItemNode[] {
+  public static treeStructureGenerator(tasksArray: ItemNode[]): ItemNode[] {
+    const tasks: ItemNode[] = tasksArray.map((task) => new ItemNode(task));
     let tasksTree: ItemNode[] = [];
     const tasksDictionary: { number: ItemNode } | {} = {};
     if (tasks && tasks.length > 0) {
