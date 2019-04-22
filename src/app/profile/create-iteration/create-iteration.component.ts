@@ -65,6 +65,6 @@ export class CreateIterationComponent implements OnInit {
   }
 
   onDone() {
-    this.router.navigate(['/profile', this._protegeId]);
+    this.router.navigate(['/mentorship/dashboard', this._protegeId]);
   }
 }

@@ -15,7 +15,7 @@
               <p class="user-specialization" [class.m-b]="isAdmin">{{ user.attributes.specialization.attributes.title }}</p>
             </div>
 
-            <div class="request-buttons" *ngIf="showRequestButtons">
+            <div class="request-buttons" *ngIf="userRights === USERRIGHTS.CURRENT">
               <button
                 mat-raised-button
                 color="accent"
@@ -31,7 +31,7 @@
                 (click)="needMentor()">Нужен ментор
               </button>
             </div>
-            <div class="horizontal-center request-buttons" *ngIf="showIterationBtn && !iterationExists">
+            <div class="horizontal-center request-buttons" *ngIf="userRights === USERRIGHTS.MENTOR && !iteration">
               <button
                 mat-raised-button
                 color="accent"
@@ -40,7 +40,7 @@
             </div>
             <div class="horizontal-center"
                  [class.mentor]="isAdmin"
-                 *ngIf="(showIterationBtn && iterationExists) || (isAdmin && iterationExists)">
+                 *ngIf="iteration && (userRights === USERRIGHTS.MENTOR  || isAdmin)">
               <button
                 mat-raised-button
                 class="google-font-bold btn-accent"
@@ -80,10 +80,10 @@
   </mat-card>
 
   <div class="mentorship-info">
-    <mat-tab-group *ngIf="iterationExists">
+    <mat-tab-group *ngIf="iteration">
       <mat-tab label="Обзор">
         <mat-card class="iteration">
-          <lt-profile-overview [currentIteration]="iterationExists" [userRights]="userRights"
+          <lt-profile-overview [currentIteration]="iteration" [userRights]="userRights"
           ></lt-profile-overview>
         </mat-card>
       </mat-tab>
