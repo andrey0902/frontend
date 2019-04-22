@@ -8,6 +8,4 @@ import {Component, Input} from '@angular/core';
 export class ProgressBarComponent {
   @Input()
   public progress = 0;
-  @Input()
-  public endPoint = 100;
 }

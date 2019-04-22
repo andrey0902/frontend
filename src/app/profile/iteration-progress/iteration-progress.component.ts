@@ -1,5 +1,4 @@
 import {ChangeDetectorRef, Component, Input, OnInit} from '@angular/core';
-import {IProgress} from '../../personal-plan/shared/models/progress.model';
 import {IterationTaskModel, TreeHelper} from '../../personal-plan/shared/models/iteration-plan.model';
 import {Store} from '@ngrx/store';
 import {ItemNode} from '../../shared/tree/models/item-node.model';
@@ -13,7 +12,7 @@ import {newPlan} from '../../root-store/profile/plan/plan.selectors';
 })
 export class IterationProgressComponent implements OnInit {
   @Input() plan: IterationTaskModel[] = [];
-  progress: IProgress;
+  progress: number;
 
   constructor(private store: Store<any>, private cd: ChangeDetectorRef) {
   }
@@ -22,10 +21,7 @@ export class IterationProgressComponent implements OnInit {
     this.store.select(newPlan)
       .subscribe((data: IterationTaskModel[]) => {
         const dataTree: ItemNode[] = TreeHelper.treeStructureGenerator(data);
-        this.progress = {
-          endPoint: dataTree.length,
-          progress: +TreeHelper.getProgress(dataTree).toFixed(1)
-        };
+        this.progress = +TreeHelper.getProgress(dataTree).toFixed(1);
       });
   }
 }
