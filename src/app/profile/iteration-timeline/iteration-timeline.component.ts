@@ -19,10 +19,16 @@ export class IterationTimelineComponent implements OnInit, OnChanges {
   private tempWeeks = {};
 
   public get startDate(): any {
+    if (!this.iteration.startDate) {
+      return;
+    }
     return moment(this.iteration.startDate).format(this.iteration.format);
   }
 
   public get endDate(): any {
+    if (!this.iteration.endDate) {
+      return;
+    }
     return moment(this.iteration.endDate).format(this.iteration.format);
   }
 

@@ -13,3 +13,10 @@ export const selectMentors = createSelector(
       .sort(sortByLastName);
   }
 );
+
+export const selectMentorsLoad = createSelector(
+  MentorsFeatureSelector,
+  (state: MentorsState) => {
+    return state.loading;
+  }
+);

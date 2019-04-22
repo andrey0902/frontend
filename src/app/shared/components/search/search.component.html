@@ -1,0 +1,16 @@
+<div class="simple-input">
+  <mat-form-field class="full-width">
+    <mat-label *ngIf="label">{{label}}</mat-label>
+    <input type="text" class="input" matInput [formControl]="control" [placeholder]="placeholder" [value]="value ? value : ''" ltAutoFocus>
+  </mat-form-field>
+  <div class="action-wrapper">
+    <button mat-icon-button
+            class="action-save"
+            (click)="clearSearch()"
+            [class.hidden]="isDisabled"
+            [disabled]="isDisabled"
+    >
+      <mat-icon class="material-icons" aria-hidden="true">close</mat-icon>
+    </button>
+  </div>
+</div>
