@@ -1,4 +1,4 @@
-import {UsersMap} from '../../models/user.model';
+import { Attributes, User, UsersMap } from '../../models/user.model';
 import {MentorsActionTypes, MentorsActionUnion} from './mentors.actions';
 import {MentorsHelper} from './mentors.helper';
 
@@ -16,6 +16,18 @@ const initialState: MentorsState = {
 
 export function mentorsReducer(state = initialState, action: MentorsActionUnion): MentorsState {
   switch (action.type) {
+
+    case MentorsActionTypes.LOAD_PROTEGE_ITERATION_SUCCESS: {
+      const {mentorId, protegeId, iteration} = action.payload;
+      const { mentors } = state;
+
+      mentors[mentorId].attributes.proteges[protegeId].iteration = iteration;
+
+      return {
+          ...state,
+          mentors
+        };
+    }
 
     case MentorsActionTypes.LOAD_MENTORS: {
       return {

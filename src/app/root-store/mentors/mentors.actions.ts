@@ -1,5 +1,7 @@
 import {Action} from '@ngrx/store';
 import {User, UsersMap} from '../../models/user.model';
+import { MentorProtegeId } from '../../summary-mentors/shared/models/mentor-protege-id.model';
+import { ProtegeIteration } from '../../summary-mentors/shared/models/protege-iteration.model';
 
 export enum MentorsActionTypes {
   LOAD_MENTORS = '[Mentors] Load Mentors',
@@ -14,7 +16,23 @@ export enum MentorsActionTypes {
   CHANGE_MENTOR_SUCCESS = '[Mentors] Change Mentor Success',
   DELETE_PROTEGE = '[Mentors] Delete Protege',
   DELETE_PROTEGE_SUCCESS = '[Mentors] Delete Protege Success',
-  DISPATCH_MENTORS_FAIL = '[Mentors] Dispatch Mentors Fail'
+  DISPATCH_MENTORS_FAIL = '[Mentors] Dispatch Mentors Fail',
+
+  LOAD_PROTEGE_ITERATION = '[Mentors] Load Protege Iteration',
+  LOAD_PROTEGE_ITERATION_SUCCESS = '[Mentors] Load Protege Iteration Success',
+  LOAD_PROTEGE_ITERATION_FAIL = '[Mentors] Load Protege Iteration Fail',
+}
+
+export class LoadProtegeIteration implements Action {
+  readonly type = MentorsActionTypes.LOAD_PROTEGE_ITERATION;
+  constructor(public payload: MentorProtegeId) {}
+}
+
+export class LoadProtegeIterationSuccess implements Action {
+  readonly type = MentorsActionTypes.LOAD_PROTEGE_ITERATION_SUCCESS;
+
+  constructor(public payload: ProtegeIteration) {
+  }
 }
 
 export class LoadMentors implements Action {
@@ -118,4 +136,6 @@ export type MentorsActionUnion =
   | ChangeMentorSuccess
   | DeleteProtege
   | DeleteProtegeSuccess
-  | DispatchMentorsFail;
+  | DispatchMentorsFail
+  | LoadProtegeIteration
+  | LoadProtegeIterationSuccess;

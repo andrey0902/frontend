@@ -1,0 +1,42 @@
+<div class="container">
+  <div class="actions">
+    <div class="search-wrap">
+      <lt-search [placeholder]="'Введите имя или фамилию'" (search)="onFilter($event)"></lt-search>
+    </div>
+
+    <div class="option-filtration">
+      <mat-form-field>
+        <mat-label>Поиск по</mat-label>
+        <mat-select [formControl]="control">
+          <mat-option [value]="filterModes.mentor">Ментор</mat-option>
+          <mat-option [value]="filterModes.protege">Протеже</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+  </div>
+
+
+  <div class="summary-wrap">
+    <ng-container *ngIf="isLoad; else summary">
+      <mat-progress-bar
+        color="primary"
+        mode="indeterminate"
+      >
+      </mat-progress-bar>
+    </ng-container>
+
+  </div>
+
+</div>
+
+<ng-template #summary>
+  <ng-container *ngIf="mentorshipList.length; else emptyFiltration">
+    <lt-summary-item *ngFor="let userMentor of mentorshipList"
+                     [userMentor]="userMentor"
+    ></lt-summary-item>
+  </ng-container>
+</ng-template>
+
+<ng-template #emptyFiltration>
+  <h3 class="text-center">К сожалению сотрудников по такому запросу не найдено...</h3>
+</ng-template>
