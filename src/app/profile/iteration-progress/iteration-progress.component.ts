@@ -21,7 +21,7 @@ export class IterationProgressComponent implements OnInit {
     this.store.select(newPlan)
       .subscribe((data: IterationTaskModel[]) => {
         const dataTree: ItemNode[] = TreeHelper.treeStructureGenerator(data);
-        this.progress = +TreeHelper.getTreeProgress(dataTree).toFixed(1);
+        this.progress = Math.round(TreeHelper.getTreeProgress(dataTree));
       });
   }
 

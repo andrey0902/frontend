@@ -73,7 +73,7 @@ export class SummaryProtegeComponent implements OnInit {
       return;
     }
     const dataTree: ItemNode[] = TreeHelper.treeStructureGenerator(tasks);
-    this.progressInPercent =  +TreeHelper.getTreeProgress(dataTree).toFixed(1) || 0;
+    this.progressInPercent =  Math.round(TreeHelper.getTreeProgress(dataTree)) || 0;
   }
 
   setShoveIpr() {
