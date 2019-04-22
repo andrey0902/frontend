@@ -6,6 +6,7 @@ import { Iteration } from '../../models/iteration.model';
 import { IterationTaskModel, IterationTaskModelByConfig, TreeHelper } from '../../personal-plan/shared/models/iteration-plan.model';
 
 import { IterationPlanService } from '../../core/services/iteration-plan.service';
+import {ItemNode} from '../../shared/tree/models/item-node.model';
 
 @Component({
   selector: 'lt-summary-protege',
@@ -71,7 +72,8 @@ export class SummaryProtegeComponent implements OnInit {
     if (!this.isEmptyTasks) {
       return;
     }
-    this.progressInPercent =  +TreeHelper.getTreeProgress(tasks).toFixed(1) || 0;
+    const dataTree: ItemNode[] = TreeHelper.treeStructureGenerator(tasks);
+    this.progressInPercent =  +TreeHelper.getTreeProgress(dataTree).toFixed(1) || 0;
   }
 
   setShoveIpr() {

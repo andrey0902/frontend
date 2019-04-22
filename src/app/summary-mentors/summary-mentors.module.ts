@@ -9,7 +9,6 @@ import { MatAutocompleteModule, MatButtonModule, MatCardModule, MatFormFieldModu
 import { SummaryItemComponent } from './summary-item/summary-item.component';
 import { SummaryProtegeComponent } from './summary-protege/summary-protege.component';
 import { ProfileModule } from '../profile/profile.module';
-import { ProtegeProgressComponent } from './protege-progress/protege-progress.component';
 import { SearchModule } from '../shared/components/search/search.module';
 import { ProtegeTasksComponent } from './protege-tasks/protege-tasks.component';
 
@@ -18,7 +17,6 @@ import { ProtegeTasksComponent } from './protege-tasks/protege-tasks.component';
     SummaryMentorsComponent,
     SummaryItemComponent,
     SummaryProtegeComponent,
-    ProtegeProgressComponent,
     ProtegeTasksComponent
   ],
   imports: [
