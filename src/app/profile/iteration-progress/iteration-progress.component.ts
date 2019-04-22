@@ -20,21 +20,8 @@ export class IterationProgressComponent implements OnInit {
   ngOnInit() {
     this.store.select(plan)
       .subscribe((data: IterationTaskModel[]) => {
-        this.progress = this.treeDataChanged(data);
+        this.progress = TreeHelper.treeProgress(data);
       });
-  }
-
-  public treeDataChanged(items: IterationTaskModel[]): IProgress {
-    if (items.length > 0) {
-      const children = TreeHelper.getChildrenFromTree(items);
-      let progress = 0;
-      children.forEach((child: IterationTaskModel) => progress += +child.is_completed);
-      return {
-        endPoint: children.length,
-        progress: progress
-      };
-    }
-    return null;
   }
 
 }

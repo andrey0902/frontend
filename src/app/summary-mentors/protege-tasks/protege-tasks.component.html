@@ -1,0 +1,10 @@
+<div class="tree"
+     *ngIf="isOpen"
+  [@appear]
+>
+  <lt-tree [data]="tasks"
+           [type]="itemConstructor"
+           [editLevel]="0"
+  >
+  </lt-tree>
+</div>

@@ -1,15 +1,18 @@
 import {MentorsHelper} from '../root-store/mentors/mentors.helper';
 import {Specialization} from './specialization.model';
+import { Iteration } from './iteration.model';
 
 export class User {
   type: string;
   id: string;
   attributes: Attributes;
+  iteration?: Iteration | boolean;
 
   constructor(data) {
     this.type = data.type;
     this.id = data.id;
     this.attributes = new Attributes(data.attributes);
+    this.iteration = false;
   }
 
   public patch(payload): User {

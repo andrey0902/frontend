@@ -1,4 +1,5 @@
 import {ItemNode} from '../../../shared/tree/models/item-node.model';
+import { IProgress } from './progress.model';
 
 export class IterationTaskModel extends ItemNode {
   public id: number;
@@ -94,5 +95,18 @@ export class TreeHelper {
       task.children.forEach((child: IterationTaskModel) => nodeIds.push(...TreeHelper.getAllNodeIds(child)));
     }
     return nodeIds;
+  }
+
+  public static treeProgress(items: IterationTaskModel[]): IProgress {
+    if (items.length > 0) {
+      const children = TreeHelper.getChildrenFromTree(items);
+      let progress = 0;
+      children.forEach((child: IterationTaskModel) => progress += +child.is_completed);
+      return {
+        endPoint: children.length,
+        progress: progress
+      };
+    }
+    return null;
   }
 }
