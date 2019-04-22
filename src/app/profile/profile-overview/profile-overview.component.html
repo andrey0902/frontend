@@ -5,8 +5,7 @@
 <lt-iteration-timeline [iteration]="currentIteration"></lt-iteration-timeline>
 <div class="section vertical-center" *ngIf="currentIteration.testProject">
   <h2 class="section-title">Тестовое задание:</h2>
-  <a class="iteration-name project-link" [href]="currentIteration.testProject"
-     target="_blank">{{ currentIteration.testProject }}</a>
+  <div class="project-link" [innerHTML]="currentIteration.testProject | wrapLink"></div>
 </div>
 <lt-iteration-progress></lt-iteration-progress>
 <div class="plan">
