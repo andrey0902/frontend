@@ -19,7 +19,7 @@ export class UserEffectsService {
   ) {
   }
 
-  @Effect() getPlan: Observable<UserActionUnion> = this.actions$.pipe(
+  @Effect() getUser: Observable<UserActionUnion> = this.actions$.pipe(
     ofType(UserActionTypes.GET_USER_REQUEST),
     switchMap((action: UserActionUnion) => {
       return this.userService.getUser(action.payload.userId, {include: 'proteges,mentor'})

@@ -16,7 +16,9 @@ const initialState: CurrentUserState = {
 export function currentUserReducer(state = initialState, action: CurrentUserActionUnion): CurrentUserState {
   switch (action.type) {
 
-    case CurrentUserActionTypes.LOAD_USER: {
+    case CurrentUserActionTypes.LOAD_USER:
+    case CurrentUserActionTypes.WANTTOBE_MENTOR_REQUEST:
+    case CurrentUserActionTypes.NEED_MENTOR_REQUEST: {
       return {
         ...state,
         error: null,
@@ -32,18 +34,29 @@ export function currentUserReducer(state = initialState, action: CurrentUserActi
       };
     }
 
-    case CurrentUserActionTypes.LOAD_USER_FAIL: {
+    case CurrentUserActionTypes.WANTTOBE_MENTOR_SUCCESS: {
       return {
         ...state,
-        error: action.payload,
+        user: state.user.patch({wantBeMentor: true}),
         loading: false,
       };
     }
 
-    case CurrentUserActionTypes.PATCH_USER: {
+    case CurrentUserActionTypes.NEED_MENTOR_SUCCESS: {
       return {
         ...state,
-        user: state.user.patch(action.payload)
+        user: state.user.patch({needMentor: true}),
+        loading: false,
+      };
+    }
+
+    case CurrentUserActionTypes.LOAD_USER_FAIL:
+    case CurrentUserActionTypes.WANTTOBE_MENTOR_FAIL:
+    case CurrentUserActionTypes.NEED_MENTOR_FAIL: {
+      return {
+        ...state,
+        error: action.payload,
+        loading: false,
       };
     }
 
