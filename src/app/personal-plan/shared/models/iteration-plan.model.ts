@@ -1,5 +1,4 @@
 import {ItemNode} from '../../../shared/tree/models/item-node.model';
-import { IProgress } from './progress.model';
 
 export class IterationTaskModel extends ItemNode {
   public id: number;
@@ -51,7 +50,8 @@ export class IterationTaskModelByConfig extends IterationTaskModel {
 }
 
 export class TreeHelper {
-  public static treeStructureGenerator(tasks: ItemNode[]): ItemNode[] {
+  public static treeStructureGenerator(tasksArray: ItemNode[]): ItemNode[] {
+    const tasks: ItemNode[] = tasksArray.map((task) => new ItemNode(task));
     let tasksTree: ItemNode[] = [];
     const tasksDictionary: { number: ItemNode } | {} = {};
     if (tasks && tasks.length > 0) {
@@ -97,16 +97,18 @@ export class TreeHelper {
     return nodeIds;
   }
 
-  public static treeProgress(items: IterationTaskModel[]): IProgress {
+  public static getTreeProgress(items: ItemNode[], percent = 100): number {
+    let progress = 0;
     if (items.length > 0) {
-      const children = TreeHelper.getChildrenFromTree(items);
-      let progress = 0;
-      children.forEach((child: IterationTaskModel) => progress += +child.is_completed);
-      return {
-        endPoint: children.length,
-        progress: progress
-      };
+      const childPercent = percent / items.length;
+      items.forEach((item: ItemNode) => {
+        if (item.children.length > 0) {
+          progress += this.getTreeProgress(item.children, childPercent);
+        } else if (item.is_completed) {
+          progress += childPercent;
+        }
+      });
     }
-    return null;
+    return progress;
   }
 }

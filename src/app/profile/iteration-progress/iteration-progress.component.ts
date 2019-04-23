@@ -1,8 +1,9 @@
 import {ChangeDetectorRef, Component, Input, OnInit} from '@angular/core';
-import {IProgress} from '../../personal-plan/shared/models/progress.model';
 import {plan} from '../../root-store/profile/plan/plan.selectors';
 import {IterationTaskModel, TreeHelper} from '../../personal-plan/shared/models/iteration-plan.model';
 import {Store} from '@ngrx/store';
+import {ItemNode} from '../../shared/tree/models/item-node.model';
+
 
 @Component({
   selector: 'lt-iteration-progress',
@@ -12,7 +13,7 @@ import {Store} from '@ngrx/store';
 })
 export class IterationProgressComponent implements OnInit {
   @Input() plan: IterationTaskModel[] = [];
-  progress: IProgress;
+  progress: number;
 
   constructor(private store: Store<any>, private cd: ChangeDetectorRef) {
   }
@@ -20,7 +21,8 @@ export class IterationProgressComponent implements OnInit {
   ngOnInit() {
     this.store.select(plan)
       .subscribe((data: IterationTaskModel[]) => {
-        this.progress = TreeHelper.treeProgress(data);
+        const dataTree: ItemNode[] = TreeHelper.treeStructureGenerator(data);
+        this.progress = Math.round(TreeHelper.getTreeProgress(dataTree));
       });
   }
 

@@ -86,8 +86,7 @@ export class TreeComponent implements OnChanges, AfterViewInit {
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes.data && changes.data.currentValue) {
-      const newData = changes.data.currentValue.map((item) => new ItemNode(item));
-      this.database.data = TreeHelper.treeStructureGenerator(newData);
+      this.database.data = TreeHelper.treeStructureGenerator(changes.data.currentValue);
       this.treeControl.expandAll();
     }
 
