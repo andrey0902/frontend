@@ -10,6 +10,7 @@ import {RouterModule} from '@angular/router';
 import {UserPermissionDirective} from './directives/user-permission.directive';
 import { AutoFocusDirective } from './directives/auto-focus.directive';
 import {ProgressBarComponent} from './progress-bar/progress-bar.component';
+import {WrapLinkPipe} from './pipes/wrap-link.pipe';
 
 @NgModule({
   declarations: [
@@ -20,7 +21,8 @@ import {ProgressBarComponent} from './progress-bar/progress-bar.component';
     UserComponent,
     ProgressBarComponent,
     UserPermissionDirective,
-    AutoFocusDirective
+    AutoFocusDirective,
+    WrapLinkPipe
   ],
   exports: [
     ActionBtnComponent,
@@ -30,7 +32,8 @@ import {ProgressBarComponent} from './progress-bar/progress-bar.component';
     UserComponent,
     ProgressBarComponent,
     UserPermissionDirective,
-    AutoFocusDirective
+    AutoFocusDirective,
+    WrapLinkPipe
   ],
   imports: [
     CommonModule,

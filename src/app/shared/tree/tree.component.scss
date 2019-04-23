@@ -1,71 +1,101 @@
-.create-tree-item {
-  width: 100%;
+@import '~src/scss/variables';
+
+.tree {
+  padding-top: 20px;
 }
 
-.drop-above {
-  border-top: 10px solid #dddddd;
-  margin-top: -10px;
+// drop
+
+mat-tree-node {
+  position: relative;
+  overflow: unset;
+  padding-bottom: 15px;
+
+  .above {
+    width: 100%;
+    position: absolute;
+    z-index: 1;
+    left: 0;
+    right: 0;
+    height: 25px;
+    top: -20px;
+  }
+
+  .below {
+    width: 100%;
+    position: absolute;
+    z-index: 2;
+    left: 0;
+    right: 0;
+    height: 25px;
+    bottom: -5px;
+  }
 }
 
-.drop-below {
-  border-bottom: 10px solid #dddddd;
-  margin-bottom: -10px;
-}
-
-.drop-center {
+ .drop-above .above{
   background-color: #dddddd;
 }
 
-.buttons {
-  display: none;
+ .drop-below .below {
+  background-color:  #dddddd;
 }
 
-mat-tree-node:hover .buttons {
-  width: 80px;
-  display: flex;
-  opacity: 0.7;
-  align-items: center;
-  height: 0;
-  position: relative;
-  top: 10px;
-  left: 10px;
-
-  button {
-    font-size: 12px;
-    width: 27px;
-  }
-
-  mat-icon {
-    font-size: 20px;
-  }
+ .drop-center .checkbox-container {
+  background-color:  #dddddd;
 }
 
-mat-tree-node {
+//drop
+
+.checkbox-container {
   font-size: 16px;
   overflow: unset;
   display: flex;
   align-items: flex-start;
-  padding-bottom: 15px;
+  width: 100%;
+
+  .checkbox {
+    max-width: calc(100% - 120px);
+  }
+
+  .btn-children {
+    top: -9px;
+    position: relative;
+    height: 0;
+  }
+
+  .buttons {
+    display: none;
+  }
+
+  &:hover .buttons{
+    width: 80px;
+    display: flex;
+    align-items: center;
+    height: 0;
+    position: relative;
+    top: 10px;
+    left: 10px;
+
+    button {
+      font-size: 12px;
+      width: 27px;
+    }
+
+    mat-icon {
+      font-size: 20px;
+      opacity: 0.7;
+    }
+  }
 }
 
-.checkbox {
-  max-width: calc(100% - 120px);
-}
-
-.btn-children {
-  top: -9px;
-  position: relative;
-  height: 0;
+.padding {
+  padding-left: 40px;
 }
 
 ::ng-deep .mat-checkbox-checked .mat-checkbox-background,
 ::ng-deep .mat-checkbox-indeterminate .mat-checkbox-background,
 ::ng-deep .mat-checkbox-ripple .mat-ripple-element {
-  background-color: #141460 !important;
-}
-
-.padding {
-  padding-left: 40px;
+  background-color: $primary-color !important;
 }
 
 ::ng-deep .checkbox .mat-checkbox-layout {
@@ -74,10 +104,20 @@ mat-tree-node {
   display: flex;
   align-items: flex-start;
 
+
   .mat-checkbox-inner-container {
     margin: 0 10px;
     position: relative;
     top: 3px;
   }
 }
+
+.activeComment {
+  color: $accent-color;
+  opacity: 1 !important;
+}
+
+
+
+
 

@@ -1,4 +1,4 @@
-import {IterationTaskModel, TreeHelper} from '../../../personal-plan/shared/models/iteration-plan.model';
+import {IterationTaskModel} from '../../../personal-plan/shared/models/iteration-plan.model';
 import {PlanActionTypes, PlanActionUnion} from './plan.actions';
 
 export type PlanDictionary = { [id: number]: IterationTaskModel };

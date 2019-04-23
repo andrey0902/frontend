@@ -1,7 +1,9 @@
 <div class="simple-input">
   <mat-form-field class="full-width">
     <mat-label *ngIf="label">{{label}}</mat-label>
-    <input type="text" class="input" matInput [formControl]="control" [placeholder]="placeholder" [value]="value ? value : ''" ltAutoFocus>
+    <input type="text" class="input" matInput [formControl]="control" [value]="value ? value : ''" ltAutoFocus>
+    <mat-hint align="end">{{control.value?.length || 0}}/120</mat-hint>
+    <mat-error *ngIf="control.hasError('maxlength')">Поле не должно превышать 120 символов</mat-error>
   </mat-form-field>
   <div class="action-wrapper">
     <button mat-icon-button class="action-save" (click)="saveTask()" [disabled]="isDisabled">

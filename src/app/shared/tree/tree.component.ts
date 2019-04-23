@@ -1,4 +1,18 @@
-import {Component, ElementRef, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild} from '@angular/core';
+import {
+  AfterViewInit,
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  ElementRef,
+  EventEmitter,
+  Input,
+  OnChanges,
+  Output,
+  QueryList,
+  SimpleChanges,
+  ViewChild,
+  ViewChildren
+} from '@angular/core';
 import {FlatTreeControl} from '@angular/cdk/tree';
 import {MatTreeFlatDataSource, MatTreeFlattener} from '@angular/material';
 import {SelectionModel} from '@angular/cdk/collections';
@@ -7,15 +21,19 @@ import {ItemFlatNode, ItemNode} from './models/item-node.model';
 import {Observable, of} from 'rxjs';
 import {DialogService} from '../dialog/services/dialog.service';
 import {TreeHelper} from '../../personal-plan/shared/models/iteration-plan.model';
+import {CreateTreeItemComponent} from './components/create-tree-item/create-tree-item.component';
+import {DeleteIterationRequest} from '../../root-store/profile/iteration/iteration.actions';
+import {LtValidators} from '../helpers/validator-methods.static';
 
 @Component({
   selector: 'lt-tree',
   templateUrl: './tree.component.html',
   styleUrls: ['./tree.component.scss'],
-  providers: [TreeDatabaseService]
+  providers: [TreeDatabaseService],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 
-export class TreeComponent implements OnChanges {
+export class TreeComponent implements OnChanges, AfterViewInit {
   @Input() private data: ItemNode[];
   @Input() public type: new (...arg: any[]) => ItemNode;
   @Input() public editLevel: number;
@@ -24,6 +42,8 @@ export class TreeComponent implements OnChanges {
   @Output() public deleteItem = new EventEmitter<ItemNode>();
   @Output() public createItem = new EventEmitter<ItemNode>();
   @Output() public editItem = new EventEmitter<ItemNode>();
+
+  @ViewChildren(CreateTreeItemComponent) inputView !: QueryList<CreateTreeItemComponent>;
 
   /** Map from flat node to nested node. This helps us finding the nested node to be modified */
   flatNodeMap = new Map<ItemFlatNode, ItemNode>();
@@ -48,7 +68,7 @@ export class TreeComponent implements OnChanges {
   dragNodeExpandOverArea: string;
   @ViewChild('emptyItem') emptyItem: ElementRef;
 
-  constructor(private database: TreeDatabaseService, private dialogService: DialogService) {
+  constructor(private database: TreeDatabaseService, private dialogService: DialogService, private cd: ChangeDetectorRef) {
     this.treeFlattener = new MatTreeFlattener(this.transformer, this.getLevel, this.isExpandable, this.getChildren);
     this.treeControl = new FlatTreeControl<ItemFlatNode>(this.getLevel, this.isExpandable);
     this.dataSource = new MatTreeFlatDataSource(this.treeControl, this.treeFlattener);
@@ -58,6 +78,10 @@ export class TreeComponent implements OnChanges {
         this.dataSource.data = [];
         this.dataSource.data = data;
       });
+  }
+
+  ngAfterViewInit(): void {
+    this.inputView.changes.subscribe(() => this.cd.detectChanges());
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -102,7 +126,9 @@ export class TreeComponent implements OnChanges {
     flatNode.text = node.text;
     flatNode.showAsInput = node.showAsInput;
     flatNode.level = level;
+    flatNode.comment = node.comment;
     flatNode.expandable = node.children.length > 0;
+
     if (node.is_completed) {
       this.checklistSelection.select(flatNode);
     }
@@ -213,6 +239,18 @@ export class TreeComponent implements OnChanges {
     }
   }
 
+  addComment(node: ItemFlatNode) {
+    this.dialogService.openCommentDialog(node.comment, this.editLevel !== 2, (request => {
+      console.log(request);
+      if (request !== undefined && request !== node.comment && this.editLevel === 2) {
+        const data = this.flatNodeMap.get(node);
+        data.comment = (request || '').trim().length !== 0 ? request : undefined;
+        this.editItem.emit(data);
+        this.database.update();
+      }
+    }));
+  }
+
   updateItemCheck(node: ItemNode, checkChildren: boolean = true) {
     if (node) {
       const changesCheckedItems = this.getChangedCheckedItems(node, checkChildren);
@@ -223,35 +261,7 @@ export class TreeComponent implements OnChanges {
   }
 
   // Drag'n'Drop
-
-  getNewDropItem(flatNode: ItemFlatNode, dragNode: ItemNode): ItemNode {
-    const node: ItemNode = this.flatNodeMap.get(flatNode);
-    const nodeDrop: boolean = !this.dragNode.expandable || node.parentId === dragNode.parentId || node.parentId === 0;
-    let newItem: ItemNode = null;
-
-    if (this.dragNodeExpandOverArea === 'above' && nodeDrop) {
-      newItem = this.database.insertItemNear(node, dragNode, InsertionType.ABOVE);
-    } else if (this.dragNodeExpandOverArea === 'below' && nodeDrop) {
-      newItem = this.database.insertItemNear(node, dragNode, InsertionType.BELOW);
-    } else if (node.children.length < 100 && flatNode.level < 2 && !this.dragNode.expandable) {
-      newItem = this.database.copyPasteItem(dragNode, node);
-    }
-
-    return newItem;
-  }
-
-  handleDragStart(event, node: ItemFlatNode) {
-    // Required by Firefox (https://stackoverflow.com/questions/19055264/why-doesnt-html5-drag-and-drop-work-in-firefox)
-    event.dataTransfer.setData('foo', 'bar');
-    event.dataTransfer.setDragImage(this.emptyItem.nativeElement, 0, 0);
-    this.dragNode = node;
-    this.treeControl.collapse(node);
-  }
-
-  handleDragOver(event, node) {
-    event.preventDefault();
-
-    // Handle node expand
+  handleNodeExpand(node) {
     if (node === this.dragNodeExpandOverNode) {
       if (this.dragNode !== node && !this.treeControl.isExpanded(node)) {
         if ((new Date().getTime() - this.dragNodeExpandOverTime) > this.dragNodeExpandOverWaitTimeMs) {
@@ -262,16 +272,65 @@ export class TreeComponent implements OnChanges {
       this.dragNodeExpandOverNode = node;
       this.dragNodeExpandOverTime = new Date().getTime();
     }
+  }
 
-    // Handle drag area
-    const percentageY = event.offsetY / event.target.clientHeight;
-    if (percentageY < 0.25) {
+  handleDragArea(node, event) {
+    if (event.target.className === 'above') {
       this.dragNodeExpandOverArea = 'above';
-    } else if (percentageY > 0.75) {
+    } else if (event.target.className === 'below') {
       this.dragNodeExpandOverArea = 'below';
     } else {
       this.dragNodeExpandOverArea = 'center';
     }
+  }
+
+  getNewDropItem(flatNode: ItemFlatNode, dragNode: ItemNode): ItemNode {
+    const node: ItemNode = this.flatNodeMap.get(flatNode);
+    let newItem: ItemNode = null;
+
+    if (this.dragNodeExpandOverArea === 'above' || this.dragNodeExpandOverArea === 'below') {
+      const newParent = this.database.getParentOfNode(node);
+      const isValidByChildren = node.parentId === dragNode.parentId || !newParent && this.dataSource.data.length < 100 || newParent.children.length < 100;
+      const isValidByLevel = flatNode.level + TreeHelper.getExpandLevelOfNode(dragNode) < 3;
+      const isValidByNode = !TreeHelper.getAllNodeIds(dragNode).includes(node.id);
+      const isValidToDrop = isValidByChildren && isValidByLevel && isValidByNode;
+
+      newItem = isValidToDrop ? this.database.insertItemNear(node, dragNode, this.dragNodeExpandOverArea) : null;
+    } else if (this.dragNodeExpandOverArea === 'center') {
+      const isValidByLevel = flatNode.level + TreeHelper.getExpandLevelOfNode(dragNode) < 2;
+      const isValidByNode = !TreeHelper.getAllNodeIds(dragNode).includes(node.id);
+      const isValidToDrop = node.children.length < 100 && isValidByLevel && isValidByNode;
+
+      newItem = isValidToDrop ? this.database.copyPasteItem(dragNode, node) : null;
+    }
+
+    return newItem;
+  }
+
+  handleDragStart(event, node: ItemFlatNode) {
+    // Required by Firefox (https://stackoverflow.com/questions/19055264/why-doesnt-html5-drag-and-drop-work-in-firefox)
+    event.dataTransfer.setData('foo', 'bar');
+    event.dataTransfer.setDragImage(this.emptyItem.nativeElement, 0, 0);
+    this.dragNode = node;
+  }
+
+  handleDragOver(event, node) {
+    event.preventDefault();
+
+    if (node !== this.dragNode) {
+      this.handleNodeExpand(node);
+      this.handleDragArea(node, event);
+    }
+  }
+
+  handleDragLeave() {
+    this.dragNodeExpandOverNode = null;
+  }
+
+  handleDragEnd(event) {
+    this.dragNode = null;
+    this.dragNodeExpandOverNode = null;
+    this.dragNodeExpandOverTime = 0;
   }
 
   handleDrop(event, flatNode: ItemFlatNode) {

@@ -8,6 +8,7 @@ import {MentorshipManagementDialogComponent} from './mentorship-management-dialo
 import {DeleteIterationDialogComponent} from './delete-iteration-dialog/delete-iteration-dialog.component';
 import {ComponentsModule} from '../components/components.module';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import { CommentDialogComponent } from './comment-dialog/comment-dialog.component';
 
 @NgModule({
   imports: [
@@ -25,7 +26,8 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
     ConfirmDialogComponent,
     RequestDialogComponent,
     MentorshipManagementDialogComponent,
-    DeleteIterationDialogComponent
+    DeleteIterationDialogComponent,
+    CommentDialogComponent
   ],
   providers: [
     DialogService
@@ -34,7 +36,8 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
     ConfirmDialogComponent,
     RequestDialogComponent,
     MentorshipManagementDialogComponent,
-    DeleteIterationDialogComponent
+    DeleteIterationDialogComponent,
+    CommentDialogComponent
   ]
 })
 

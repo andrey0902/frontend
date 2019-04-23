@@ -10,8 +10,6 @@ import {LtValidators} from '../../../helpers/validator-methods.static';
 })
 export class CreateTreeItemComponent implements OnInit {
   @Input() label: string;
-  @Input() placeholder: string;
-  @Input() validators: any;
   @Input() main = false;
   @Input() value: string;
 
@@ -19,54 +17,9 @@ export class CreateTreeItemComponent implements OnInit {
   @Output() removeItem = new EventEmitter<string>();
 
   public isDisabled = true;
-  public control: FormControl;
-  public item: ItemNode;
-  public controlValue: any;
-
-  constructor() {
-  }
-
-  public createControl() {
-    this.control = new FormControl(null);
-    this.listenChanges();
-    this.setValue();
-  }
+  public control: FormControl = new FormControl(null, [Validators.maxLength(120)]);
 
   ngOnInit() {
-    this.createControl();
-  }
-
-  @HostListener('window:keydown', ['$event'])
-  keyEvent(event: KeyboardEvent) {
-    if (event.key === 'Enter' && !this.isDisabled) {
-      this.saveTask();
-    }
-    if (event.key === 'Escape') {
-      this.deleteTask();
-    }
-  }
-
-  public setValue() {
-    this.checkedValue(this.item);
-  }
-
-  public checkedValue(task) {
-    if (!task || !task.text) {
-      this.isDisabled = true;
-    } else {
-      this.patchValue(task.text);
-      this.controlValue = this.control.value;
-    }
-  }
-
-  public patchValue(value): void {
-    this.control.patchValue(value);
-  }
-
-  /**
-   * will call after creating control
-   */
-  private listenChanges(): void {
     this.control.valueChanges.subscribe((value) => {
       if (value && value.length > 0 && value.length < 121 && !LtValidators.noWhitespaceValidator(this.control)) {
         this.isDisabled = false;
@@ -91,6 +44,16 @@ export class CreateTreeItemComponent implements OnInit {
     this.control.markAsUntouched({onlySelf: true});
     this.control.reset();
     this.isDisabled = true;
+  }
+
+  @HostListener('window:keydown', ['$event'])
+  keyEvent(event: KeyboardEvent) {
+    if (event.key === 'Enter' && !this.isDisabled) {
+      this.saveTask();
+    }
+    if (event.key === 'Escape') {
+      this.deleteTask();
+    }
   }
 
 }

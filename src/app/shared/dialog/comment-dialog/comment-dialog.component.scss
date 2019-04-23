@@ -1,0 +1,47 @@
+.title-container {
+  display: flex;
+  align-items: center;
+  width: 100%;
+
+  mat-form-field {
+    width: 100%;
+  }
+}
+
+:host {
+  display: block;
+  padding: 20px;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.modal-content {
+  padding: 0 20px;
+}
+
+.text-area {
+  width: 100%;
+  min-height: 100px;
+  resize: none;
+  line-height: 22px;
+}
+
+.read-container {
+  flex-direction: column;
+
+  .title {
+    margin-bottom: 5px;
+    font-weight: bold;
+    font-size: 20px;
+  }
+
+  .text-area {
+    font-family: unset;
+    min-height: unset;
+    line-height: unset;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+  }
+}
