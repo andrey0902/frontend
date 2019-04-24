@@ -1,5 +1,5 @@
 import {ItemNode} from '../../../shared/tree/models/item-node.model';
-import { IProgress } from './progress.model';
+import {IProgress} from './progress.model';
 
 export class IterationTaskModel extends ItemNode {
   public id: number;
@@ -68,6 +68,7 @@ export class TreeHelper {
     tasks.forEach((task: ItemNode) => {
       if (task.children.length > 0) {
         task.children = TreeHelper.sortTreeByOrder(task.children);
+        task.children[task.children.length - 1].lastChild = true;
       }
     });
     return tasks.sort((a, b) => a.order - b.order);
@@ -108,5 +109,18 @@ export class TreeHelper {
       };
     }
     return null;
+  }
+
+  public static getArrayFromTree(tasks: ItemNode[]): IterationTaskModel[] {
+    const tasksTree: IterationTaskModel[] = [];
+    tasksTree.forEach((task: ItemNode) => {
+      const itTask = new IterationTaskModel(task);
+      if (task.children.length > 0) {
+        tasksTree.push(...this.getArrayFromTree(task.children));
+        itTask.children = [];
+      }
+      tasksTree.push(itTask);
+    });
+    return tasksTree;
   }
 }

@@ -39,8 +39,8 @@ export class TreeComponent implements OnChanges, AfterViewInit {
   @Input() public editLevel: number;
 
   @Output() public updateItem = new EventEmitter<ItemNode[]>();
-  @Output() public deleteItem = new EventEmitter<ItemNode>();
-  @Output() public createItem = new EventEmitter<ItemNode>();
+  @Output() public deleteItem = new EventEmitter<{changes: ItemNode, tree: ItemNode[]}>();
+  @Output() public createItem = new EventEmitter<{changes: ItemNode, tree: ItemNode[]}>();
   @Output() public editItem = new EventEmitter<ItemNode>();
 
   @ViewChildren(CreateTreeItemComponent) inputView !: QueryList<CreateTreeItemComponent>;
@@ -129,6 +129,7 @@ export class TreeComponent implements OnChanges, AfterViewInit {
     flatNode.level = level;
     flatNode.comment = node.comment;
     flatNode.expandable = node.children.length > 0;
+    flatNode.lastChild = node.lastChild;
 
     if (node.is_completed) {
       this.checklistSelection.select(flatNode);
@@ -168,7 +169,7 @@ export class TreeComponent implements OnChanges, AfterViewInit {
       data.text = nodeText;
       this.database.insertItem(null, data, true);
       this.database.update();
-      this.createItem.emit(data);
+      this.createItem.emit({changes: data, tree: this.database.data});
     }
   }
 
@@ -197,7 +198,7 @@ export class TreeComponent implements OnChanges, AfterViewInit {
 
     if (node.showAsInput === 'add') {
       this.updateItemCheck(data);
-      this.createItem.emit(data);
+      this.createItem.emit({changes: data, tree: this.database.data});
     }
 
     if (node.showAsInput === 'edit') {
@@ -224,7 +225,7 @@ export class TreeComponent implements OnChanges, AfterViewInit {
           this.database.deleteNode(data);
           this.database.update();
           this.updateItemCheck(this.database.getParentOfNode(data), false);
-          this.deleteItem.emit(data);
+          this.deleteItem.emit({changes: data, tree: this.database.data});
         }
       });
     }
@@ -337,6 +338,7 @@ export class TreeComponent implements OnChanges, AfterViewInit {
   handleDrop(event, flatNode: ItemFlatNode) {
     event.preventDefault();
     const dragNode = this.flatNodeMap.get(this.dragNode);
+    const dragNodeParent = this.database.getParentOfNode(dragNode);
     const {order: oldOrder, parentId: oldParentId} = dragNode;
     const newItem: ItemNode = flatNode !== this.dragNode ? this.getNewDropItem(flatNode, dragNode) : null;
 
@@ -348,7 +350,8 @@ export class TreeComponent implements OnChanges, AfterViewInit {
         this.treeControl.expandDescendants(this.nestedNodeMap.get(newItem));
       }
 
-      this.updateItemCheck(this.database.getParentOfNode(dragNode), false);
+
+      this.updateItemCheck(dragNodeParent, false);
       this.updateItemCheck(this.database.getParentOfNode(newItem), false);
     }
 
@@ -356,8 +359,6 @@ export class TreeComponent implements OnChanges, AfterViewInit {
     this.dragNodeExpandOverNode = null;
     this.dragNodeExpandOverTime = 0;
   }
-
-  //
 
   getChangedCheckedItems(startNode: ItemNode, checkChildren: boolean = true): ItemNode[] {
     const changedItems: ItemNode[] = [];

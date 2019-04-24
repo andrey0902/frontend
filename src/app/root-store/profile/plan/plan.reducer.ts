@@ -6,19 +6,20 @@ export type PlanDictionary = { [id: number]: IterationTaskModel };
 export interface PlanState {
   planDictionary: PlanDictionary;
   loading: boolean;
+  loadingNewTask: boolean;
   error: any;
 }
 
 const initialState: PlanState = {
   planDictionary: null,
   loading: false,
+  loadingNewTask: false,
   error: null
 };
 
 export function planReducer(state = initialState, action: PlanActionUnion): PlanState {
   switch (action.type) {
     case PlanActionTypes.GET_PLAN_REQUEST:
-    case PlanActionTypes.CREATE_PLAN_TASK_REQUEST:
     case PlanActionTypes.EDIT_PLAN_TASK_REQUEST:
     case PlanActionTypes.DELETE_PLAN_TASK_REQUEST:
     case PlanActionTypes.UPDATE_PLAN_TASKS_REQUEST: {
@@ -26,6 +27,15 @@ export function planReducer(state = initialState, action: PlanActionUnion): Plan
         ...state,
         error: null,
         loading: true
+      };
+    }
+
+    case PlanActionTypes.CREATE_PLAN_TASK_REQUEST: {
+      return {
+        ...state,
+        error: null,
+        loading: true,
+        loadingNewTask: true
       };
     }
 
@@ -39,7 +49,17 @@ export function planReducer(state = initialState, action: PlanActionUnion): Plan
       };
     }
 
-    case PlanActionTypes.CREATE_PLAN_TASK_SUCCESS:
+    case PlanActionTypes.CREATE_PLAN_TASK_SUCCESS: {
+      const newPlan: PlanDictionary = Object.assign({}, state.planDictionary);
+      newPlan[action.payload.task.id] = action.payload.task;
+      return {
+        ...state,
+        planDictionary: newPlan,
+        loading: false,
+        loadingNewTask: false
+      };
+    }
+
     case PlanActionTypes.EDIT_PLAN_TASK_SUCCESS: {
       const newPlan: PlanDictionary = Object.assign({}, state.planDictionary);
       newPlan[action.payload.task.id] = action.payload.task;

@@ -43,7 +43,6 @@ export class TreeDatabaseService {
       const oldParent = this.getParentOfNode(item);
       const oldArr = oldParent ? oldParent.children : this.data;
       this.deleteNode(item, oldArr);
-      this._recalculateOrdering(oldArr);
     }
 
     if (parent === null) {
@@ -74,7 +73,6 @@ export class TreeDatabaseService {
     insertNode.parentId = parentNode ? parentNode.id : null;
     arr.splice(index, 0, insertNode);
 
-    this._recalculateOrdering(oldArr);
     this._recalculateOrdering(arr);
     return insertNode;
   }
@@ -117,6 +115,10 @@ export class TreeDatabaseService {
   }
 
   private _recalculateOrdering(arr: ItemNode[]): void {
-    arr.forEach((item: ItemNode, index: number) => item.order = index + 1);
+    console.log('recalculate');
+    arr.forEach((item: ItemNode, index: number) => {
+      item.order = index + 1;
+      item.lastChild = index === arr.length - 1;
+    });
   }
 }

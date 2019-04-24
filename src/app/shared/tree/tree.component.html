@@ -5,7 +5,7 @@
 
 <mat-tree [dataSource]="dataSource" [treeControl]="treeControl" class="tree">
   <mat-tree-node *matTreeNodeDef="let node"
-                 [ngClass]="{'drop-above': dragNodeExpandOverArea === 'above' && dragNodeExpandOverNode === node,
+                 [ngClass]="{ 'drop-above': dragNodeExpandOverArea === 'above' && dragNodeExpandOverNode === node,
                               'drop-below': dragNodeExpandOverArea === 'below' && dragNodeExpandOverNode === node,
                               'drop-center': dragNodeExpandOverArea === 'center' && dragNodeExpandOverNode === node
                              }"
@@ -15,20 +15,20 @@
                  (dragleave)="handleDragLeave()"
                  (dragend)="handleDragEnd($event)"
                  (drop)="handleDrop($event, node);"
-                 matTreeNodePadding>
+                 [style.margin-left.px]="40*getLevel(node)">
     <div class="above"></div>
     <div class="checkbox-container">
-      <mat-checkbox class="padding checkbox"
+      <mat-checkbox class="checkbox padding"
                     [checked]="checklistSelection.isSelected(node)"
                     [disabled]="editLevel === 0"
                     (change)="todoItemSelectionToggle(node);"
-      >{{node.text}}</mat-checkbox>
+      >{{node.text}} {{flatNodeMap.get(node).order}}  {{node.lastChild}}</mat-checkbox>
       <ng-container *ngTemplateOutlet="nodeMenu; context: {node: node}"></ng-container>
     </div>
     <div class="below"></div>
   </mat-tree-node>
 
-  <mat-tree-node *matTreeNodeDef="let node; when: showAsInput" matTreeNodePadding>
+  <mat-tree-node *matTreeNodeDef="let node; when: showAsInput" [style.margin-left.px]="40*getLevel(node)">
     <lt-create-tree-item
       [value]="node.text"
       (createItem)="addItem($event, node)"
@@ -38,7 +38,7 @@
 
   <mat-tree-node *matTreeNodeDef="let node; when: hasChild"
                  [ngClass]="{'drop-above': dragNodeExpandOverArea === 'above' && dragNodeExpandOverNode === node,
-                              'drop-center': dragNodeExpandOverArea === 'center' && dragNodeExpandOverNode === node
+                             'drop-center': dragNodeExpandOverArea === 'center' && dragNodeExpandOverNode === node
                               }"
                  draggable="true"
                  (dragstart)="editLevel === 2 && handleDragStart($event, node);"
@@ -46,7 +46,7 @@
                  (dragleave)="handleDragLeave()"
                  (dragend)="handleDragEnd($event)"
                  (drop)="handleDrop($event, node);"
-                 matTreeNodePadding>
+                 [style.margin-left.px]="40*getLevel(node)">
     <div class="above"></div>
     <div class="checkbox-container">
       <button class="btn-children"
@@ -61,7 +61,7 @@
                     [checked]="checklistSelection.isSelected(node)"
                     [disabled]="editLevel === 0"
                     [indeterminate]="descendantsPartiallySelected(node)"
-                    (change)="todoItemSelectionToggle(node)">{{node.text}}</mat-checkbox>
+                    (change)="todoItemSelectionToggle(node)">{{node.text}} {{flatNodeMap.get(node).order}} {{node.lastChild}}</mat-checkbox>
       <ng-container *ngTemplateOutlet="nodeMenu; context: {node: node}" class="buttons"></ng-container>
     </div>
   </mat-tree-node>
