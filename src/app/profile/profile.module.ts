@@ -11,7 +11,6 @@ import {CreateIterationComponent} from './create-iteration/create-iteration.comp
 import {ReactiveFormsModule} from '@angular/forms';
 import {CreateIterationFormComponent} from './create-iteration-form/create-iteration-form.component';
 import {SharedModule} from '../shared/shared.module';
-import {ProgressBarModule} from '../shared/progress-bar/progress-bar.module';
 import {IterationPlanComponent} from './iteration-plan/iteration-plan.component';
 import {IterationProgressComponent} from './iteration-progress/iteration-progress.component';
 import {CreateIterationGuard} from '../core/guards/create-iteration.guard';
@@ -35,7 +34,6 @@ import { DashboardService } from './shared/services/dashboard.service';
     CoreModule,
     ReactiveFormsModule,
     SharedModule,
-    ProgressBarModule,
     LazyLoadImageModule
   ],
   exports: [

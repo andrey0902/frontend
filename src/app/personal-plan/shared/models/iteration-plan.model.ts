@@ -1,5 +1,4 @@
 import {ItemNode} from '../../../shared/tree/models/item-node.model';
-import {IProgress} from './progress.model';
 
 export class IterationTaskModel extends ItemNode {
   public id: number;
@@ -51,7 +50,8 @@ export class IterationTaskModelByConfig extends IterationTaskModel {
 }
 
 export class TreeHelper {
-  public static treeStructureGenerator(tasks: ItemNode[]): ItemNode[] {
+  public static treeStructureGenerator(tasksArray: ItemNode[]): ItemNode[] {
+    const tasks: ItemNode[] = tasksArray.map((task) => new ItemNode(task));
     let tasksTree: ItemNode[] = [];
     const tasksDictionary: { number: ItemNode } | {} = {};
     if (tasks && tasks.length > 0) {
@@ -68,7 +68,6 @@ export class TreeHelper {
     tasks.forEach((task: ItemNode) => {
       if (task.children.length > 0) {
         task.children = TreeHelper.sortTreeByOrder(task.children);
-        task.children[task.children.length - 1].lastChild = true;
       }
     });
     return tasks.sort((a, b) => a.order - b.order);
@@ -98,28 +97,32 @@ export class TreeHelper {
     return nodeIds;
   }
 
-  public static treeProgress(items: IterationTaskModel[]): IProgress {
+  public static getTreeProgress(items: ItemNode[], percent = 100): number {
+    let progress = 0;
     if (items.length > 0) {
-      const children = TreeHelper.getChildrenFromTree(items);
-      let progress = 0;
-      children.forEach((child: IterationTaskModel) => progress += +child.is_completed);
-      return {
-        endPoint: children.length,
-        progress: progress
-      };
+      const childPercent = percent / items.length;
+      items.forEach((item: ItemNode) => {
+        if (item.children.length > 0) {
+          progress += this.getTreeProgress(item.children, childPercent);
+        } else if (item.is_completed) {
+          progress += childPercent;
+        }
+      });
     }
-    return null;
+    return progress;
   }
 
   public static getArrayFromTree(tasks: ItemNode[]): IterationTaskModel[] {
     const tasksTree: IterationTaskModel[] = [];
-    tasksTree.forEach((task: ItemNode) => {
+    tasks.forEach((task: ItemNode) => {
       const itTask = new IterationTaskModel(task);
       if (task.children.length > 0) {
         tasksTree.push(...this.getArrayFromTree(task.children));
         itTask.children = [];
       }
-      tasksTree.push(itTask);
+      if (itTask.id) {
+        tasksTree.push(itTask);
+      }
     });
     return tasksTree;
   }

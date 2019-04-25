@@ -66,7 +66,7 @@ export class IterationPlanComponent implements OnInit, OnDestroy {
         task: new IterationTaskModel(data.changes),
         tasks: TreeHelper.getArrayFromTree(data.tree)
       }));
-//    this.getPlan(loadingPlanTask);
+    this.getPlan(loadingPlanTask);
   }
 
   public editTreeItem(data): void {
@@ -88,7 +88,7 @@ export class IterationPlanComponent implements OnInit, OnDestroy {
       .pipe(
         filter((loading) => !loading),
         switchMap(() => this.store.select(plan)),
-//        take(1)
+        take(1)
       )
       .subscribe((data: IterationTaskModel[]) => this.plan = data);
   }

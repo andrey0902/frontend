@@ -39,7 +39,8 @@ export function planReducer(state = initialState, action: PlanActionUnion): Plan
       };
     }
 
-    case PlanActionTypes.GET_PLAN_SUCCESS: {
+    case PlanActionTypes.GET_PLAN_SUCCESS:
+    case PlanActionTypes.EDIT_PLAN_TASK_SUCCESS: {
       const newPlan: PlanDictionary = {};
       action.payload.tasks.forEach((task: IterationTaskModel) => newPlan[task.id] = task);
       return {
@@ -50,23 +51,13 @@ export function planReducer(state = initialState, action: PlanActionUnion): Plan
     }
 
     case PlanActionTypes.CREATE_PLAN_TASK_SUCCESS: {
-      const newPlan: PlanDictionary = Object.assign({}, state.planDictionary);
-      newPlan[action.payload.task.id] = action.payload.task;
+      const newPlan: PlanDictionary = {};
+      action.payload.tasks.forEach((task: IterationTaskModel) => newPlan[task.id] = task);
       return {
         ...state,
         planDictionary: newPlan,
         loading: false,
         loadingNewTask: false
-      };
-    }
-
-    case PlanActionTypes.EDIT_PLAN_TASK_SUCCESS: {
-      const newPlan: PlanDictionary = Object.assign({}, state.planDictionary);
-      newPlan[action.payload.task.id] = action.payload.task;
-      return {
-        ...state,
-        planDictionary: newPlan,
-        loading: false
       };
     }
 

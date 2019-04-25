@@ -86,8 +86,7 @@ export class TreeComponent implements OnChanges, AfterViewInit {
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes.data && changes.data.currentValue) {
-      const newData = changes.data.currentValue.map((item) => new ItemNode(item));
-      this.database.data = TreeHelper.treeStructureGenerator(newData);
+      this.database.data = TreeHelper.treeStructureGenerator(changes.data.currentValue);
       this.treeControl.expandAll();
     }
 
@@ -129,7 +128,6 @@ export class TreeComponent implements OnChanges, AfterViewInit {
     flatNode.level = level;
     flatNode.comment = node.comment;
     flatNode.expandable = node.children.length > 0;
-    flatNode.lastChild = node.lastChild;
 
     if (node.is_completed) {
       this.checklistSelection.select(flatNode);
@@ -347,8 +345,6 @@ export class TreeComponent implements OnChanges, AfterViewInit {
 
       if (oldOrder !== newItem.order || oldParentId !== newItem.parentId) {
         this.editItem.emit({changes: newItem, tree: this.database.data});
-        console.log(this.database.data);
-        console.log(this.data);
         this.treeControl.expandDescendants(this.nestedNodeMap.get(newItem));
       }
 

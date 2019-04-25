@@ -5,10 +5,11 @@ import {NavTabsComponent} from './nav-tabs/nav-tabs.component';
 import {SafeHtmlPipe} from './pipes/safe-html.pipe';
 import {SvgIconComponent} from './svg-icon/svg-icon.component';
 import {UserComponent} from './user/user.component';
-import {MatButtonModule, MatIconModule, MatMenuModule, MatTabsModule, MatTooltipModule} from '@angular/material';
+import {MatButtonModule, MatIconModule, MatMenuModule, MatProgressBarModule, MatTabsModule, MatTooltipModule} from '@angular/material';
 import {RouterModule} from '@angular/router';
 import {UserPermissionDirective} from './directives/user-permission.directive';
 import { AutoFocusDirective } from './directives/auto-focus.directive';
+import {ProgressBarComponent} from './progress-bar/progress-bar.component';
 import {WrapLinkPipe} from './pipes/wrap-link.pipe';
 
 @NgModule({
@@ -18,6 +19,7 @@ import {WrapLinkPipe} from './pipes/wrap-link.pipe';
     SafeHtmlPipe,
     SvgIconComponent,
     UserComponent,
+    ProgressBarComponent,
     UserPermissionDirective,
     AutoFocusDirective,
     WrapLinkPipe
@@ -28,6 +30,7 @@ import {WrapLinkPipe} from './pipes/wrap-link.pipe';
     SafeHtmlPipe,
     SvgIconComponent,
     UserComponent,
+    ProgressBarComponent,
     UserPermissionDirective,
     AutoFocusDirective,
     WrapLinkPipe
@@ -39,7 +42,8 @@ import {WrapLinkPipe} from './pipes/wrap-link.pipe';
     MatMenuModule,
     RouterModule,
     MatTabsModule,
-    MatButtonModule
+    MatButtonModule,
+    MatProgressBarModule
   ]
 })
 export class ComponentsModule {

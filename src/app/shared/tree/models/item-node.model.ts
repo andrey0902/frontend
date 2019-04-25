@@ -12,11 +12,10 @@ export class ItemNode {
   id: number;
   parentId: number;
   isNew: boolean;
-  lastChild: boolean;
   is_completed: boolean;
 
   constructor(config) {
-    this.children = config.children || [];
+    this.children = config.children && config.children.length > 0 ? config.children.map((child) => new ItemNode(child)) : [];
     this.showAsInput = false;
     this.isNew = false;
     this.order = config.order;
@@ -25,7 +24,6 @@ export class ItemNode {
     this.id = config.id;
     this.parentId = config.parentId;
     this.is_completed = config.is_completed;
-    this.lastChild = false;
   }
 }
 
@@ -35,6 +33,5 @@ export class ItemFlatNode {
   comment: string;
   showAsInput: InputType;
   level: number;
-  lastChild: boolean;
   expandable: boolean;
 }

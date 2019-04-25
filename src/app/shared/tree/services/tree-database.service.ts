@@ -115,10 +115,8 @@ export class TreeDatabaseService {
   }
 
   private _recalculateOrdering(arr: ItemNode[]): void {
-    console.log('recalculate');
     arr.forEach((item: ItemNode, index: number) => {
       item.order = index + 1;
-      item.lastChild = index === arr.length - 1;
     });
   }
 }

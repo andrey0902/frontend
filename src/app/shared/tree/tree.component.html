@@ -10,7 +10,7 @@
                               'drop-center': dragNodeExpandOverArea === 'center' && dragNodeExpandOverNode === node
                              }"
                  draggable="true"
-                 (dragstart)="editLevel === 2 && handleDragStart($event, node);"
+                 (dragstart)="(!inputView || inputView.length < 2) && editLevel === 2 && handleDragStart($event, node);"
                  (dragover)="handleDragOver($event, node);"
                  (dragleave)="handleDragLeave()"
                  (dragend)="handleDragEnd($event)"
@@ -22,7 +22,7 @@
                     [checked]="checklistSelection.isSelected(node)"
                     [disabled]="editLevel === 0"
                     (change)="todoItemSelectionToggle(node);"
-      >{{node.text}} {{flatNodeMap.get(node).order}}  {{node.lastChild}}</mat-checkbox>
+      >{{node.text}}</mat-checkbox>
       <ng-container *ngTemplateOutlet="nodeMenu; context: {node: node}"></ng-container>
     </div>
     <div class="below"></div>
@@ -41,7 +41,7 @@
                              'drop-center': dragNodeExpandOverArea === 'center' && dragNodeExpandOverNode === node
                               }"
                  draggable="true"
-                 (dragstart)="editLevel === 2 && handleDragStart($event, node);"
+                 (dragstart)="(!inputView || inputView.length < 2) && editLevel === 2 && handleDragStart($event, node);"
                  (dragover)="handleDragOver($event, node);"
                  (dragleave)="handleDragLeave()"
                  (dragend)="handleDragEnd($event)"
@@ -61,7 +61,7 @@
                     [checked]="checklistSelection.isSelected(node)"
                     [disabled]="editLevel === 0"
                     [indeterminate]="descendantsPartiallySelected(node)"
-                    (change)="todoItemSelectionToggle(node)">{{node.text}} {{flatNodeMap.get(node).order}} {{node.lastChild}}</mat-checkbox>
+                    (change)="todoItemSelectionToggle(node)">{{node.text}}</mat-checkbox>
       <ng-container *ngTemplateOutlet="nodeMenu; context: {node: node}" class="buttons"></ng-container>
     </div>
   </mat-tree-node>
