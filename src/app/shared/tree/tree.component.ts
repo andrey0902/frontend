@@ -39,9 +39,9 @@ export class TreeComponent implements OnChanges, AfterViewInit {
   @Input() public editLevel: number;
 
   @Output() public updateItem = new EventEmitter<ItemNode[]>();
-  @Output() public deleteItem = new EventEmitter<{changes: ItemNode, tree: ItemNode[]}>();
+  @Output() public deleteItem = new EventEmitter<ItemNode>();
   @Output() public createItem = new EventEmitter<{changes: ItemNode, tree: ItemNode[]}>();
-  @Output() public editItem = new EventEmitter<ItemNode>();
+  @Output() public editItem = new EventEmitter<{changes: ItemNode, tree: ItemNode[]}>();
 
   @ViewChildren(CreateTreeItemComponent) inputView !: QueryList<CreateTreeItemComponent>;
 
@@ -202,7 +202,7 @@ export class TreeComponent implements OnChanges, AfterViewInit {
     }
 
     if (node.showAsInput === 'edit') {
-      this.editItem.emit(data);
+      this.editItem.emit({changes: data, tree: this.database.data});
     }
   }
 
@@ -225,7 +225,7 @@ export class TreeComponent implements OnChanges, AfterViewInit {
           this.database.deleteNode(data);
           this.database.update();
           this.updateItemCheck(this.database.getParentOfNode(data), false);
-          this.deleteItem.emit({changes: data, tree: this.database.data});
+          this.deleteItem.emit(data);
         }
       });
     }
@@ -247,7 +247,7 @@ export class TreeComponent implements OnChanges, AfterViewInit {
       if (request !== undefined && request !== node.comment && this.editLevel === 2) {
         const data = this.flatNodeMap.get(node);
         data.comment = (request || '').trim().length !== 0 ? request : undefined;
-        this.editItem.emit(data);
+        this.editItem.emit({changes: data, tree: this.database.data});
         this.database.update();
       }
     }));
@@ -346,7 +346,9 @@ export class TreeComponent implements OnChanges, AfterViewInit {
       this.database.update();
 
       if (oldOrder !== newItem.order || oldParentId !== newItem.parentId) {
-        this.editItem.emit(newItem);
+        this.editItem.emit({changes: newItem, tree: this.database.data});
+        console.log(this.database.data);
+        console.log(this.data);
         this.treeControl.expandDescendants(this.nestedNodeMap.get(newItem));
       }
 

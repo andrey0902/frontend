@@ -54,8 +54,7 @@ export class IterationPlanComponent implements OnInit, OnDestroy {
       {
         userId: this.iteration.user_id,
         iterationId: this.iteration.id,
-        task: new IterationTaskModel(data.changes),
-        tasks: TreeHelper.getArrayFromTree(data.tree)
+        task: new IterationTaskModel(data)
       }));
   }
 
@@ -67,14 +66,15 @@ export class IterationPlanComponent implements OnInit, OnDestroy {
         task: new IterationTaskModel(data.changes),
         tasks: TreeHelper.getArrayFromTree(data.tree)
       }));
-    this.getPlan(loadingPlanTask);
+//    this.getPlan(loadingPlanTask);
   }
 
-  public editTreeItem(task: ItemNode): void {
+  public editTreeItem(data): void {
     this.store.dispatch(new EditPlanTaskRequest({
       userId: this.iteration.user_id,
       iterationId: this.iteration.id,
-      task: new IterationTaskModel(task),
+      task: new IterationTaskModel(data.changes),
+      tasks: TreeHelper.getArrayFromTree(data.tree)
     }));
   }
 
@@ -88,7 +88,7 @@ export class IterationPlanComponent implements OnInit, OnDestroy {
       .pipe(
         filter((loading) => !loading),
         switchMap(() => this.store.select(plan)),
-        take(1)
+//        take(1)
       )
       .subscribe((data: IterationTaskModel[]) => this.plan = data);
   }
