@@ -46,7 +46,6 @@ export class MentorshipComponent implements OnInit, OnDestroy {
     this.getUserThatWantToBeMentor();
     this.store.dispatch(new LoadMentorRequests());
     this.getUserThatNeedMentor();
-
     this.store.dispatch(new LoadProtegeRequests());
   }
 
@@ -55,34 +54,26 @@ export class MentorshipComponent implements OnInit, OnDestroy {
   }
 
   private getUserThatNeedMentor() {
-    this.store.select(selectProtegeRequests)
-      .pipe(
-      takeWhile(() => this.componentActive),
-      map((data: any) => {
-        return this.mentorshipService.getObjectLength(data);
-      }))
-      .subscribe((result) => {
-        this.navLinks = this.mentorshipService.addBadge(this.navLinks, {
-          routName: typeRoutes.needMentor,
-          count: result
-        });
-      });
+    this.getUsers(selectProtegeRequests, typeRoutes.needMentor);
   }
 
   private getUserThatWantToBeMentor() {
-    this.store.select(selectMentorRequests)
-      .pipe(
-        takeWhile(() => this.componentActive),
-        map((data: any) => {
-          return this.mentorshipService.getObjectLength(data);
-        })
-      )
-      .subscribe((result) => {
-         this.navLinks = this.mentorshipService.addBadge(this.navLinks, {
-           routName: typeRoutes.wantToBeMentor,
-           count: result
-         });
-      });
+    this.getUsers(selectMentorRequests, typeRoutes.wantToBeMentor);
   }
 
+    private getUsers(selector, routName) {
+      this.store.select(selector)
+        .pipe(
+          takeWhile(() => this.componentActive),
+          map((data: any) => {
+            return this.mentorshipService.getObjectLength(data);
+          })
+        )
+        .subscribe((result) => {
+          this.navLinks = this.mentorshipService.addBadge(this.navLinks, {
+            routName,
+            count: result
+          });
+        });
+    }
 }
