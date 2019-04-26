@@ -5,7 +5,7 @@ import {NavTabsComponent} from './nav-tabs/nav-tabs.component';
 import {SafeHtmlPipe} from './pipes/safe-html.pipe';
 import {SvgIconComponent} from './svg-icon/svg-icon.component';
 import {UserComponent} from './user/user.component';
-import {MatButtonModule, MatIconModule, MatMenuModule, MatProgressBarModule, MatTabsModule, MatTooltipModule} from '@angular/material';
+import { MatBadgeModule, MatButtonModule, MatIconModule, MatMenuModule, MatProgressBarModule, MatTabsModule, MatTooltipModule } from '@angular/material';
 import {RouterModule} from '@angular/router';
 import {UserPermissionDirective} from './directives/user-permission.directive';
 import { AutoFocusDirective } from './directives/auto-focus.directive';
@@ -43,7 +43,8 @@ import {WrapLinkPipe} from './pipes/wrap-link.pipe';
     RouterModule,
     MatTabsModule,
     MatButtonModule,
-    MatProgressBarModule
+    MatProgressBarModule,
+    MatBadgeModule,
   ]
 })
 export class ComponentsModule {
