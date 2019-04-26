@@ -25,7 +25,7 @@ export class MentorshipComponent implements OnInit, OnDestroy {
     private store: Store<any>,
     private mentorshipService: MentorshipService
   ) { }
-  wantToBeMentor: null | number = null;
+
   isAdmin = false;
   componentActive = true;
   navLinks = [
