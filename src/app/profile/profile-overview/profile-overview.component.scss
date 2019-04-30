@@ -1,10 +1,12 @@
 @import "../../../scss/helpers";
 
-.section {
+.section-test-project {
+  margin-bottom: 40px;
 }
 
 .section-title {
   margin-right: 20px;
+  flex-shrink: 0;
 }
 
 .iteration-name {

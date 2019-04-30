@@ -3,10 +3,10 @@
   <h2 class="iteration-name">{{ currentIteration.goal }}</h2>
 </div>
 <lt-iteration-timeline [iteration]="currentIteration"></lt-iteration-timeline>
-<div class="section vertical-center" *ngIf="currentIteration.testProject">
+<div class="section vertical-center section-test-project" *ngIf="currentIteration.testProject">
   <h2 class="section-title">Тестовое задание:</h2>
-  <a class="iteration-name project-link" [href]="currentIteration.testProject"
-     target="_blank">{{ currentIteration.testProject }}</a>
+  <div class="iteration-name project-link" [innerHTML]="currentIteration.testProject | wrapLink"
+     target="_blank"></div>
 </div>
 <lt-iteration-progress></lt-iteration-progress>
 <div class="plan">
