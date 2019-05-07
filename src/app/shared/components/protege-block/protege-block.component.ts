@@ -14,7 +14,7 @@ export class ProtegeBlockComponent implements OnInit, OnChanges {
   @Input() mentorship: any;
   @Input() showAction = true;
   @Output() onChangeMentor = new EventEmitter<{mentorship: any, protege: User}>();
-  @Output() onDeleteProtege = new EventEmitter<{mentorship: any, protege: User}>();
+  @Output() onDeleteProtege = new EventEmitter<{mentor: any, protege: User}>();
 
   public listProtege: User[];
   constructor() { }
@@ -31,7 +31,7 @@ export class ProtegeBlockComponent implements OnInit, OnChanges {
   }
 
   public deleteProtege(protege): void {
-    this.onDeleteProtege.emit({mentorship: this.mentorship, protege});
+    this.onDeleteProtege.emit({mentor: this.mentorship, protege});
   }
 
   private handleUser(users: UsersMap): void {
