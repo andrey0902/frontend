@@ -35,21 +35,14 @@
       </div>
     </div>
     <div class="mentorship-table__cell">
-      <div class="protege activator-actions" *ngFor="let protege of objectValues(mentorship.attributes.proteges)">
-        <lt-user [currentUser]="currentUser$ | async" [user]="protege"></lt-user>
-        <div class="actions" *ngIf="isAdmin">
-          <lt-action-btn
-            [tooltip]="'Сменить ментора'"
-            [icon]="'transfer_within_a_station'"
-            (action)="changeMentor(mentorship, protege)">
-          </lt-action-btn>
-          <lt-action-btn
-            [tooltip]="'Убрать протеже'"
-            [icon]="'delete'"
-            (action)="deleteProtege(mentorship, protege)">
-          </lt-action-btn>
-        </div>
-      </div>
+      <lt-protege-block
+                        [protege]="mentorship.attributes.proteges"
+                        [isAdmin]="isAdmin"
+                        [mentorship]="mentorship"
+                        [currentUser]="currentUser$ | async"
+                        (onChangeMentor)="changeMentor($event)"
+                        (onDeleteProtege)="deleteProtege($event)"
+      > </lt-protege-block>
     </div>
   </div>
 </div>

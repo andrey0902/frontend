@@ -1,0 +1,36 @@
+@import "../../../../scss/variables";
+
+.protege {
+  display: flex;
+
+  &:not(:last-child) {
+    margin-bottom: 15px;
+  }
+}
+
+.activator-actions:hover .actions {
+  opacity: 1;
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  margin-left: 15px;
+  opacity: 0;
+  transition: .3s opacity;
+}
+
+.action-btn {
+  margin: 0 5px;
+}
+
+.mat-primary {
+  background-color: $primary-color;
+}
+
+lt-user {
+  cursor: pointer;
+  outline: none;
+}
+
+

@@ -55,12 +55,19 @@
             <div class="relations-block" *ngIf="objectValues(user.attributes.proteges).length">
               <div class="relation-title">Протеже</div>
               <div class="user-container">
-                <lt-user
-                  *ngFor="let protege of objectValues(user.attributes.proteges)"
-                  [user]="protege"
+                <!--<lt-user-->
+                  <!--*ngFor="let protege of objectValues(user.attributes.proteges)"-->
+                  <!--[user]="protege"-->
+                  <!--[currentUser]="currentUser$ | async"-->
+                <!--&gt;-->
+                <!--</lt-user>-->
+                <lt-protege-block
+                  [protege]="user.attributes.proteges"
+                  [isAdmin]="isAdmin"
+                  [showAction]="false"
                   [currentUser]="currentUser$ | async"
-                >
-                </lt-user>
+                > </lt-protege-block>
+
               </div>
             </div>
           </div>

@@ -64,7 +64,7 @@ export class MentorProtegeComponent implements OnInit, OnDestroy {
     });
   }
 
-  changeMentor(mentorship, protege) {
+  changeMentor({mentorship, protege}) {
     this.dialogService.openMentorshipManagementDialog({
       mode: 'changeMentor',
       mentor: mentorship,
@@ -89,7 +89,7 @@ export class MentorProtegeComponent implements OnInit, OnDestroy {
     });
   }
 
-  deleteProtege(mentor, protege) {
+  deleteProtege({mentor, protege}) {
     const htmlContent = `<p>Вы уверены, что <b>${protege.attributes.fullName}</b>
       больше не протеже для <b>${mentor.attributes.fullName}</b> ?</p>`;
 

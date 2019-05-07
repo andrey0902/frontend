@@ -6,6 +6,7 @@ import { MentorProtegeComponent } from './mentor-protege.component';
 import {CoreModule} from '../../core/core.module';
 import {RouterModule} from '@angular/router';
 import {SharedModule} from '../../shared/shared.module';
+import { ProtegeBlockModule } from '../../shared/components/protege-block/protege-block.module';
 
 @NgModule({
   declarations: [
@@ -16,7 +17,8 @@ import {SharedModule} from '../../shared/shared.module';
     MentorProtegeRoutingModule,
     SharedModule,
     CoreModule,
-    RouterModule
+    RouterModule,
+    ProtegeBlockModule,
   ]
 })
 export class MentorProtegeModule { }

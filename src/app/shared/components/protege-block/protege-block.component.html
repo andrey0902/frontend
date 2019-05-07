@@ -1,0 +1,17 @@
+<ng-container *ngIf="listProtege">
+  <div class="protege activator-actions" *ngFor="let protege of listProtege">
+    <lt-user [currentUser]="currentUser" [user]="protege"></lt-user>
+    <div class="actions" *ngIf="isAdmin && showAction">
+      <lt-action-btn
+        [tooltip]="'Сменить ментора'"
+        [icon]="'transfer_within_a_station'"
+        (action)="changeMentor(protege)">
+      </lt-action-btn>
+      <lt-action-btn
+        [tooltip]="'Убрать протеже'"
+        [icon]="'delete'"
+        (action)="deleteProtege(protege)">
+      </lt-action-btn>
+    </div>
+  </div>
+</ng-container>

@@ -16,6 +16,7 @@ import {IterationProgressComponent} from './iteration-progress/iteration-progres
 import {CreateIterationGuard} from '../core/guards/create-iteration.guard';
 import {LazyLoadImageModule} from 'ng-lazyload-image';
 import { DashboardService } from './shared/services/dashboard.service';
+import { ProtegeBlockModule } from '../shared/components/protege-block/protege-block.module';
 
 @NgModule({
   declarations: [
@@ -34,7 +35,8 @@ import { DashboardService } from './shared/services/dashboard.service';
     CoreModule,
     ReactiveFormsModule,
     SharedModule,
-    LazyLoadImageModule
+    LazyLoadImageModule,
+    ProtegeBlockModule,
   ],
   exports: [
     IterationTimelineComponent,
