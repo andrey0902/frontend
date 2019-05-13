@@ -68,27 +68,40 @@ mat-tree-node {
   }
 
   .buttons {
-    display: none;
-  }
-
-  &:hover .buttons {
-    width: 80px;
     display: flex;
     align-items: center;
-    height: 0;
     position: relative;
+    height: 0;
     top: 10px;
     left: 10px;
 
     button {
       font-size: 12px;
       width: 27px;
+
+      &:not(.activeComment) {
+        display: none;
+      }
+
+      mat-icon {
+        font-size: 20px;
+        opacity: 0.7;
+      }
+    }
+    .comment-button {
+      margin-right: 10px;
     }
 
-    mat-icon {
-      font-size: 20px;
-      opacity: 0.7;
+    .comment-button.activeComment {
+      mat-icon {
+        color: $accent-color;
+        opacity: 1 !important;
+      }
     }
+  }
+
+  &:hover .buttons button{
+    display: unset;
   }
 }
 
@@ -119,12 +132,6 @@ mat-tree-node {
     top: 3px;
   }
 }
-
-.activeComment {
-  color: $accent-color;
-  opacity: 1 !important;
-}
-
 
 
 
