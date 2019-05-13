@@ -61,7 +61,7 @@ export class SummaryProtegeComponent implements OnInit {
   }
 
   getTasks(userId, iterationId) {
-    return this.planService.getPlan(+this.user.id, iterationId)
+    return this.planService.getPlan(this.user.id, iterationId)
       .pipe(map(data => {
         const tasks: IterationTaskModel[] = data.map((task) => new IterationTaskModelByConfig(task));
         return  tasks;

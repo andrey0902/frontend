@@ -3,7 +3,7 @@ import {IterationTaskModel} from '../../../personal-plan/shared/models/iteration
 
 export interface IPlanPayload {
   iterationId?: number;
-  userId?: number;
+  userId?: string;
   taskId?: number;
   tasksId?: number[];
   tasks?: IterationTaskModel[];

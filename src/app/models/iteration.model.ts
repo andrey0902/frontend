@@ -2,7 +2,7 @@ import {InfoPlanModel} from '../personal-plan/shared/models/info-plan.model';
 
 export class Iteration {
   id: number;
-  user_id: number;
+  user_id: string;
   goal: string;
   testProject: string;
   startDate: Date;

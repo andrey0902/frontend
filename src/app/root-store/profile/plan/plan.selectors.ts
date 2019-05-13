@@ -14,19 +14,20 @@ export const plan = createSelector(
 export const loadingPlan = createSelector(
   PlanFeatureSelector,
   (state: ProfileState) => {
-    return {
-      loading: state.plan.loading,
-      plan : Object.values(state.plan.planDictionary || {}).map((task: IterationTaskModel) => new IterationTaskModel(task))
-    };
+    return state.plan.loading;
   }
 );
 
 export const errorPlan = createSelector(
   PlanFeatureSelector,
   (state: ProfileState) => {
-    return {
-      error: state.plan.error ? state.plan.error.message : '',
-      plan : Object.values(state.plan.planDictionary || {}).map((task: IterationTaskModel) => new IterationTaskModel(task))
-    };
+    return state.plan.error;
+  }
+);
+
+export const loadingPlanTask = createSelector(
+  PlanFeatureSelector,
+  (state: ProfileState) => {
+    return state.plan.loadingNewTask;
   }
 );
