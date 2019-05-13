@@ -5,20 +5,20 @@
 
 <mat-tree [dataSource]="dataSource" [treeControl]="treeControl" class="tree">
   <mat-tree-node *matTreeNodeDef="let node"
-                 [ngClass]="{'drop-above': dragNodeExpandOverArea === 'above' && dragNodeExpandOverNode === node,
+                 [ngClass]="{ 'drop-above': dragNodeExpandOverArea === 'above' && dragNodeExpandOverNode === node,
                               'drop-below': dragNodeExpandOverArea === 'below' && dragNodeExpandOverNode === node,
                               'drop-center': dragNodeExpandOverArea === 'center' && dragNodeExpandOverNode === node
                              }"
                  draggable="true"
-                 (dragstart)="editLevel === 2 && handleDragStart($event, node);"
+                 (dragstart)="(!inputView || inputView.length < 2) && editLevel === 2 && handleDragStart($event, node);"
                  (dragover)="handleDragOver($event, node);"
                  (dragleave)="handleDragLeave()"
                  (dragend)="handleDragEnd($event)"
                  (drop)="handleDrop($event, node);"
-                 matTreeNodePadding>
+                 [style.margin-left.px]="40*getLevel(node)">
     <div class="above"></div>
     <div class="checkbox-container">
-      <mat-checkbox class="padding checkbox"
+      <mat-checkbox class="checkbox padding"
                     [checked]="checklistSelection.isSelected(node)"
                     [disabled]="editLevel === 0"
                     (change)="todoItemSelectionToggle(node);"
@@ -28,7 +28,7 @@
     <div class="below"></div>
   </mat-tree-node>
 
-  <mat-tree-node *matTreeNodeDef="let node; when: showAsInput" matTreeNodePadding>
+  <mat-tree-node *matTreeNodeDef="let node; when: showAsInput" [style.margin-left.px]="40*getLevel(node)">
     <lt-create-tree-item
       [value]="node.text"
       (createItem)="addItem($event, node)"
@@ -38,15 +38,15 @@
 
   <mat-tree-node *matTreeNodeDef="let node; when: hasChild"
                  [ngClass]="{'drop-above': dragNodeExpandOverArea === 'above' && dragNodeExpandOverNode === node,
-                              'drop-center': dragNodeExpandOverArea === 'center' && dragNodeExpandOverNode === node
+                             'drop-center': dragNodeExpandOverArea === 'center' && dragNodeExpandOverNode === node
                               }"
                  draggable="true"
-                 (dragstart)="editLevel === 2 && handleDragStart($event, node);"
+                 (dragstart)="(!inputView || inputView.length < 2) && editLevel === 2 && handleDragStart($event, node);"
                  (dragover)="handleDragOver($event, node);"
                  (dragleave)="handleDragLeave()"
                  (dragend)="handleDragEnd($event)"
                  (drop)="handleDrop($event, node);"
-                 matTreeNodePadding>
+                 [style.margin-left.px]="40*getLevel(node)">
     <div class="above"></div>
     <div class="checkbox-container">
       <button class="btn-children"

@@ -111,4 +111,19 @@ export class TreeHelper {
     }
     return progress;
   }
+
+  public static getArrayFromTree(tasks: ItemNode[]): IterationTaskModel[] {
+    const tasksTree: IterationTaskModel[] = [];
+    tasks.forEach((task: ItemNode) => {
+      const itTask = new IterationTaskModel(task);
+      if (task.children.length > 0) {
+        tasksTree.push(...this.getArrayFromTree(task.children));
+        itTask.children = [];
+      }
+      if (itTask.id) {
+        tasksTree.push(itTask);
+      }
+    });
+    return tasksTree;
+  }
 }
