@@ -41,7 +41,7 @@ export class CreateIterationComponent implements OnInit {
         startDate: ['', [Validators.required, LtValidators.checkDataStartIteration]],
         endDate: ['', [Validators.required]]
       }, { validator: LtValidators.checkEndDateIteration }),
-      goal: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(70)]],
+      goal: ['', [Validators.required, LtValidators.checkSpace, Validators.minLength(3), Validators.maxLength(70)]],
       projectLink: ['', [LtValidators.checkSpace, Validators.minLength(3), Validators.maxLength(700)] ],
       meetType: ['', Validators.required],
       weekDay: ['', Validators.required]
