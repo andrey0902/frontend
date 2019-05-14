@@ -40,8 +40,8 @@ export class TreeComponent implements OnChanges, AfterViewInit {
 
   @Output() public updateItem = new EventEmitter<ItemNode[]>();
   @Output() public deleteItem = new EventEmitter<ItemNode>();
-  @Output() public createItem = new EventEmitter<ItemNode>();
-  @Output() public editItem = new EventEmitter<ItemNode>();
+  @Output() public createItem = new EventEmitter<{changes: ItemNode, tree: ItemNode[]}>();
+  @Output() public editItem = new EventEmitter<{changes: ItemNode, tree: ItemNode[]}>();
 
   @ViewChildren(CreateTreeItemComponent) inputView !: QueryList<CreateTreeItemComponent>;
 
@@ -126,7 +126,7 @@ export class TreeComponent implements OnChanges, AfterViewInit {
     flatNode.text = node.text;
     flatNode.showAsInput = node.showAsInput;
     flatNode.level = level;
-    flatNode.comment = node.comment;
+    flatNode.description = node.description;
     flatNode.expandable = node.children.length > 0;
 
     if (node.is_completed) {
@@ -167,7 +167,7 @@ export class TreeComponent implements OnChanges, AfterViewInit {
       data.text = nodeText;
       this.database.insertItem(null, data, true);
       this.database.update();
-      this.createItem.emit(data);
+      this.createItem.emit({changes: data, tree: this.database.data});
     }
   }
 
@@ -196,11 +196,11 @@ export class TreeComponent implements OnChanges, AfterViewInit {
 
     if (node.showAsInput === 'add') {
       this.updateItemCheck(data);
-      this.createItem.emit(data);
+      this.createItem.emit({changes: data, tree: this.database.data});
     }
 
     if (node.showAsInput === 'edit') {
-      this.editItem.emit(data);
+      this.editItem.emit({changes: data, tree: this.database.data});
     }
   }
 
@@ -240,12 +240,11 @@ export class TreeComponent implements OnChanges, AfterViewInit {
   }
 
   addComment(node: ItemFlatNode) {
-    this.dialogService.openCommentDialog(node.comment, this.editLevel !== 2, (request => {
-      console.log(request);
-      if (request !== undefined && request !== node.comment && this.editLevel === 2) {
+    this.dialogService.openCommentDialog(node.description, this.editLevel !== 2, (request => {
+      if (request !== undefined && request !== node.description && this.editLevel === 2) {
         const data = this.flatNodeMap.get(node);
-        data.comment = (request || '').trim().length !== 0 ? request : undefined;
-        this.editItem.emit(data);
+        data.description = (request || '').trim().length !== 0 ? request : undefined;
+        this.editItem.emit({changes: data, tree: this.database.data});
         this.database.update();
       }
     }));
@@ -336,6 +335,7 @@ export class TreeComponent implements OnChanges, AfterViewInit {
   handleDrop(event, flatNode: ItemFlatNode) {
     event.preventDefault();
     const dragNode = this.flatNodeMap.get(this.dragNode);
+    const dragNodeParent = this.database.getParentOfNode(dragNode);
     const {order: oldOrder, parentId: oldParentId} = dragNode;
     const newItem: ItemNode = flatNode !== this.dragNode ? this.getNewDropItem(flatNode, dragNode) : null;
 
@@ -343,11 +343,12 @@ export class TreeComponent implements OnChanges, AfterViewInit {
       this.database.update();
 
       if (oldOrder !== newItem.order || oldParentId !== newItem.parentId) {
-        this.editItem.emit(newItem);
+        this.editItem.emit({changes: newItem, tree: this.database.data});
         this.treeControl.expandDescendants(this.nestedNodeMap.get(newItem));
       }
 
-      this.updateItemCheck(this.database.getParentOfNode(dragNode), false);
+
+      this.updateItemCheck(dragNodeParent, false);
       this.updateItemCheck(this.database.getParentOfNode(newItem), false);
     }
 
@@ -355,8 +356,6 @@ export class TreeComponent implements OnChanges, AfterViewInit {
     this.dragNodeExpandOverNode = null;
     this.dragNodeExpandOverTime = 0;
   }
-
-  //
 
   getChangedCheckedItems(startNode: ItemNode, checkChildren: boolean = true): ItemNode[] {
     const changedItems: ItemNode[] = [];

@@ -1,26 +1,18 @@
 @import "../../../scss/helpers";
 
-.section-test-project {
-  margin-bottom: 40px;
+.section {
+  display: flex;
+  flex-direction: column;
 }
 
 .section-title {
-  margin-right: 20px;
+  margin: 0 20px 0 0;
   flex-shrink: 0;
 }
 
 .iteration-name {
   color: rgba(0, 0, 0, .5);
-}
-
-.project-link {
-  outline: none;
-  text-align: unset;
-  text-decoration: unset;
-  cursor: pointer;
-  font-size: 1.5em;
-  font-family: "Google Sans", Roboto, Arial, sans-serif;
-  font-weight: 400;
+  font-size: 16px;
 }
 
 .relations-block {

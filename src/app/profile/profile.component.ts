@@ -35,7 +35,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
   USERRIGHTS = USERRULES;
   user: User;
   userId: string;
-  iteration: Iteration;
+  iteration: Iteration = null;
   userRights: Rights = this.USERRIGHTS.READ;
   isAdmin = false;
   objectValues = Object.values;
@@ -67,7 +67,8 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
     // get iteration
     this.currentIteration$.pipe(
-      takeWhile(() => this.componentActive)
+      takeWhile(() => this.componentActive),
+      filter( (iteration: Iteration) => !iteration || iteration.user_id === this.userId)
     )
       .subscribe((iteration) => this.iteration = iteration);
   }

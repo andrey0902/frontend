@@ -17,7 +17,7 @@ export class WrapLinkPipe implements PipeTransform {
 
     content = content.replace(reg, (s) => {
       const str = (/:\/\//.exec(s) === null ? 'http://' + s : s );
-      return '<a class=\"blue-text text-darken-1\" target="_blank" href=\'' + str + '\'>' + str + '</a>';
+      return '<a class=\"link text-darken-1\" target="_blank" href=\'' + str + '\'>' + str + '</a>';
     });
 
     return content;
