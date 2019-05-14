@@ -41,9 +41,9 @@ export class CreateIterationComponent implements OnInit, OnDestroy {
       time: this.fb.group({
         startDate: ['', [Validators.required, LtValidators.checkDataStartIteration]],
         endDate: ['', [Validators.required]]
-      }, {validator: LtValidators.checkEndDateIteration}),
-      goal: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(70)]],
-      projectLink: ['', [Validators.pattern(RegExpService.url)]],
+      }, { validator: LtValidators.checkEndDateIteration }),
+      goal: ['', [Validators.required, LtValidators.checkSpace, Validators.minLength(3), Validators.maxLength(70)]],
+      projectLink: ['', [LtValidators.checkSpace, Validators.minLength(3), Validators.maxLength(700)] ],
       meetType: ['', Validators.required],
       weekDay: ['', Validators.required]
     });
