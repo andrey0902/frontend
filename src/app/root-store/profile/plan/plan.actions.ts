@@ -1,9 +1,9 @@
 import {Action} from '@ngrx/store';
-import {IterationTaskModel} from '../../../personal-plan/shared/models/iteration-plan.model';
+import {IterationTaskModel} from '../../../models/iteration-plan.model';
 
 export interface IPlanPayload {
   iterationId?: number;
-  userId?: string;
+  userId?: number;
   taskId?: number;
   tasksId?: number[];
   tasks?: IterationTaskModel[];

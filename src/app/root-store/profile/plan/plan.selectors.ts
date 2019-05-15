@@ -1,6 +1,6 @@
 import {createFeatureSelector, createSelector} from '@ngrx/store';
 import {ProfileState} from '../profile.reducer';
-import {IterationTaskModel} from '../../../personal-plan/shared/models/iteration-plan.model';
+import {IterationTaskModel} from '../../../models/iteration-plan.model';
 
 export const PlanFeatureSelector = createFeatureSelector('profile');
 

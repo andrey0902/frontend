@@ -12,23 +12,23 @@ export class IterationPlanService {
   constructor(private http: HttpClient) {
   }
 
-  public getPlan( userId: string, iterationId: number): Observable<any> {
+  public getPlan( userId: number, iterationId: number): Observable<any> {
     return this.http.get(`${ApiConfig.protege}/${userId}/iterations/${iterationId}/plans/tasks`);
   }
 
-  public createPlanTask(userId: string, iterationId: number, request): Observable<any> {
+  public createPlanTask(userId: number, iterationId: number, request): Observable<any> {
     return this.http.post(`${ApiConfig.protege}/${userId}/iterations/${iterationId}/plans/tasks`, request);
   }
 
-  public editPlanTask(userId: string, iterationId: number, taskId: number, request): Observable<any> {
+  public editPlanTask(userId: number, iterationId: number, taskId: number, request): Observable<any> {
     return this.http.patch(`${ApiConfig.protege}/${userId}/iterations/${iterationId}/plans/tasks/${taskId}`, request);
   }
 
-  public deletePlanTask(userId: string, iterationId: number, taskId: number): Observable<any> {
+  public deletePlanTask(userId: number, iterationId: number, taskId: number): Observable<any> {
     return this.http.delete(`${ApiConfig.protege}/${userId}/iterations/${iterationId}/plans/tasks/${taskId}`);
   }
 
-  public updatePlanTasks(userId: string, iterationId: number, request): Observable<any> {
+  public updatePlanTasks(userId: number, iterationId: number, request): Observable<any> {
     return this.http.patch(`${ApiConfig.protege}/${userId}/iterations/${iterationId}/plans/tasks/status`, request);
   }
 }

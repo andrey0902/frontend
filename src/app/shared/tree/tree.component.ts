@@ -16,14 +16,12 @@ import {
 import {FlatTreeControl} from '@angular/cdk/tree';
 import {MatTreeFlatDataSource, MatTreeFlattener} from '@angular/material';
 import {SelectionModel} from '@angular/cdk/collections';
-import {InsertionType, TreeDatabaseService} from './services/tree-database.service';
+import {TreeDatabaseService} from './services/tree-database.service';
 import {ItemFlatNode, ItemNode} from './models/item-node.model';
 import {Observable, of} from 'rxjs';
 import {DialogService} from '../dialog/services/dialog.service';
-import {TreeHelper} from '../../personal-plan/shared/models/iteration-plan.model';
 import {CreateTreeItemComponent} from './components/create-tree-item/create-tree-item.component';
-import {DeleteIterationRequest} from '../../root-store/profile/iteration/iteration.actions';
-import {LtValidators} from '../helpers/validator-methods.static';
+import {TreeHelper} from '../../helpers/tree.helper';
 
 @Component({
   selector: 'lt-tree',

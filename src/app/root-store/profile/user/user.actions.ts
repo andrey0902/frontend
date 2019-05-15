@@ -2,7 +2,7 @@ import {Action} from '@ngrx/store';
 import {User} from '../../../models/user.model';
 
 export interface IUserPayload {
-  userId?: string;
+  userId?: number;
   user?: User;
   error?: Error;
 }

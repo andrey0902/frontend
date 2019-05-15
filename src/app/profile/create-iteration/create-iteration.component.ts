@@ -9,7 +9,7 @@ import {selectIteration} from '../../root-store/profile/iteration/iteration.sele
 import {filter, take, takeWhile} from 'rxjs/operators';
 import {Iteration} from '../../models/iteration.model';
 import {plan} from '../../root-store/profile/plan/plan.selectors';
-import {IterationTaskModel} from '../../personal-plan/shared/models/iteration-plan.model';
+import {IterationTaskModel} from '../../models/iteration-plan.model';
 import {RegExpService} from '../../shared/helpers/reg-exp.service';
 
 @Component({
@@ -25,7 +25,7 @@ export class CreateIterationComponent implements OnInit, OnDestroy {
   currentIteration: Iteration;
   plan: IterationTaskModel[] = [];
 
-  private _protegeId: string;
+  private _protegeId: number;
   public componentActive = true;
 
   constructor(
@@ -48,7 +48,7 @@ export class CreateIterationComponent implements OnInit, OnDestroy {
       weekDay: ['', Validators.required]
     });
 
-    this._protegeId = this.route.snapshot.paramMap.get('id');
+    this._protegeId = +this.route.snapshot.paramMap.get('id');
   }
 
   ngOnDestroy(): void {

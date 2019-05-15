@@ -63,56 +63,56 @@ export class AddMentorSuccess implements Action {
 export class AddProtege implements Action {
   readonly type = MentorsActionTypes.ADD_PROTEGE;
 
-  constructor(public payload: { protegeId: string, mentorId: string }) {
+  constructor(public payload: { protegeId: number, mentorId: number }) {
   }
 }
 
 export class AddProtegeSuccess implements Action {
   readonly type = MentorsActionTypes.ADD_PROTEGE_SUCCESS;
 
-  constructor(public payload: { protege: User, mentorId: string }) {
+  constructor(public payload: { protege: User, mentorId: number }) {
   }
 }
 
 export class DeleteMentor implements Action {
   readonly type = MentorsActionTypes.DELETE_MENTOR;
 
-  constructor(public payload: string | number) {
+  constructor(public payload: number) {
   }
 }
 
 export class DeleteMentorSuccess implements Action {
   readonly type = MentorsActionTypes.DELETE_MENTOR_SUCCESS;
 
-  constructor(public payload: string | number) {
+  constructor(public payload: number) {
   }
 }
 
 export class ChangeMentor implements Action {
   readonly type = MentorsActionTypes.CHANGE_MENTOR;
 
-  constructor(public payload: { protegeId: string, mentorId: string , currentMentorId: string }) {
+  constructor(public payload: { protegeId: number, mentorId: number , currentMentorId: number }) {
   }
 }
 
 export class ChangeMentorSuccess implements Action {
   readonly type = MentorsActionTypes.CHANGE_MENTOR_SUCCESS;
 
-  constructor(public payload: { protege: User, newMentorId: string , currentMentorId: string }) {
+  constructor(public payload: { protege: User, newMentorId: number , currentMentorId: number }) {
   }
 }
 
 export class DeleteProtege implements Action {
   readonly type = MentorsActionTypes.DELETE_PROTEGE;
 
-  constructor(public payload: { protegeId: string, mentorId: string , currentMentorId: string }) {
+  constructor(public payload: { protegeId: number, mentorId: number, currentMentorId: number }) {
   }
 }
 
 export class DeleteProtegeSuccess implements Action {
   readonly type = MentorsActionTypes.DELETE_PROTEGE_SUCCESS;
 
-  constructor(public payload: { protegeId: string, currentMentorId: string }) {
+  constructor(public payload: { protegeId: number, currentMentorId: number }) {
   }
 }
 

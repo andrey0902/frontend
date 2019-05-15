@@ -18,7 +18,7 @@ export class SummaryItemComponent implements OnInit {
   }
 
 
-  getIteration(protegeId: string) {
+  getIteration(protegeId: number) {
     this.fetchIteration.emit(new MentorProtegeId({
       protegeId,
       mentorId: this.userMentor.id

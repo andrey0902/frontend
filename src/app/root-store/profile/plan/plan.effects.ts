@@ -14,7 +14,8 @@ import {
   PlanActionTypes,
   PlanActionUnion, UpdatePlanTasksFail, UpdatePlanTasksSuccess
 } from './plan.actions';
-import {IterationTaskModel, IterationTaskModelByConfig, TreeHelper} from '../../../personal-plan/shared/models/iteration-plan.model';
+import {IterationTaskModel, IterationTaskModelByConfig} from '../../../models/iteration-plan.model';
+import {TreeHelper} from '../../../helpers/tree.helper';
 
 @Injectable()
 export class PlanEffectsService {

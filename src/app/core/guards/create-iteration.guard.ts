@@ -28,7 +28,7 @@ export class CreateIterationGuard implements CanActivate {
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
 
-    const selectedUserId = route.paramMap.get('id');
+    const selectedUserId: number = +route.paramMap.get('id');
 
     return combineLatest(
       this.currentUser$,

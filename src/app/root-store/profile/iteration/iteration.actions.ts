@@ -2,7 +2,7 @@ import {Action} from '@ngrx/store';
 
 export interface IIterationPayload {
   iteration?: any;
-  userId?: string;
+  userId?: number;
   reason?: string;
   error?: Error;
 }

@@ -10,7 +10,7 @@ import {
   DeleteProtege
 } from '../../root-store/mentors/mentors.actions';
 import {selectMentors} from '../../root-store/mentors/mentors.selectors';
-import {User, UsersMap} from '../../models/user.model';
+import {User} from '../../models/user.model';
 import {Observable} from 'rxjs';
 import {selectCurrentUser} from '../../root-store/currentUser/current-user.selectors';
 import {filter, takeWhile} from 'rxjs/operators';
@@ -95,7 +95,7 @@ export class MentorProtegeComponent implements OnInit, OnDestroy {
 
     this.dialogService.openConfirmDialog({htmlContent}, (result) => {
       if (result) {
-        this.store.dispatch(new DeleteProtege({protegeId: protege.id, mentorId: '', currentMentorId: mentor.id}));
+        this.store.dispatch(new DeleteProtege({protegeId: protege.id, mentorId: null, currentMentorId: mentor.id}));
       }
     });
   }

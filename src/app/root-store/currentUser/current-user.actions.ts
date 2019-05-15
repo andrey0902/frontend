@@ -32,7 +32,7 @@ export class LoadUserFail implements Action {
 export class WantToBeMentorRequest implements Action {
   readonly type = CurrentUserActionTypes.WANTTOBE_MENTOR_REQUEST;
 
-  constructor(public payload: {userId: string, reason: string}) {}
+  constructor(public payload: {userId: number, reason: string}) {}
 }
 
 export class WantToBeMentorSuccess implements Action {
@@ -48,7 +48,7 @@ export class WantToBeMentorFail implements Action {
 export class NeedMentorRequest implements Action {
   readonly type = CurrentUserActionTypes.NEED_MENTOR_REQUEST;
 
-  constructor(public payload: {userId: string, reason: string}) {}
+  constructor(public payload: {userId: number, reason: string}) {}
 }
 
 export class NeedMentorSuccess implements Action {
