@@ -10,7 +10,7 @@ export class MentorRequestsHelper {
     return requestList;
   }
 
-  public static deleteRequest(requestList: MentorRequestMap, id: string) {
+  public static deleteRequest(requestList: MentorRequestMap, id: number) {
     delete requestList[id];
     return requestList;
   }

@@ -7,7 +7,7 @@ import {
   transition,
 } from '@angular/animations';
 import { InfoPlanModel } from '../../personal-plan/shared/models/info-plan.model';
-import { IterationTaskModel } from '../../personal-plan/shared/models/iteration-plan.model';
+import { IterationTaskModel } from '../../models/iteration-plan.model';
 @Component({
   selector: 'lt-protege-tasks',
   templateUrl: './protege-tasks.component.html',

@@ -37,7 +37,7 @@ export class UserService {
   }
 
   bindProtegeToMentor({ protegeId, mentorId }) {
-    const params = { mentor: mentorId };
+    const params = { mentor: mentorId || '' };
     return this.http.patch(`${ApiConfig.protege}/${protegeId}`, {}, { params });
   }
 

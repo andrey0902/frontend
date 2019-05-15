@@ -1,5 +1,5 @@
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
-import {IterationTaskModel, TreeHelper} from '../../personal-plan/shared/models/iteration-plan.model';
+import {IterationTaskModel} from '../../models/iteration-plan.model';
 import {ItemNode} from '../../shared/tree/models/item-node.model';
 import {InfoPlanModel} from '../../personal-plan/shared/models/info-plan.model';
 import {Iteration} from '../../models/iteration.model';
@@ -13,8 +13,9 @@ import {
 } from '../../root-store/profile/plan/plan.actions';
 import {errorPlan, loadingPlan, loadingPlanTask, plan} from '../../root-store/profile/plan/plan.selectors';
 import {Rights} from '../profile.component';
-import {map, switchMap, take, takeWhile} from 'rxjs/operators';
+import {switchMap, take} from 'rxjs/operators';
 import {filter} from 'rxjs/internal/operators/filter';
+import {TreeHelper} from '../../helpers/tree.helper';
 
 @Component({
   selector: 'lt-iteration-plan',

@@ -1,4 +1,4 @@
-import { Attributes, User, UsersMap } from '../../models/user.model';
+import {UsersMap } from '../../models/user.model';
 import {MentorsActionTypes, MentorsActionUnion} from './mentors.actions';
 import {MentorsHelper} from './mentors.helper';
 

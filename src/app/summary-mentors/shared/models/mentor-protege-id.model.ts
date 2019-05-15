@@ -1,6 +1,6 @@
 export class MentorProtegeId {
-  mentorId: string;
-  protegeId: string;
+  mentorId: number;
+  protegeId: number;
 
   constructor(data) {
     this.mentorId = data.mentorId;

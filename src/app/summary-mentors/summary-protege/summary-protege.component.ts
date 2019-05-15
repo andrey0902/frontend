@@ -3,10 +3,10 @@ import { User } from '../../models/user.model';
 import { IterationService } from '../../core/services/iteration.service';
 import { map, switchMap, tap } from 'rxjs/operators';
 import { Iteration } from '../../models/iteration.model';
-import { IterationTaskModel, IterationTaskModelByConfig, TreeHelper } from '../../personal-plan/shared/models/iteration-plan.model';
-
+import { IterationTaskModel, IterationTaskModelByConfig} from '../../models/iteration-plan.model';
 import { IterationPlanService } from '../../core/services/iteration-plan.service';
 import {ItemNode} from '../../shared/tree/models/item-node.model';
+import {TreeHelper} from '../../helpers/tree.helper';
 
 @Component({
   selector: 'lt-summary-protege',

@@ -12,7 +12,7 @@ export class IterationService {
   constructor(private http: HttpClient) {
   }
 
-  getCurrentIteration(protegeId) {
+  getCurrentIteration(protegeId: number) {
     return this.http.get(`${ApiConfig.protege}/${protegeId}/iterations/current`, {
       params: {
         include: 'meets'
@@ -20,7 +20,7 @@ export class IterationService {
     });
   }
 
-  createIteration(protegeId, iteration) {
+  createIteration(protegeId: number, iteration) {
     return this.http.post<Iteration>(`${ApiConfig.protege}/${protegeId}/iterations`, iteration, {
       params: {
         include: 'meets'
@@ -28,7 +28,7 @@ export class IterationService {
     });
   }
 
-  deleteIteration(protegeId: string, iterationId: number, request): Observable<any> {
+  deleteIteration(protegeId: number, iterationId: number, request): Observable<any> {
     return this.http.delete(`${ApiConfig.protege}/${protegeId}/iterations/${iterationId}`, {params: request});
   }
 
