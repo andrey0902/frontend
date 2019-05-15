@@ -24,21 +24,21 @@ export class LoadProtegeRequestsSuccess implements Action {
 export class AssignMentor implements Action {
   readonly type = ProtegeRequestsActionTypes.ASSIGN_MENTOR;
 
-  constructor(public payload: { protegeId: string, mentorId: string, requestId: string }) {
+  constructor(public payload: { protegeId: number, mentorId: number, requestId: number }) {
   }
 }
 
 export class DeleteProtegeRequest implements Action {
   readonly type = ProtegeRequestsActionTypes.DELETE_PROTEGE_REQUEST;
 
-  constructor(public payload: string) {
+  constructor(public payload: number) {
   }
 }
 
 export class ClearProtegeRequest implements Action {
   readonly type = ProtegeRequestsActionTypes.CLEAR_PROTEGE_REQUEST;
 
-  constructor(public payload: string) {
+  constructor(public payload: number) {
   }
 }
 

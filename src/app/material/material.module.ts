@@ -1,8 +1,9 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
-  MatAutocompleteModule,
-  MatButtonModule, MatCardModule,
+  MatAutocompleteModule, MatBadgeModule,
+  MatButtonModule,
+  MatCardModule,
   MatDatepickerModule,
   MatDialogModule,
   MatFormFieldModule,
@@ -32,6 +33,7 @@ import {
     MatSelectModule,
     MatStepperModule,
     MatCardModule,
+    MatBadgeModule,
   ],
   exports: [
     MatMenuModule,
@@ -47,6 +49,7 @@ import {
     MatSelectModule,
     MatStepperModule,
     MatCardModule,
+    MatBadgeModule,
   ]
 })
 export class MaterialModule { }

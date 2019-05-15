@@ -24,21 +24,21 @@ export class LoadMentorRequestsSuccess implements Action {
 export class MakeMentor implements Action {
   readonly type = MentorRequestsActionTypes.MAKE_MENTOR;
 
-  constructor(public payload: { requestId: string, userId: string }) {
+  constructor(public payload: { requestId: number, userId: number }) {
   }
 }
 
 export class DeleteMentorRequest implements Action {
   readonly type = MentorRequestsActionTypes.DELETE_MENTOR_REQUEST;
 
-  constructor(public payload: string) {
+  constructor(public payload: number) {
   }
 }
 
 export class ClearMentorRequest implements Action {
   readonly type = MentorRequestsActionTypes.CLEAR_MENTOR_REQUEST;
 
-  constructor(public payload: string) {
+  constructor(public payload: number) {
   }
 }
 

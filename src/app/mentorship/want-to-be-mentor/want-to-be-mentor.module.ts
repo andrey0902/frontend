@@ -5,7 +5,6 @@ import { WantToBeMentorRoutingModule } from './want-to-be-mentor-routing.module'
 import { WantToBeMentorComponent } from './want-to-be-mentor.component';
 import {CoreModule} from '../../core/core.module';
 import {SharedModule} from '../../shared/shared.module';
-import {ReactiveFormsModule} from '@angular/forms';
 
 @NgModule({
   declarations: [WantToBeMentorComponent],

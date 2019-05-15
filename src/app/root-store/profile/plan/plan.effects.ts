@@ -14,7 +14,8 @@ import {
   PlanActionTypes,
   PlanActionUnion, UpdatePlanTasksFail, UpdatePlanTasksSuccess
 } from './plan.actions';
-import {IterationTaskModel, IterationTaskModelByConfig, TreeHelper} from '../../../personal-plan/shared/models/iteration-plan.model';
+import {IterationTaskModel, IterationTaskModelByConfig} from '../../../models/iteration-plan.model';
+import {TreeHelper} from '../../../helpers/tree.helper';
 
 @Injectable()
 export class PlanEffectsService {
@@ -46,7 +47,8 @@ export class PlanEffectsService {
         .pipe(
           map(data => {
             const newTask = new IterationTaskModelByConfig(data);
-            return new CreatePlanTaskSuccess({task: newTask});
+            action.payload.tasks.push(newTask);
+            return new CreatePlanTaskSuccess({tasks: action.payload.tasks});
           }),
           catchError(err => of(new CreatePlanTaskFail({error: err.error.error})))
         );
@@ -58,10 +60,7 @@ export class PlanEffectsService {
     switchMap((action: PlanActionUnion) => {
       return this.planService.editPlanTask(action.payload.userId, action.payload.iterationId, action.payload.task.id, action.payload.task.request())
         .pipe(
-          map(data => {
-            const task = new IterationTaskModelByConfig(data);
-            return new EditPlanTaskSuccess({task: task});
-          }),
+          map(() => new EditPlanTaskSuccess({tasks: action.payload.tasks})),
           catchError(err => of(new EditPlanTaskFail({error: err.error.error})))
         );
     })

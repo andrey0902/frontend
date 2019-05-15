@@ -4,13 +4,13 @@ import { Iteration } from './iteration.model';
 
 export class User {
   type: string;
-  id: string;
+  id: number;
   attributes: Attributes;
   iteration?: Iteration | boolean;
 
   constructor(data) {
     this.type = data.type;
-    this.id = data.id;
+    this.id = +data.id;
     this.attributes = new Attributes(data.attributes);
     this.iteration = false;
   }
@@ -42,7 +42,7 @@ export class Attributes {
     this.photo = data.photo;
     this.photoThumbnail = data.photo_thumbnail;
     this.isMentor = data.is_mentor;
-    this.portalId = data.portal_id;
+    this.portalId = +data.portal_id;
     this.slack = data.slack;
     this.specialization = data.specialization ? new Specialization(data.specialization) : null;
     this.mentor = data.mentor ? new User(data.mentor) : null;

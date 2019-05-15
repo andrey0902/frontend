@@ -12,8 +12,8 @@ export class Iteration {
   plan: InfoPlanModel[];
 
   constructor(config) {
-    this.id = config.id;
-    this.user_id = config.attributes.user_id;
+    this.id = +config.id;
+    this.user_id = +config.attributes.user_id;
     this.goal = config.attributes.goal;
     this.startDate = config.attributes.start_date;
     this.endDate = config.attributes.end_date;

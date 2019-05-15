@@ -1,17 +1,16 @@
-import { Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
+import {Component, OnDestroy, OnInit, ViewChild, ViewEncapsulation} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
 import {MatVerticalStepper} from '@angular/material';
-import { LtValidators } from '../../shared/helpers/validator-methods.static';
+import {LtValidators} from '../../shared/helpers/validator-methods.static';
 import {Store} from '@ngrx/store';
 import {CreateIterationRequest} from '../../root-store/profile/iteration/iteration.actions';
 import {selectIteration} from '../../root-store/profile/iteration/iteration.selectors';
-import {filter, take} from 'rxjs/operators';
+import {filter, take, takeWhile} from 'rxjs/operators';
 import {Iteration} from '../../models/iteration.model';
-import {GetPlanRequest} from '../../root-store/profile/plan/plan.actions';
 import {plan} from '../../root-store/profile/plan/plan.selectors';
-import {IterationTaskModel} from '../../personal-plan/shared/models/iteration-plan.model';
-import { RegExpService } from '../../shared/helpers/reg-exp.service';
+import {IterationTaskModel} from '../../models/iteration-plan.model';
+import {RegExpService} from '../../shared/helpers/reg-exp.service';
 
 @Component({
   selector: 'lt-create-iteration',
@@ -19,21 +18,23 @@ import { RegExpService } from '../../shared/helpers/reg-exp.service';
   styleUrls: ['./create-iteration.component.scss'],
   encapsulation: ViewEncapsulation.None
 })
-export class CreateIterationComponent implements OnInit {
+export class CreateIterationComponent implements OnInit, OnDestroy {
 
   @ViewChild(MatVerticalStepper) public stepper: MatVerticalStepper;
   iterationForm: FormGroup;
   currentIteration: Iteration;
   plan: IterationTaskModel[] = [];
 
-  private _protegeId: string;
+  private _protegeId: number;
+  public componentActive = true;
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     private fb: FormBuilder,
     private store: Store<any>
-  ) {}
+  ) {
+  }
 
   ngOnInit() {
     this.iterationForm = this.fb.group({
@@ -41,13 +42,17 @@ export class CreateIterationComponent implements OnInit {
         startDate: ['', [Validators.required, LtValidators.checkDataStartIteration]],
         endDate: ['', [Validators.required]]
       }, { validator: LtValidators.checkEndDateIteration }),
-      goal: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(70)]],
-      projectLink: ['', [Validators.pattern(RegExpService.url)]],
+      goal: ['', [Validators.required, LtValidators.checkSpace, Validators.minLength(3), Validators.maxLength(70)]],
+      projectLink: ['', [LtValidators.checkSpace, Validators.minLength(3), Validators.maxLength(700)] ],
       meetType: ['', Validators.required],
       weekDay: ['', Validators.required]
     });
 
-    this._protegeId = this.route.snapshot.paramMap.get('id');
+    this._protegeId = +this.route.snapshot.paramMap.get('id');
+  }
+
+  ngOnDestroy(): void {
+    this.componentActive = false;
   }
 
   createIteration() {
@@ -58,8 +63,11 @@ export class CreateIterationComponent implements OnInit {
       take(1)
     ).subscribe((result) => {
       this.currentIteration = result;
-      this.store.dispatch(new GetPlanRequest({iterationId: this.currentIteration.id, userId: this.currentIteration.user_id}));
-      this.store.select(plan).subscribe((data: IterationTaskModel[]) => this.plan = data);
+      this.store.select(plan)
+        .pipe(
+          takeWhile(() => this.componentActive)
+        )
+        .subscribe((data: IterationTaskModel[]) => this.plan = data);
       this.stepper.next();
     });
   }

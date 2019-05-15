@@ -1,5 +1,5 @@
-import {Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges} from '@angular/core';
-import {IterationTaskModel} from '../../personal-plan/shared/models/iteration-plan.model';
+import {Component, Input, OnDestroy, OnInit} from '@angular/core';
+import {IterationTaskModel} from '../../models/iteration-plan.model';
 import {ItemNode} from '../../shared/tree/models/item-node.model';
 import {InfoPlanModel} from '../../personal-plan/shared/models/info-plan.model';
 import {Iteration} from '../../models/iteration.model';
@@ -11,10 +11,11 @@ import {
   GetPlanRequest, GetPlanSuccess,
   UpdatePlanTasksRequest
 } from '../../root-store/profile/plan/plan.actions';
-import {errorPlan, loadingPlan} from '../../root-store/profile/plan/plan.selectors';
+import {errorPlan, loadingPlan, loadingPlanTask, plan} from '../../root-store/profile/plan/plan.selectors';
 import {Rights} from '../profile.component';
-import {take, takeWhile} from 'rxjs/operators';
+import {switchMap, take} from 'rxjs/operators';
 import {filter} from 'rxjs/internal/operators/filter';
+import {TreeHelper} from '../../helpers/tree.helper';
 
 @Component({
   selector: 'lt-iteration-plan',
@@ -22,12 +23,10 @@ import {filter} from 'rxjs/internal/operators/filter';
   styleUrls: ['./iteration-plan.component.scss'],
 })
 
-export class IterationPlanComponent implements OnChanges, OnInit, OnDestroy {
+export class IterationPlanComponent implements OnInit, OnDestroy {
   @Input() iteration: Iteration;
   @Input() plan: IterationTaskModel[] = [];
   @Input() userRights: Rights = 'mentor';
-
-  @Output() public createItem = new EventEmitter<ItemNode>();
 
   public itemConstructor = InfoPlanModel;
   public treeEditLevel = {
@@ -41,22 +40,9 @@ export class IterationPlanComponent implements OnChanges, OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.store.select(errorPlan)
-      .pipe(
-        takeWhile(() => this.componentActive),
-        filter((data) => data.error)
-      )
-      .subscribe((data) => {
-        // TODO: toster error (data.error)
-        this.plan = data.plan;
-      });
-  }
-
-  ngOnChanges(changes: SimpleChanges): void {
-    if (changes.iteration && changes.iteration.currentValue) {
-      this.store.dispatch(new GetPlanRequest({iterationId: this.iteration.id, userId: this.iteration.user_id}));
-      this.getPlan();
-    }
+    this.store.dispatch(new GetPlanRequest({iterationId: this.iteration.id, userId: this.iteration.user_id}));
+    this.getPlan();
+    this.updatePlanAfterError();
   }
 
   ngOnDestroy(): void {
@@ -64,17 +50,33 @@ export class IterationPlanComponent implements OnChanges, OnInit, OnDestroy {
     this.store.dispatch(new GetPlanSuccess({tasks: []}));
   }
 
-  public deleteTreeItem(task: ItemNode): void {
-    this.store.dispatch(new DeletePlanTaskRequest({userId: this.iteration.user_id, iterationId: this.iteration.id, task: new IterationTaskModel(task)}));
+  public deleteTreeItem(data): void {
+    this.store.dispatch(new DeletePlanTaskRequest(
+      {
+        userId: this.iteration.user_id,
+        iterationId: this.iteration.id,
+        task: new IterationTaskModel(data)
+      }));
   }
 
-  public createTreeItem(task: ItemNode): void {
-    this.store.dispatch(new CreatePlanTaskRequest({userId: this.iteration.user_id, iterationId: this.iteration.id, task: new IterationTaskModel(task)}));
-    this.getPlan();
+  public createTreeItem(data): void {
+    this.store.dispatch(new CreatePlanTaskRequest(
+      {
+        userId: this.iteration.user_id,
+        iterationId: this.iteration.id,
+        task: new IterationTaskModel(data.changes),
+        tasks: TreeHelper.getArrayFromTree(data.tree)
+      }));
+    this.getPlan(loadingPlanTask);
   }
 
-  public editTreeItem(task: ItemNode): void {
-    this.store.dispatch(new EditPlanTaskRequest({userId: this.iteration.user_id, iterationId: this.iteration.id, task: new IterationTaskModel(task)}));
+  public editTreeItem(data): void {
+    this.store.dispatch(new EditPlanTaskRequest({
+      userId: this.iteration.user_id,
+      iterationId: this.iteration.id,
+      task: new IterationTaskModel(data.changes),
+      tasks: TreeHelper.getArrayFromTree(data.tree)
+    }));
   }
 
   public updateTreeItems(items: ItemNode[]): void {
@@ -82,12 +84,21 @@ export class IterationPlanComponent implements OnChanges, OnInit, OnDestroy {
     this.store.dispatch(new UpdatePlanTasksRequest({userId: this.iteration.user_id, iterationId: this.iteration.id, tasks: tasks}));
   }
 
-  public getPlan() {
-    this.store.select(loadingPlan)
+  public getPlan(selector = loadingPlan) {
+    this.store.select(selector)
       .pipe(
-        filter((data) => !data.loading),
+        filter((loading) => !loading),
+        switchMap(() => this.store.select(plan)),
         take(1)
       )
-      .subscribe((data) => this.plan = data.plan);
+      .subscribe((data: IterationTaskModel[]) => this.plan = data);
+  }
+
+  public updatePlanAfterError() {
+    this.store.select(errorPlan)
+      .pipe(
+        filter((error) => !!error)
+      )
+      .subscribe((data: IterationTaskModel[]) => this.getPlan());
   }
 }

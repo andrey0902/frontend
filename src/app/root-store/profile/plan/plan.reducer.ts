@@ -1,4 +1,4 @@
-import {IterationTaskModel} from '../../../personal-plan/shared/models/iteration-plan.model';
+import {IterationTaskModel} from '../../../models/iteration-plan.model';
 import {PlanActionTypes, PlanActionUnion} from './plan.actions';
 
 export type PlanDictionary = { [id: number]: IterationTaskModel };
@@ -6,19 +6,20 @@ export type PlanDictionary = { [id: number]: IterationTaskModel };
 export interface PlanState {
   planDictionary: PlanDictionary;
   loading: boolean;
+  loadingNewTask: boolean;
   error: any;
 }
 
 const initialState: PlanState = {
   planDictionary: null,
   loading: false,
+  loadingNewTask: false,
   error: null
 };
 
 export function planReducer(state = initialState, action: PlanActionUnion): PlanState {
   switch (action.type) {
     case PlanActionTypes.GET_PLAN_REQUEST:
-    case PlanActionTypes.CREATE_PLAN_TASK_REQUEST:
     case PlanActionTypes.EDIT_PLAN_TASK_REQUEST:
     case PlanActionTypes.DELETE_PLAN_TASK_REQUEST:
     case PlanActionTypes.UPDATE_PLAN_TASKS_REQUEST: {
@@ -29,7 +30,17 @@ export function planReducer(state = initialState, action: PlanActionUnion): Plan
       };
     }
 
-    case PlanActionTypes.GET_PLAN_SUCCESS: {
+    case PlanActionTypes.CREATE_PLAN_TASK_REQUEST: {
+      return {
+        ...state,
+        error: null,
+        loading: true,
+        loadingNewTask: true
+      };
+    }
+
+    case PlanActionTypes.GET_PLAN_SUCCESS:
+    case PlanActionTypes.EDIT_PLAN_TASK_SUCCESS: {
       const newPlan: PlanDictionary = {};
       action.payload.tasks.forEach((task: IterationTaskModel) => newPlan[task.id] = task);
       return {
@@ -39,14 +50,14 @@ export function planReducer(state = initialState, action: PlanActionUnion): Plan
       };
     }
 
-    case PlanActionTypes.CREATE_PLAN_TASK_SUCCESS:
-    case PlanActionTypes.EDIT_PLAN_TASK_SUCCESS: {
-      const newPlan: PlanDictionary = Object.assign({}, state.planDictionary);
-      newPlan[action.payload.task.id] = action.payload.task;
+    case PlanActionTypes.CREATE_PLAN_TASK_SUCCESS: {
+      const newPlan: PlanDictionary = {};
+      action.payload.tasks.forEach((task: IterationTaskModel) => newPlan[task.id] = task);
       return {
         ...state,
         planDictionary: newPlan,
-        loading: false
+        loading: false,
+        loadingNewTask: false
       };
     }
 

@@ -1,8 +1,9 @@
 import {ChangeDetectorRef, Component, Input, OnInit} from '@angular/core';
 import {plan} from '../../root-store/profile/plan/plan.selectors';
-import {IterationTaskModel, TreeHelper} from '../../personal-plan/shared/models/iteration-plan.model';
+import {IterationTaskModel} from '../../models/iteration-plan.model';
 import {Store} from '@ngrx/store';
 import {ItemNode} from '../../shared/tree/models/item-node.model';
+import {TreeHelper} from '../../helpers/tree.helper';
 
 
 @Component({

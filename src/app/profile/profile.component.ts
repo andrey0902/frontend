@@ -2,7 +2,7 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
 import {User} from '../models/user.model';
 import {ActivatedRoute} from '@angular/router';
 import {combineLatest, Observable} from 'rxjs';
-import {filter, map, switchMap, take, takeWhile, tap} from 'rxjs/operators';
+import {filter, switchMap, take, takeWhile} from 'rxjs/operators';
 import {Store} from '@ngrx/store';
 import {selectCurrentUser} from '../root-store/currentUser/current-user.selectors';
 import {NeedMentorRequest, WantToBeMentorRequest} from '../root-store/currentUser/current-user.actions';
@@ -34,8 +34,8 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
   USERRIGHTS = USERRULES;
   user: User;
-  userId: string;
-  iteration: Iteration;
+  userId: number;
+  iteration: Iteration = null;
   userRights: Rights = this.USERRIGHTS.READ;
   isAdmin = false;
   objectValues = Object.values;
@@ -67,14 +67,15 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
     // get iteration
     this.currentIteration$.pipe(
-      takeWhile(() => this.componentActive)
+      takeWhile(() => this.componentActive),
+      filter( (iteration: Iteration) => !iteration || iteration.user_id === this.userId)
     )
       .subscribe((iteration) => this.iteration = iteration);
   }
 
   // requests
 
-  public deleteIteration(userId: string): void {
+  public deleteIteration(userId: number): void {
     this.dialogService.openDeleteIterationDialog(request => {
       if (request) {
         this.store.dispatch(new DeleteIterationRequest({
@@ -113,7 +114,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
       takeWhile(() => this.componentActive)
     )
       .subscribe(([routeParams, data]) => {
-        const routeId = routeParams.get('id');
+        const routeId: number = +routeParams.get('id');
         const request = routeId ? new GetUserRequest({userId: routeId}) : new GetUserSuccess({user: data.user});
         this.userId = routeId || data.user.id;
         this.store.dispatch(request);
